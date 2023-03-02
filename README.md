@@ -7,6 +7,7 @@ etc....
 
 ## Getting Started
 1. `npm install`
+1. `npm build:css`
 1. `npm run build-extension`
 1. Go to your chrome and navigate to :
     - `Extension` 
