@@ -4,7 +4,7 @@ chrome.runtime.onInstalled.addListener(() => {
 
 chrome.runtime.onMessage.addListener((data, sender, sendResponse) => {
   if (data.type === 'notification') {
-    console.log('notification recived', data)
+    console.log('notification received', data)
 
     const notificationOptions = {
       type: 'basic',

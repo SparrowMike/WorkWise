@@ -9,5 +9,24 @@
   "background": {
     "service_worker": "background.js"
   },
-  "permissions": ["notifications"]
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_end"
+    }
+  ],
+  "permissions": [
+    "notifications"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["build/static/js/main.js"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }
