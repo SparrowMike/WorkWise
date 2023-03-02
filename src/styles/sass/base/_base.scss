@@ -1,5 +1,14 @@
+/* Universal Reset */
+*,
+*::after,
+*::before {
+	margin: 0;
+	padding: 0;
+	box-sizing: inherit;
+}
+
 html {
-  background: #020202;
+  background: blue;
   color: #fffafa;
   width: 250px;
   height: 200px;
