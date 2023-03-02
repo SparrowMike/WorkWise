@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "concurrently \"npm run watch:sass\" \"vite\"",
     "build": "tsc && vite build",
-    "build-extension": "npm run build:css && npm run build && copy manifest.json dist\\",
+    "build-extension": "npm run build:css && npm run build && copy background.js dist\\ && copy manifest.json dist\\",
     "preview": "vite preview",
     "watch:sass": "node-sass src/styles/sass/main.scss src/styles/css/style.css -w",
     "compile:sass": "node-sass src/styles/sass/main.scss src/styles/css/style.comp.css",
@@ -16,6 +16,7 @@
     "build:css": "npm-run-all compile:sass concat:css prefix:css compress:css"
   },
   "dependencies": {
+    "@types/chrome": "^0.0.218",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

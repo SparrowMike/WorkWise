@@ -11,6 +11,7 @@ function Joke() {
       try {
         const res: any = await getFunnyChuck();
         setJoke(res);
+        triggerNoty()
       } catch (error) {
         console.error(error);
       }
@@ -18,6 +19,18 @@ function Joke() {
     fetchJoke();
 
   }, [reset])
+
+  // ? This suppose to trigger notification when used as extension 
+  const triggerNoty = () => {
+    chrome.runtime.sendMessage('', {
+      type: 'notification',
+      options: {
+        title: 'Chuck Norris Joke',
+        message: joke?.value,
+        type: 'basic'
+      }
+    });
+  }
 
   return (
     <>
