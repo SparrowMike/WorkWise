@@ -1,0 +1,22 @@
+.tracker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .reminders {
+    width: 90%;
+
+    .reminder {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem;
+      font-size: 1.5rem;
+      
+      .delete {
+        cursor: pointer;
+        line-height: 0;
+      }
+    }
+  }
+}
