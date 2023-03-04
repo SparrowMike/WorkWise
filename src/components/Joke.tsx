@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getFunnyChuck } from '../api/funnyChuck'
-import { ChuckNorrisJoke } from '../interfaces/chuckJoke'
+import { ChuckNorrisJoke } from '../interfaces/api'
 
 function Joke() {
   const [joke, setJoke] = useState<ChuckNorrisJoke | null>(null)
@@ -21,6 +21,7 @@ function Joke() {
   }, [reset])
 
   // ? This suppose to trigger notification when used as extension 
+  // ! for experimentation only
   const triggerNoty = () => {
     chrome.runtime.sendMessage('', {
       type: 'notification',

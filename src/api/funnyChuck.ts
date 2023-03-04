@@ -1,4 +1,4 @@
-import { ChuckNorrisJoke } from "../interfaces/chuckJoke";
+import { ChuckNorrisJoke } from "../interfaces/api";
 
 export const getFunnyChuck = async ()  => {
   const response = await fetch(`https://api.chucknorris.io/jokes/random`);
