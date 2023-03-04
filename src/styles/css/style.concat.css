@@ -7,16 +7,61 @@
   box-sizing: inherit; }
 
 html {
+  font-size: 62.5%;
+  font-family: 'Roboto', serif;
   background: black;
   color: #fffafa;
   width: 250px;
-  height: 200px;
-  display: flex;
-  justify-content: center;
-  align-items: center; }
+  max-height: 350px;
+  max-width: 350px;
+  margin: 0 auto;
+  padding: 2rem; }
 
-.App {
+body {
+  box-sizing: border-box; }
+
+.quote {
+  padding: 1.5rem; }
+  .quote .sidekick {
+    position: relative;
+    font-size: 2.5rem;
+    line-height: 1;
+    font-weight: 100;
+    text-align: center; }
+  .quote .sidekick:before, .quote .sidekick:after {
+    font-family: Calibri;
+    color: gold;
+    font-size: 2rem; }
+  .quote .sidekick:before {
+    content: '\201e'; }
+  .quote .sidekick:after {
+    content: '\201c'; }
+  .quote .sidekick cite {
+    font-size: 50%;
+    text-align: center;
+    top: 50%; }
+  .quote .sidekick cite:before {
+    content: ' \2015 '; }
+
+.clock {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  text-align: center; }
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1.75rem;
+  font-weight: bold; }
+
+.tracker {
+  display: flex;
+  flex-direction: column;
+  align-items: center; }
+  .tracker .reminders {
+    width: 90%; }
+    .tracker .reminders .reminder {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem;
+      font-size: 1.5rem; }
+      .tracker .reminders .reminder .delete {
+        cursor: pointer;
+        line-height: 0; }
