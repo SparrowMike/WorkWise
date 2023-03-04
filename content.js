@@ -11,7 +11,7 @@ style = `
 `
 
 const elemHtml = `<div id="my-extension" style="${style}"></div>`
-document.body.insertAdjacentHTML('beforeend', elemHtml);
+// document.body.insertAdjacentHTML('beforeend', elemHtml);
 
 const container = document.getElementById('my-extension');
 let isDragging = false;
