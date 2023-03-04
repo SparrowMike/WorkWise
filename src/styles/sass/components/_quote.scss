@@ -1,0 +1,20 @@
+.quote {
+  padding: 1.5rem;
+  
+  .sidekick {
+    position: relative;
+    font-size: 2rem;
+    line-height: 1;
+    font-weight: 100;
+    text-align: center;
+  }
+  .sidekick:before, .sidekick:after {
+    font-family: Calibri;
+    color: gold;
+    font-size: 2rem;
+  }
+  .sidekick:before {content: '\201e'}
+  .sidekick:after {content: '\201c';}
+  .sidekick cite {font-size: 50%; text-align:center; top:50%}
+  .sidekick cite:before {content: ' \2015 '}
+}
