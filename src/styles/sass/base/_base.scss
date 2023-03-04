@@ -8,18 +8,18 @@
 }
 
 html {
+  font-size: 62.5%;
+  font-family: 'Roboto', serif;
+
   background: black;
   color: #fffafa;
   width: 250px;
-  height: 200px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  max-height: 350px;
+  max-width: 350px;
+  margin: 0 auto;
+  padding: 2rem;
 }
 
-.App {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  text-align: center;
+body {
+  box-sizing: border-box;
 }
