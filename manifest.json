@@ -1,7 +1,7 @@
 {
-  "name": "LifeKeeper",
-  "description": "Build an Extension!",
-  "version": "1.0",
+  "name": "Tracker",
+  "description": "Simple task tracker with motivational quote",
+  "version": "0.0.1",
   "manifest_version": 3,
   "action": {
     "default_popup": "index.html"
@@ -9,17 +9,10 @@
   "background": {
     "service_worker": "background.js"
   },
-  "content_scripts": [
-    {
-      "matches": [
-        "*://*/*"
-      ],
-      "js": [
-        "content.js"
-      ],
-      "run_at": "document_end"
-    }
-  ],
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": false
+  },
   "permissions": [
     "notifications",
     "storage"

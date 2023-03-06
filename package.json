@@ -8,11 +8,11 @@
     "build": "tsc && vite build",
     "build-extension": "npm run build:css && npm run build && copy background.js dist\\ && copy content.js dist\\ && copy manifest.json dist\\",
     "preview": "vite preview",
-    "watch:sass": "node-sass src/styles/sass/main.scss src/styles/css/style.css -w",
-    "compile:sass": "node-sass src/styles/sass/main.scss src/styles/css/style.comp.css",
-    "concat:css": "concat -o src/styles/css/style.concat.css src/styles/css/style.comp.css",
-    "prefix:css": "postcss --user autoprefixer -b 'last 10 versions' src/styles/css/style.concat.css -o src/styles/css/style.prefix.css",
-    "compress:css": "node-sass src/styles/css/style.prefix.css src/styles/css/style.css --output-style compressed",
+    "watch:sass": "node-sass styles/sass/main.scss styles/css/style.css -w",
+    "compile:sass": "node-sass styles/sass/main.scss styles/css/style.comp.css",
+    "concat:css": "concat -o styles/css/style.concat.css styles/css/style.comp.css",
+    "prefix:css": "postcss --user autoprefixer -b 'last 10 versions' styles/css/style.concat.css -o styles/css/style.prefix.css",
+    "compress:css": "node-sass styles/css/style.prefix.css styles/css/style.css --output-style compressed",
     "build:css": "npm-run-all compile:sass concat:css prefix:css compress:css"
   },
   "dependencies": {

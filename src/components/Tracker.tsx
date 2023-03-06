@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { FormData } from "../interfaces/user";
-import { isRunningAsChromeExtension } from "../utils/helpers";
+import { FormData } from "../../interfaces/user";
+import { isRunningAsChromeExtension } from "../../utils/helpers";
 
 function Tracker() {
   const formData: FormData = {

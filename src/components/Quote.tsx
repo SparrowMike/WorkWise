@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { typeFitQuote } from '../interfaces/api';
+import { typeFitQuote } from '../../interfaces/api';
 
 function Quote() {
   // ? free motivational API

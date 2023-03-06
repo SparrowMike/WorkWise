@@ -16,6 +16,6 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "background.js"],
+  "include": ["popup", "options", "src", "api", "utils", "interfaces"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

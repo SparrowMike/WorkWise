@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { getFunnyChuck } from '../api/funnyChuck'
-import { ChuckNorrisJoke } from '../interfaces/api'
+import { getFunnyChuck } from '../../api/funnyChuck'
+import { ChuckNorrisJoke } from '../../interfaces/api'
 
 function Joke() {
   const [joke, setJoke] = useState<ChuckNorrisJoke | null>(null)
