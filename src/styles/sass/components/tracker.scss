@@ -4,7 +4,9 @@
   align-items: center;
 
   .reminders {
-    width: 90%;
+    width: 100%;
+    max-height: 200px;
+    overflow: auto;
 
     .reminder {
       display: flex;
