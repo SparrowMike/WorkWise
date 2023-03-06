@@ -1,4 +1,4 @@
-import './styles/css/style.css';
+import './../styles/css/style.css';
 import Clock from './components/Clock';
 import Joke from './components/Joke';
 import Tracker from './components/Tracker';
