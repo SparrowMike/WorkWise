@@ -17,6 +17,10 @@ function Tracker() {
 
   const chrome = window.chrome;
 
+  const handleOptionsClick = () => {
+    chrome.runtime.openOptionsPage();
+  };
+
   useEffect(() => {
     if (myAppIsRunningAsChromeExtension) {
       chrome.runtime.sendMessage({ type: 'LOAD_REMINDER' }, (response) => {
@@ -112,7 +116,9 @@ function Tracker() {
           </div>
         ))}
       </div>
-
+      {myAppIsRunningAsChromeExtension && 
+        <a onClick={handleOptionsClick} style={{ alignSelf: 'baseline', padding: '10px 5px', textDecoration: 'underline', cursor: 'pointer' }}>Options</a>
+      }
     </div>
   )
 }
