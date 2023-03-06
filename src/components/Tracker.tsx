@@ -12,6 +12,7 @@ function Tracker() {
 
   const [taskArray, setTaskArray] = useState<FormData[]>([]);
   const [task, setTask] = useState<FormData>(formData);
+  const [backupTrigger, setBackupTrigger] = useState(false);
   const myAppIsRunningAsChromeExtension = isRunningAsChromeExtension();
 
   const chrome = window.chrome;
@@ -37,8 +38,11 @@ function Tracker() {
   }, []);
 
   useEffect(() => {
-    backUpData();
-  }, [taskArray]);
+    if (backupTrigger) {
+      backUpData();
+      setBackupTrigger(false);
+    }
+  }, [backupTrigger, taskArray]);
 
   function backUpData() {
     if (myAppIsRunningAsChromeExtension) {
@@ -57,6 +61,8 @@ function Tracker() {
 
     setTaskArray([...taskArray, task])
     setTask(formData);
+    setBackupTrigger(true);
+    
   }
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -69,7 +75,9 @@ function Tracker() {
 
   function handleTaskDelete(index: number) {
     setTaskArray(taskArray.filter((_, i) => index !== i));
+    setBackupTrigger(true);
   }
+
 
   const handleItemUpdate = (index: number, value: string | null, name: string) => {
     if (!value?.length) {
@@ -80,7 +88,7 @@ function Tracker() {
     setTaskArray((prevItems) =>
       prevItems.map((item, i) => (i === index ? { ...item, [name]: value } : item))
     );
-    backUpData();
+    setBackupTrigger(true);
   };
 
   return (
