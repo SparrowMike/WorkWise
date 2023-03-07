@@ -1,7 +1,7 @@
 {
   "name": "WorkWise",
-  "description": "Stay motivated and organized with our Chrome extension that displays the time, a random motivational quote, and a task manager. Submit messages, update, or delete them at any time.",
-  "version": "0.0.1",
+  "description": "Stay motivated and organized. Get time, quotes, and a task manager. Add, update, or delete messages anytime.",
+  "version": "0.0.2",
   "manifest_version": 3,
   "action": {
     "default_popup": "index.html"
