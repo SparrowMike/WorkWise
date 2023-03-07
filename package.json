@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "concurrently \"npm run watch:sass\" \"vite\"",
     "build": "tsc && vite build",
-    "build-extension": "npm run build:css && npm run build && copy background.js dist\\ && copy content.js dist\\ && copy manifest.json dist\\",
+    "build-extension": "npm run build:css && npm run build && copy background.js dist\\ && copy icons dist\\ && copy content.js dist\\ && copy manifest.json dist\\",
     "preview": "vite preview",
     "watch:sass": "node-sass styles/sass/main.scss styles/css/style.css -w",
     "compile:sass": "node-sass styles/sass/main.scss styles/css/style.comp.css",

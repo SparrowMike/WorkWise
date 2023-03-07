@@ -1,6 +1,6 @@
 {
-  "name": "Tracker",
-  "description": "Simple task tracker with motivational quote",
+  "name": "WorkWise",
+  "description": "Stay motivated and organized with our Chrome extension that displays the time, a random motivational quote, and a task manager. Submit messages, update, or delete them at any time.",
   "version": "0.0.1",
   "manifest_version": 3,
   "action": {
@@ -22,5 +22,10 @@
       "resources": ["build/static/js/main.js"],
       "matches": ["<all_urls>"]
     }
-  ]
+  ],
+  "icons": {
+    "16": "p16.png",
+    "32": "p32.png",
+    "128": "p128.png"
+  }
 }

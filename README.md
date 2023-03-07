@@ -1,18 +1,21 @@
 # Chrome Extension
+This is a Chrome extension built with React and TypeScript.
 
 ## Stack
-React
-TS
-etc...
+- React
+- TypeScript
 
 ## Getting Started
-1. `npm install`
-1. `npm build:css`
-1. `npm run build-extension`
-1. Go to your chrome and navigate to :
-    - `chrome://extensions/` 
-    - `Manage extensions`
-    - then top right corner switch on `Developer mode`
-    - left side `Load unpacked` and navigate to `dist folder` 
-    - within `extension` tab simply pin the extension for easy access
-    - each build extension reload is required
+1. Install dependencies: `npm install`
+1. Build the extension: `npm run build-extension`
+1. Install the extension in Chrome:
+    - Open Chrome and navigate to `chrome://extensions/` 
+    - Click `Manage extensions` in the top right corner
+    - Turn on `Developer mode` in the top right corner
+    - Click `Load unpacked` on the left side and navigate to the `dist` folder
+    - Within the `Extensions` tab, pin the extension for easy access
+    - Note that each time you update the extension, you will need to reload it for the changes to take effect
+
+
+## Attribution for icons
+`Icons from Home Based Business pack from www.flaticon.com`
