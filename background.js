@@ -8,14 +8,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type === 'notification') {
     console.log('notification received', request)
 
-    const notificationOptions = {
-      type: 'basic',
-      iconUrl: 'https://cdn-icons-png.flaticon.com/512/3449/3449750.png',
-      title: request.title || 'misisng title',
-      message: request.message || 'missing message',
-    };
+    // const notificationOptions = {
+    //   type: 'basic',
+    //   iconUrl: 'https://cdn-icons-png.flaticon.com/512/3449/3449750.png',
+    //   title: request.title || 'misisng title',
+    //   message: request.message || 'missing message',
+    // };
 
-    chrome.notifications.create(notificationOptions);
+    // chrome.notifications.create(notificationOptions);
   }
 
   if (request.type === 'SAVE_REMINDER') {

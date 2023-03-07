@@ -1,5 +1,5 @@
 
-style = `
+let style = `
   width: 50px;
   height: 50px;
   background-color: #8f3aad;

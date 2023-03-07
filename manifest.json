@@ -17,12 +17,6 @@
     "notifications",
     "storage"
   ],
-  "web_accessible_resources": [
-    {
-      "resources": ["build/static/js/main.js"],
-      "matches": ["<all_urls>"]
-    }
-  ],
   "icons": {
     "16": "p16.png",
     "32": "p32.png",

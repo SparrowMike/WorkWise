@@ -4,7 +4,7 @@ import Joke from './components/Joke';
 import Tracker from './components/Tracker';
 import Quote from './components/Quote';
 
-function App() {
+function Popup() {
 
   return (
     <div className="App">
@@ -16,4 +16,4 @@ function App() {
   )
 }
 
-export default App
+export default Popup

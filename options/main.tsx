@@ -1,5 +1,10 @@
+import React from 'react';
 import ReactDOM from 'react-dom';
-import { App } from './App';
+import { Options } from './Options';
 
-const app = document.getElementById('options');
-ReactDOM.render(<App />, app);
+ReactDOM.render(
+  <React.StrictMode>
+      <Options />
+  </React.StrictMode>,
+  document.getElementById('options')
+);
