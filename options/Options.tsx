@@ -1,7 +1,7 @@
 export function Options() {
 
   return (
-    <div>
+    <div className="options-container">
       <h1>My options component</h1>
     </div>
   );

@@ -10,31 +10,35 @@
 
 *::-webkit-scrollbar {
   width: 8px;
+  transition: background .2s linear, border .2s linear;
 }
 
 *::-webkit-scrollbar-track {
-  background-color: #fff;
+  background: var(--background-dark);
   border-radius: 20px;
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: #000;
-  border: 2px solid #fff;
+  background: var(--background-dark);
+  border: 2px solid var(--text-light);
   border-radius: 20px;
 }
 
 html {
   font-size: 62.5%;
   font-family: 'Roboto', serif;
-
-  background: black;
-  color: #fffafa;
-  width: 250px;
+  width: 300px;
   max-width: 350px;
   margin: 0 auto;
-  padding: 2rem;
 }
 
-body {
+html {
   box-sizing: border-box;
+}
+
+.App {
+  background: var(--background-dark);
+  color: var(--text-light);
+  padding: 2rem;
+  transition: background .2s linear, color .1s linear;
 }
