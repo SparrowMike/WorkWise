@@ -18,12 +18,29 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     // chrome.notifications.create(notificationOptions);
   }
 
-  if (request.type === 'SAVE_REMINDER') {
+  if (request.type === 'SAVE_REMINDERS') {
     chrome.storage.local.set({ reminders: JSON.stringify(request.reminders) }, () => {
       sendResponse({ success: true });
     });
   }
-  
+
+  if (request.type === 'SAVE_REMINDER') {
+    chrome.storage.local.get('reminders', (data) => {
+      console.log('data save reminder single!', data, request)
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError);
+        sendResponse({ success: false, error: 'Failed to load reminders' });
+      } else {
+        const reminders = JSON.parse(data.reminders || '[]');
+        const newReminder = { title: request.title };
+        reminders.push(newReminder);
+        chrome.storage.local.set({ reminders: JSON.stringify(reminders) }, () => {
+          sendResponse({ success: true });
+        });
+      }
+    });
+  }
+
   if (request.type === 'LOAD_REMINDER') {
     chrome.storage.local.get('reminders', (data) => {
       if (chrome.runtime.lastError) {

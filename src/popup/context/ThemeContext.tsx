@@ -22,8 +22,6 @@ const ThemeProvider = ({ children }: any) => {
     toggleTheme,
   };
 
-  console.log('children theme context', children)
-
   return (
     <ThemeContext.Provider value={themeContext}>
       {children}
