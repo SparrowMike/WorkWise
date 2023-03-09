@@ -116,9 +116,9 @@ function Tracker() {
           </div>
         ))}
       </div>
-      {/* {myAppIsRunningAsChromeExtension && 
+      {myAppIsRunningAsChromeExtension && 
         <a onClick={handleOptionsClick} style={{ alignSelf: 'baseline', padding: '10px 5px', textDecoration: 'underline', cursor: 'pointer' }}>Options</a>
-      } */}
+      }
     </div>
   )
 }

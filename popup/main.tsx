@@ -4,10 +4,14 @@ import Popup from './Popup'
 
 import ThemeProvider from './context/ThemeContext';
 
-ReactDOM.createRoot(document.getElementById('popup') as HTMLElement).render(
-  <React.StrictMode>
-    <ThemeProvider>
-      <Popup />
-    </ThemeProvider>
-  </React.StrictMode>,
-)
+const popupElement = document.getElementById('popup-root');
+if (popupElement) {
+  const popupRoot = ReactDOM.createRoot(popupElement);
+  popupRoot.render(
+    <React.StrictMode>
+     <ThemeProvider>
+       <Popup />
+     </ThemeProvider>
+   </React.StrictMode>,
+  );
+}

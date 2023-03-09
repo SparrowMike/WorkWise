@@ -5,15 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently \"npm run watch:sass\" \"vite\"",
-    "build": "tsc && vite build",
-    "build-extension": "npm run build:css && npm run build && copy background.js dist\\ && copy icons dist\\ && copy content.js dist\\ && copy manifest.json dist\\",
     "preview": "vite preview",
     "watch:sass": "node-sass styles/sass/main.scss styles/css/style.css -w",
     "compile:sass": "node-sass styles/sass/main.scss styles/css/style.comp.css",
     "concat:css": "concat -o styles/css/style.concat.css styles/css/style.comp.css",
     "prefix:css": "postcss --user autoprefixer -b 'last 10 versions' styles/css/style.concat.css -o styles/css/style.prefix.css",
     "compress:css": "node-sass styles/css/style.prefix.css styles/css/style.css --output-style compressed",
-    "build:css": "npm-run-all compile:sass concat:css prefix:css compress:css"
+    "build:css": "npm-run-all compile:sass concat:css prefix:css compress:css",
+    "build": "tsc && vite build",
+    "build:webpack": "webpack --config webpack.config.js",
+    "build:extension": "npm run build:css && npm run build && copy public/background.js dist\\ && copy public/icons dist\\ && copy public/content.js dist\\ && copy manifest.json dist\\"
   },
   "dependencies": {
     "@types/chrome": "^0.0.218",
@@ -21,16 +22,32 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.21.0",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-react": "^7.18.6",
+    "@babel/preset-typescript": "^7.21.0",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@vitejs/plugin-react": "^3.1.0",
     "autoprefixer": "^10.4.13",
+    "babel-loader": "^9.1.2",
+    "clean-webpack-plugin": "^4.0.0",
     "concat": "^1.0.3",
     "concurrently": "^7.6.0",
+    "copy-webpack-plugin": "^11.0.0",
+    "css-loader": "^6.7.3",
+    "html-webpack-plugin": "^5.5.0",
     "node-sass": "^8.0.0",
     "npm-run-all": "^4.1.5",
     "postcss-cli": "^10.1.0",
+    "sass": "^1.58.3",
+    "sass-loader": "^13.2.0",
+    "style-loader": "^3.3.1",
     "typescript": "^4.9.3",
-    "vite": "^4.1.0"
+    "vite": "^4.1.0",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.11.1",
+    "webpack-shell-plugin": "^0.5.0"
   }
 }
