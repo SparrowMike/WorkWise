@@ -6,11 +6,13 @@ import webpack from 'webpack';
 
 import { spawn } from 'child_process';
 
+const isProd = process.env.NODE_ENV === 'production'
+
 export default {
-  mode: 'development',
+  mode: isProd ? 'production' : 'development',
   entry: {
-    popup: './popup/main.tsx',
-    options: './options/main.tsx',
+    popup: './src/popup/main.tsx',
+    options: './src/options/main.tsx',
     background: './src/background.ts',
     content: './src/content.ts',
   },
@@ -58,11 +60,11 @@ export default {
     }),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      template: './popup.html',
+      template: './src/popup.html',
       filename: 'popup.html'
     }),
     new HtmlWebpackPlugin({
-      template: './options.html',
+      template: './src/options.html',
       filename: 'options.html'
     }),
     new CopyWebpackPlugin({
