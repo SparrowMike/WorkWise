@@ -1,5 +1,7 @@
 import { useContext } from 'react';
-import './../styles/css/style.css';
+// import './../styles/css/style.css';
+import './../styles/sass/main.scss';
+
 import Clock from './components/Clock';
 import Joke from './components/Joke';
 import Tracker from './components/Tracker';

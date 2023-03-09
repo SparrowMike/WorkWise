@@ -1,10 +1,13 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client'
 import { Options } from './Options';
 
-ReactDOM.render(
-  <React.StrictMode>
+const optionsElement = document.getElementById('options-root');
+if (optionsElement) {
+  const optionsRoot = ReactDOM.createRoot(optionsElement);
+  optionsRoot.render(
+    <React.StrictMode>
       <Options />
-  </React.StrictMode>,
-  document.getElementById('options')
-);
+    </React.StrictMode>
+  );
+}
