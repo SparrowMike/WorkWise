@@ -6,7 +6,7 @@ import webpack from 'webpack';
 
 import { spawn } from 'child_process';
 
-const isProd = process.env.NODE_ENV === 'production'
+const isProd = process.env.NODE_ENV === 'production';
 
 export default {
   mode: isProd ? 'production' : 'development',
@@ -69,7 +69,7 @@ export default {
     }),
     new CopyWebpackPlugin({
       patterns: [
-        { from: './public', to: './' },
+        { from: 'public', to: './' },
       ]
     }),
     function () {

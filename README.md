@@ -9,7 +9,7 @@
 
 ## Getting Started
 1. Install dependencies: `npm install`
-1. Build the extension: `npm run webpack:dev`
+1. Build the extension: `npm run dev`
 1. Install the extension in Chrome:
     - Open Chrome and navigate to `chrome://extensions/` 
     - Click `Manage extensions` in the top right corner
