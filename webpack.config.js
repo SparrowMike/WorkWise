@@ -16,7 +16,7 @@ export default {
     background: './src/background.ts',
     content: './src/content/content.tsx',
   },
-  devtool: 'inline-source-map',
+  devtool: isProd ? 'inline-source-map' : false,
   devServer: {
     contentBase: './',
     hot: true
@@ -39,10 +39,6 @@ export default {
             presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-typescript'],
           },
         },
-      },
-      {
-        test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.scss$/,
