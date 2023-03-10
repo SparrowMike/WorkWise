@@ -14,7 +14,7 @@ export default {
     popup: './src/popup/main.tsx',
     options: './src/options/main.tsx',
     background: './src/background.ts',
-    content: './src/content.ts',
+    content: './src/content/content.tsx',
   },
   devtool: 'inline-source-map',
   devServer: {
@@ -74,6 +74,11 @@ export default {
     }),
     function () {
       this.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
+        // console.log('webpack after emit tap function')
+        // if (typeof chrome !== 'undefined') {
+        //   chrome.runtime.reload();
+        //   chrome.runtime.sendMessage({ type: "RELOAD" });
+        // }
         spawn('chrome.runtime.reload()', { shell: true });
       });
     }

@@ -5,8 +5,8 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   //! it will likely grow - lets rewrite this with switch/case 
 
+  // console.log('background triggered', request.type, sender)
   if (request.type === 'notification') {
-    console.log('notification received', request)
 
     // const notificationOptions = {
     //   type: 'basic',
@@ -14,7 +14,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     //   title: request.title || 'misisng title',
     //   message: request.message || 'missing message',
     // };
-
     // chrome.notifications.create(notificationOptions);
   }
 
