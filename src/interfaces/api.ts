@@ -7,3 +7,8 @@ export interface ChuckNorrisJoke {
   url: string;
   value: string;
 }
+
+export interface typeFitQuote {
+  text: string;
+  author: string;
+}

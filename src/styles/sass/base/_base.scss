@@ -5,21 +5,40 @@
 	margin: 0;
 	padding: 0;
 	box-sizing: inherit;
+  scrollbar-width: thin;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  transition: background .2s linear, border .2s linear;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--background-dark);
+  border-radius: 20px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--background-dark);
+  border: 2px solid var(--text-light);
+  border-radius: 20px;
 }
 
 html {
-  background: black;
-  color: #fffafa;
-  width: 250px;
-  height: 200px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  font-size: 62.5%;
+  font-family: 'Roboto', serif;
+  width: 300px;
+  max-width: 350px;
+  margin: 0 auto;
+}
+
+html {
+  box-sizing: border-box;
 }
 
 .App {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  text-align: center;
+  background: var(--background-dark);
+  color: var(--text-light);
+  padding: 2rem;
+  transition: background .2s linear, color .1s linear;
 }
