@@ -23,7 +23,7 @@ function Tracker() {
 
   useEffect(() => {
     if (myAppIsRunningAsChromeExtension) {
-      chrome.runtime.sendMessage({ type: 'LOAD_REMINDER' }, (response) => {
+      chrome.runtime.sendMessage({ type: 'LOAD_REMINDERS' }, (response) => {
         if (chrome.runtime.lastError) {
           console.error(chrome.runtime.lastError);
         } else {

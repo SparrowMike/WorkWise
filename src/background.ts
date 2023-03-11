@@ -1,5 +1,5 @@
 chrome.runtime.onInstalled.addListener(() => {
-  console.log(' background')
+  console.log('background loaded')
 })
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -25,7 +25,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
   if (request.type === 'SAVE_REMINDER') {
     chrome.storage.local.get('reminders', (data) => {
-      console.log('data save reminder single!', data, request)
       if (chrome.runtime.lastError) {
         console.error(chrome.runtime.lastError);
         sendResponse({ success: false, error: 'Failed to load reminders' });
@@ -40,14 +39,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     });
   }
 
-  if (request.type === 'LOAD_REMINDER') {
+  if (request.type === 'LOAD_REMINDERS') {
     chrome.storage.local.get('reminders', (data) => {
       if (chrome.runtime.lastError) {
         console.error(chrome.runtime.lastError);
         sendResponse({ reminders: null, error: 'Failed to load reminders' });
       } else {
-        console.log(data);
-        sendResponse({ reminders: JSON.parse(data.reminders) });
+        console.log('loading reminders', JSON.parse(data?.reminders));
+        sendResponse({ reminders: JSON.parse(data?.reminders) });
       }
     });
   }
