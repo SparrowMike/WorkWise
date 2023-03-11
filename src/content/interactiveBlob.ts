@@ -13,7 +13,6 @@ export function interactiveBlob() {
   </div>  
 `
 
-  const extensionUrl = chrome.runtime.getURL('popup.html');
   const currentUrl = window.location.href;
 
   if (!currentUrl.startsWith("chrome-extension://glmmlghfolpmfcmgccdpnfknhcbhnabn")) {
@@ -27,6 +26,8 @@ export function interactiveBlob() {
     let dragStartX = 0;
     let dragStartY = 0;
 
+    const svg = document.querySelector('svg');
+    const blob = document.querySelector('#blob');
 
     if (container && inputWrapper && input) {
       const userSelectStyle = window.getComputedStyle(container).userSelect;
@@ -42,15 +43,47 @@ export function interactiveBlob() {
         if (isDragging) {
           container.classList.add('dragging');
           document.body.style.userSelect = "none";
-          const dx = event.clientX - dragStartX;
-          const dy = event.clientY - dragStartY;
-          container.style.left = `${container.offsetLeft + dx}px`;
-          container.style.top = `${container.offsetTop + dy}px`;
+
+          // Get the size of the container
+          const containerWidth = container.offsetWidth;
+          const containerHeight = container.offsetHeight;
+
+          // Get the size of the viewport
+          const viewportWidth = window.innerWidth;
+          const viewportHeight = window.innerHeight;
+
+          // Calculate the maximum and minimum values for the left and top CSS properties
+          const maxLeft = viewportWidth - containerWidth / 2;
+          const maxTop = viewportHeight - containerHeight / 2;
+          const minLeft = -containerWidth / 2;
+          const minTop = -containerHeight / 2;
+
+          // Update the left and top CSS properties of the container element
+          let newLeft = container.offsetLeft + event.clientX - dragStartX;
+          let newTop = container.offsetTop + event.clientY - dragStartY;
+
+          // Adjust the maximum and minimum values for the left and top CSS properties
+          if (newLeft > maxLeft) {
+            newLeft = maxLeft;
+          } else if (newLeft < minLeft) {
+            newLeft = minLeft;
+          }
+
+          if (newTop > maxTop) {
+            newTop = maxTop;
+          } else if (newTop < minTop) {
+            newTop = minTop;
+          }
+
+          container.style.left = `${newLeft}px`;
+          container.style.top = `${newTop}px`;
+
+          // Update the drag start position
           dragStartX = event.clientX;
           dragStartY = event.clientY;
-          console.log(dragStartX, dragStartY, window.innerHeight, window.innerWidth)
         }
       });
+
       document.addEventListener('mouseup', event => {
         isDragging = false;
         document.body.style.userSelect = userSelectStyle;
