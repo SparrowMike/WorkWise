@@ -19,7 +19,6 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "exclude_matches": ["*://glmmlghfolpmfcmgccdpnfknhcbhnabn/*"],
       "js": ["content.js"]
     }
   ],

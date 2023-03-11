@@ -5,8 +5,9 @@ const ThemeToggle: React.FC = () => {
   const { isDark, toggleTheme } = useContext(ThemeContext);
 
   function updateThemePref() {
-    toggleTheme(!isDark);
-    chrome.runtime.sendMessage({ type: 'UPDATE_THEME', theme: !isDark });
+    const newTheme = !isDark;
+    toggleTheme(newTheme);
+    chrome.runtime.sendMessage({ type: 'UPDATE_THEME', theme: newTheme });
   }
 
   return (
