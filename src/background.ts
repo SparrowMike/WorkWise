@@ -1,3 +1,9 @@
+let currentTabId: any;
+
+chrome.tabs.onActivated.addListener(function(activeInfo) {
+  currentTabId = activeInfo.tabId;
+});
+
 chrome.runtime.onInstalled.addListener(() => {
   console.log('background loaded')
 })
@@ -16,7 +22,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     // };
     // chrome.notifications.create(notificationOptions);
   }
-
+  
   if (request.type === 'SAVE_REMINDERS') {
     chrome.storage.sync.set({ reminders: JSON.stringify(request.reminders) }, () => {
       sendResponse({ success: true });
@@ -56,6 +62,17 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type === 'LOAD_THEME') {
     chrome.storage.sync.get('theme', (data) => {
       sendResponse({ theme: JSON.parse(data?.theme) });
+    });
+  }
+
+  if (request.type === 'SAVE_BLOB_POSITION') {
+    chrome.storage.sync.set({ newPosition: JSON.stringify(request.newPosition) });
+  }
+
+  if (request.type === 'LOAD_BLOB_POSITION') {
+    chrome.storage.sync.get('newPosition', (data) => {
+      sendResponse({ newPosition: JSON.parse(data?.newPosition) });
+      console.log('new position is ??? ', JSON.parse(data?.newPosition))
     });
   }
 

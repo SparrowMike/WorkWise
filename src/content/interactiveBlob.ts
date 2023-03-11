@@ -22,6 +22,17 @@ export function interactiveBlob() {
     const inputWrapper = document.getElementById('work-wise__input-wrapper') as HTMLElement;
     const input = document.getElementById('work-wise__my-input') as HTMLInputElement;
 
+    chrome.runtime.sendMessage({ type: 'LOAD_BLOB_POSITION' }, (response) => {
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError);
+      } else {
+        if (response && response.newPosition) {
+          container.style.left = `${response.newPosition.x}px`;
+          container.style.top = `${response.newPosition.y}px`;
+        }
+      }
+    });
+
     let isDragging = false;
     let dragStartX = 0;
     let dragStartY = 0;
@@ -87,10 +98,11 @@ export function interactiveBlob() {
         setTimeout(() => {
           container.classList.remove('dragging');
         }, 10);
+        chrome.runtime.sendMessage({  type: 'SAVE_BLOB_POSITION', newPosition: { x: event.clientX, y: event.clientY} });
+        console.log('sending message save blob', event)
       });
 
       container.addEventListener('click', (event) => {
-        console.log(event)
         event.stopPropagation();
         if (!container.classList.contains('dragging') && !isDragging) {
           input.focus();
