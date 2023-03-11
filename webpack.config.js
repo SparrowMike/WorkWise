@@ -16,7 +16,7 @@ export default {
     background: './src/background.ts',
     content: './src/content/content.tsx',
   },
-  devtool: isProd ? 'inline-source-map' : false,
+  devtool: isProd ? false : 'inline-source-map',
   devServer: {
     contentBase: './',
     hot: true
@@ -65,7 +65,8 @@ export default {
     }),
     new CopyWebpackPlugin({
       patterns: [
-        { from: 'public', to: './' },
+        { from: 'public/manifest.json', to: './' },
+        { from: `public/icons/${ isProd ? 'prod' : 'dev' }`, to: './icons' }
       ]
     }),
     function () {
