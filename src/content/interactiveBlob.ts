@@ -1,5 +1,6 @@
 import { blobGreen } from "./blobs";
 import { blobFirst } from "./blobs";
+import { countdown } from "../utils/countdown";
 
 export function interactiveBlob() {
   let blob = blobGreen()
@@ -15,7 +16,7 @@ export function interactiveBlob() {
 
   const currentUrl = window.location.href;
 
-  if (!currentUrl.includes("glmmlghfolpmfcmgccdpnfknhcbhnabn" || "ilodfinadncakkokondgknkehonhcckc")) {
+  if (!currentUrl.includes("glmmlghfolpmfcmgccdpnfknhcbhnabn" || "ilodfinadncakkokondgknkehonhcckc" || "dlkjllhiohiehadgjfbcjpcgnnppimba")) {
     document.body.insertAdjacentHTML('beforeend', elemHtml);
 
     const container = document.getElementById('work-wise__content-container') as HTMLElement;
@@ -125,6 +126,8 @@ export function interactiveBlob() {
             changeBlobColor();
             input.value = "";
             container.classList.remove('input-active');
+            // Start countdown
+            countdown(1);
           }
         }
       });
