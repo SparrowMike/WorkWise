@@ -30,7 +30,6 @@ export function interactiveBlob() {
 
     if (container && inputWrapper && input) {
       const userSelectStyle = window.getComputedStyle(container).userSelect;
-      console.log(userSelectStyle);
 
       container.addEventListener('mousedown', (event) => {
         event.stopPropagation();
@@ -41,6 +40,7 @@ export function interactiveBlob() {
 
       document.addEventListener('mousemove', event => {
         if (isDragging) {
+          container.classList.add('dragging');
           document.body.style.userSelect = "none";
           const dx = event.clientX - dragStartX;
           const dy = event.clientY - dragStartY;
@@ -48,17 +48,21 @@ export function interactiveBlob() {
           container.style.top = `${container.offsetTop + dy}px`;
           dragStartX = event.clientX;
           dragStartY = event.clientY;
+          console.log(dragStartX, dragStartY, window.innerHeight, window.innerWidth)
         }
       });
-
       document.addEventListener('mouseup', event => {
         isDragging = false;
         document.body.style.userSelect = userSelectStyle;
+        setTimeout(() => {
+          container.classList.remove('dragging');
+        }, 10);
       });
 
       container.addEventListener('click', (event) => {
+        console.log(event)
         event.stopPropagation();
-        if (!isDragging) {
+        if (!container.classList.contains('dragging') && !isDragging) {
           input.focus();
           container.classList.add('input-active');
           inputWrapper.style.display = "block";
@@ -71,7 +75,7 @@ export function interactiveBlob() {
         container.classList.remove('input-active');
       });
 
-      input.addEventListener('keyup', (event) => {
+      input.addEventListener('keyup', event => {
         if (event.key === 'Enter') {
           const inputValue = input.value.trim();
           if (inputValue !== "") {
