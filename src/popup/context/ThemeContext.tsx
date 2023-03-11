@@ -1,8 +1,8 @@
-import React, { createContext, useState } from 'react';
+import { createContext, useState } from 'react';
 
 interface ThemeContextProps {
   isDark: boolean;
-  toggleTheme: () => void;
+  toggleTheme: (theme: boolean) => void;
 }
 
 export const ThemeContext = createContext<ThemeContextProps>({
@@ -13,8 +13,8 @@ export const ThemeContext = createContext<ThemeContextProps>({
 const ThemeProvider = ({ children }: any) => {
   const [isDark, setIsDark] = useState(false);
 
-  const toggleTheme = () => {
-    setIsDark(prevIsDark => !prevIsDark);
+  const toggleTheme = (theme: boolean) => {
+    setIsDark(prevIsDark => theme || !prevIsDark);
   };
 
   const themeContext: ThemeContextProps = {
