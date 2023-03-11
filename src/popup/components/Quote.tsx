@@ -24,7 +24,7 @@ function Quote() {
   return (
     <div className="quote">
       <blockquote className="sidekick">
-        {quote?.text} <cite> {quote?.author} </cite>
+        {quote?.text} <cite> {quote?.author || 'Anonymous'} </cite>
       </blockquote>
     </div>
   )
