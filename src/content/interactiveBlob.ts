@@ -15,7 +15,7 @@ export function interactiveBlob() {
 
   const currentUrl = window.location.href;
 
-  if (!currentUrl.includes("glmmlghfolpmfcmgccdpnfknhcbhnabn" || "ilodfinadncakkokondgknkehonhcckc")) {
+  if (!currentUrl.includes("glmmlghfolpmfcmgccdpnfknhcbhnabn" || "ilodfinadncakkokondgknkehonhcckc" || "dlkjllhiohiehadgjfbcjpcgnnppimba")) {
     document.body.insertAdjacentHTML('beforeend', elemHtml);
 
     const container = document.getElementById('work-wise__content-container') as HTMLElement;
