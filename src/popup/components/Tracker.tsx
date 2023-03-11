@@ -101,7 +101,7 @@ function Tracker() {
         <input type="text" name="title" value={task.title} onChange={(event) => handleChange(event)} />
       </form>
       <div className="reminders">
-        {taskArray.map((task, index) => (
+        {taskArray?.map((task, index) => (
           <div key={index} className="reminder">
             <h4 contentEditable
               suppressContentEditableWarning

@@ -6,7 +6,7 @@ import webpack from 'webpack';
 
 import { spawn } from 'child_process';
 
-const isProd = process.env.NODE_ENV === 'production'
+const isProd = process.env.NODE_ENV === 'production';
 
 export default {
   mode: isProd ? 'production' : 'development',
@@ -14,9 +14,9 @@ export default {
     popup: './src/popup/main.tsx',
     options: './src/options/main.tsx',
     background: './src/background.ts',
-    content: './src/content.ts',
+    content: './src/content/content.tsx',
   },
-  devtool: 'inline-source-map',
+  devtool: isProd ? false : 'inline-source-map',
   devServer: {
     contentBase: './',
     hot: true
@@ -39,10 +39,6 @@ export default {
             presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-typescript'],
           },
         },
-      },
-      {
-        test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.scss$/,
@@ -69,11 +65,17 @@ export default {
     }),
     new CopyWebpackPlugin({
       patterns: [
-        { from: './public', to: './' },
+        { from: 'public/manifest.json', to: './' },
+        { from: `public/icons/${ isProd ? 'prod' : 'dev' }`, to: './icons' }
       ]
     }),
     function () {
       this.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
+        // console.log('webpack after emit tap function')
+        // if (typeof chrome !== 'undefined') {
+        //   chrome.runtime.reload();
+        //   chrome.runtime.sendMessage({ type: "RELOAD" });
+        // }
         spawn('chrome.runtime.reload()', { shell: true });
       });
     }

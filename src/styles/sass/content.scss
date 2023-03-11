@@ -1,0 +1,36 @@
+@import './helpers/variables';
+
+#work-wise__content-container {
+    width: 50px;
+    height: 50px;
+    position: fixed;
+    top: 133px;
+    left: 152px;
+    border-radius: 50%;
+    z-index: 2147483647;
+    cursor: pointer;
+    transition: width .5s ease-in, height .5s ease-in-out;
+
+    &.input-active {
+        width: 200px;
+        height: 200px;
+    }
+
+    #work-wise__input-wrapper {
+        position: absolute;
+        width: fit-content;
+        position: absolute;
+        top: 50%;
+        z-index: 99;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        
+        input {
+            background-color: black;
+            width: 100%;
+            color: white;
+            border: none;
+            border-radius: 50px;
+        }
+    }
+}

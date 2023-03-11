@@ -1,5 +1,4 @@
-import './../styles/css/style.css';
-// import './../styles/sass/main.scss';
+import './../styles/sass/main.scss';
 
 export function Options() {
   return (
