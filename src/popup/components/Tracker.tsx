@@ -23,7 +23,7 @@ function Tracker() {
 
   useEffect(() => {
     if (myAppIsRunningAsChromeExtension) {
-      chrome.runtime.sendMessage({ type: 'LOAD_REMINDER' }, (response) => {
+      chrome.runtime.sendMessage({ type: 'LOAD_REMINDERS' }, (response) => {
         if (chrome.runtime.lastError) {
           console.error(chrome.runtime.lastError);
         } else {
@@ -98,7 +98,7 @@ function Tracker() {
   return (
     <div className="tracker">
       <form onSubmit={handleSubmit}>
-        <input type="text" name="title" value={task.title} onChange={(event) => handleChange(event)} />
+        <input id="work-wise__my-input" type="text" name="title" value={task.title} onChange={(event) => handleChange(event)} />
       </form>
       <div className="reminders">
         {taskArray?.map((task, index) => (

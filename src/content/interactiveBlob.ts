@@ -13,7 +13,6 @@ export function interactiveBlob() {
   </div>  
 `
 
-  const extensionUrl = chrome.runtime.getURL('popup.html');
   const currentUrl = window.location.href;
 
   if (!currentUrl.startsWith("chrome-extension://glmmlghfolpmfcmgccdpnfknhcbhnabn")) {
@@ -23,14 +22,23 @@ export function interactiveBlob() {
     const inputWrapper = document.getElementById('work-wise__input-wrapper') as HTMLElement;
     const input = document.getElementById('work-wise__my-input') as HTMLInputElement;
 
+    chrome.runtime.sendMessage({ type: 'LOAD_BLOB_POSITION' }, (response) => {
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError);
+      } else {
+        if (response && response.newPosition) {
+          container.style.left = `${response.newPosition.x}px`;
+          container.style.top = `${response.newPosition.y}px`;
+        }
+      }
+    });
+
     let isDragging = false;
     let dragStartX = 0;
     let dragStartY = 0;
 
-
     if (container && inputWrapper && input) {
       const userSelectStyle = window.getComputedStyle(container).userSelect;
-      console.log(userSelectStyle);
 
       container.addEventListener('mousedown', (event) => {
         event.stopPropagation();
@@ -41,11 +49,44 @@ export function interactiveBlob() {
 
       document.addEventListener('mousemove', event => {
         if (isDragging) {
+          container.classList.add('dragging');
           document.body.style.userSelect = "none";
-          const dx = event.clientX - dragStartX;
-          const dy = event.clientY - dragStartY;
-          container.style.left = `${container.offsetLeft + dx}px`;
-          container.style.top = `${container.offsetTop + dy}px`;
+
+          // Get the size of the container
+          const containerWidth = container.offsetWidth;
+          const containerHeight = container.offsetHeight;
+
+          // Get the size of the viewport
+          const viewportWidth = window.innerWidth;
+          const viewportHeight = window.innerHeight;
+
+          // Calculate the maximum and minimum values for the left and top CSS properties
+          const maxLeft = viewportWidth - containerWidth / 2;
+          const maxTop = viewportHeight - containerHeight / 2;
+          const minLeft = -containerWidth / 2;
+          const minTop = -containerHeight / 2;
+
+          // Update the left and top CSS properties of the container element
+          let newLeft = container.offsetLeft + event.clientX - dragStartX;
+          let newTop = container.offsetTop + event.clientY - dragStartY;
+
+          // Adjust the maximum and minimum values for the left and top CSS properties
+          if (newLeft > maxLeft) {
+            newLeft = maxLeft;
+          } else if (newLeft < minLeft) {
+            newLeft = minLeft;
+          }
+
+          if (newTop > maxTop) {
+            newTop = maxTop;
+          } else if (newTop < minTop) {
+            newTop = minTop;
+          }
+
+          container.style.left = `${newLeft}px`;
+          container.style.top = `${newTop}px`;
+
+          // Update the drag start position
           dragStartX = event.clientX;
           dragStartY = event.clientY;
         }
@@ -54,11 +95,16 @@ export function interactiveBlob() {
       document.addEventListener('mouseup', event => {
         isDragging = false;
         document.body.style.userSelect = userSelectStyle;
+        setTimeout(() => {
+          container.classList.remove('dragging');
+        }, 10);
+        chrome.runtime.sendMessage({  type: 'SAVE_BLOB_POSITION', newPosition: { x: event.clientX, y: event.clientY} });
+        console.log('sending message save blob', event)
       });
 
       container.addEventListener('click', (event) => {
         event.stopPropagation();
-        if (!isDragging) {
+        if (!container.classList.contains('dragging') && !isDragging) {
           input.focus();
           container.classList.add('input-active');
           inputWrapper.style.display = "block";
@@ -71,7 +117,7 @@ export function interactiveBlob() {
         container.classList.remove('input-active');
       });
 
-      input.addEventListener('keyup', (event) => {
+      input.addEventListener('keyup', event => {
         if (event.key === 'Enter') {
           const inputValue = input.value.trim();
           if (inputValue !== "") {
@@ -86,7 +132,6 @@ export function interactiveBlob() {
     }
   }
 }
-
 
 // !================= temp var for toggle =======================
 let toggle = true;
