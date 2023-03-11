@@ -11,7 +11,6 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   //! it will likely grow - lets rewrite this with switch/case 
 
-  // console.log('background triggered', request.type, sender)
   if (request.type === 'notification') {
 
     // const notificationOptions = {
@@ -72,7 +71,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type === 'LOAD_BLOB_POSITION') {
     chrome.storage.sync.get('newPosition', (data) => {
       sendResponse({ newPosition: JSON.parse(data?.newPosition) });
-      console.log('new position is ??? ', JSON.parse(data?.newPosition))
     });
   }
 

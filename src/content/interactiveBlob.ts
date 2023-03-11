@@ -15,7 +15,7 @@ export function interactiveBlob() {
 
   const currentUrl = window.location.href;
 
-  if (!currentUrl.startsWith("chrome-extension://glmmlghfolpmfcmgccdpnfknhcbhnabn")) {
+  if (!currentUrl.includes("glmmlghfolpmfcmgccdpnfknhcbhnabn" || "ilodfinadncakkokondgknkehonhcckc")) {
     document.body.insertAdjacentHTML('beforeend', elemHtml);
 
     const container = document.getElementById('work-wise__content-container') as HTMLElement;
@@ -99,7 +99,6 @@ export function interactiveBlob() {
           container.classList.remove('dragging');
         }, 10);
         chrome.runtime.sendMessage({  type: 'SAVE_BLOB_POSITION', newPosition: { x: event.clientX, y: event.clientY} });
-        console.log('sending message save blob', event)
       });
 
       container.addEventListener('click', (event) => {

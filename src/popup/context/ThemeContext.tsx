@@ -14,7 +14,7 @@ const ThemeProvider = ({ children }: any) => {
   const [isDark, setIsDark] = useState(false);
 
   const toggleTheme = (theme: boolean) => {
-    setIsDark(prevIsDark => theme || !prevIsDark);
+    setIsDark(theme);
   };
 
   const themeContext: ThemeContextProps = {
