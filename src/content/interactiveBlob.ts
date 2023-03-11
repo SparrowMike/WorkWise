@@ -26,9 +26,6 @@ export function interactiveBlob() {
     let dragStartX = 0;
     let dragStartY = 0;
 
-    const svg = document.querySelector('svg');
-    const blob = document.querySelector('#blob');
-
     if (container && inputWrapper && input) {
       const userSelectStyle = window.getComputedStyle(container).userSelect;
 
@@ -123,7 +120,6 @@ export function interactiveBlob() {
     }
   }
 }
-
 
 // !================= temp var for toggle =======================
 let toggle = true;

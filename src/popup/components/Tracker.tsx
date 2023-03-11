@@ -98,7 +98,7 @@ function Tracker() {
   return (
     <div className="tracker">
       <form onSubmit={handleSubmit}>
-        <input type="text" name="title" value={task.title} onChange={(event) => handleChange(event)} />
+        <input id="work-wise__my-input" type="text" name="title" value={task.title} onChange={(event) => handleChange(event)} />
       </form>
       <div className="reminders">
         {taskArray?.map((task, index) => (
