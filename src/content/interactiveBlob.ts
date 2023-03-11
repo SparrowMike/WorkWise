@@ -98,7 +98,8 @@ export function interactiveBlob() {
         setTimeout(() => {
           container.classList.remove('dragging');
         }, 10);
-        chrome.runtime.sendMessage({  type: 'SAVE_BLOB_POSITION', newPosition: { x: event.clientX, y: event.clientY} });
+
+        chrome.runtime.sendMessage({  type: 'SAVE_BLOB_POSITION', newPosition: { x: dragStartX, y: dragStartY } });
       });
 
       container.addEventListener('click', (event) => {
