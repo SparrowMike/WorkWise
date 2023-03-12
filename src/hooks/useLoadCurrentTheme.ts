@@ -8,7 +8,7 @@ function useLoadCurrentTheme() {
     chrome.runtime.sendMessage({ type: 'LOAD_THEME' }, (response) => {
       if (response && response.theme !== undefined && response.theme !== null) {
         toggleTheme(response.theme);
-        console.log('Loaded theme:', response.theme);
+        console.log('Loaded theme:', response.theme ? 'dark' : 'light');
       } else {
         console.error('Error loading theme:', response);
       }

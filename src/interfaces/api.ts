@@ -8,7 +8,7 @@ export interface ChuckNorrisJoke {
   value: string;
 }
 
-export interface typeFitQuote {
+export interface QuoteType {
   text: string;
   author: string;
 }

@@ -28,9 +28,6 @@ function Popup() {
     };
   }, []);
 
-  //! normal for this log to trigger multiple times, can look into it later.
-  console.log('Is current theme dark? ---', isDark)
-
   return (
     <div className={`App ${isDark ? 'dark' : 'light'}`}>
       {!showElement ? (

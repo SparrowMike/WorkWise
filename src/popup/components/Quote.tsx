@@ -1,33 +1,28 @@
-import { useState, useEffect } from 'react';
-import { typeFitQuote } from '../../interfaces/api';
+import { useApiCall } from "../../hooks/useApiCall";
+import { QuoteType } from "../../interfaces/api";
 
 function Quote() {
-  // ? free motivational API
-  // https://type.fit/api/quotes
-  // https://favqs.com/api/
-  // https://quotes.rest/
-  // http://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en
+  const { data, isLoading, error } = useApiCall<QuoteType[]>('https://type.fit/api/quotes');
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-  const [quote, setQuote] = useState<typeFitQuote | null>(null);
+  if (error) {
+    return <div>Error fetching data: {error.message}</div>;
+  }
 
-  useEffect(() => {
-    fetch('https://type.fit/api/quotes')
-      .then(response => response.json())
-      .then(data => {
-        const randomIndex = Math.floor(Math.random() * data.length);
-        setQuote(data[randomIndex]);
-      })
-      .catch(error => console.error('Error fetching quote:', error));
-  }, []);
+  const randomIndex = Math.floor(Math.random() * (data?.length ?? 0));
 
   return (
-    <div className="quote">
-      <blockquote className="sidekick">
-        {quote?.text} <cite> {quote?.author || 'Anonymous'} </cite>
-      </blockquote>
+    <div className="quote-list">
+      <div className="quote">
+        <blockquote className="sidekick">
+          {(data as QuoteType[])[randomIndex]?.text} <cite> {(data as QuoteType[])[randomIndex]?.author || 'Anonymous'} </cite>
+        </blockquote>
+      </div>
     </div>
-  )
+  );
 }
 
-export default Quote
+export default Quote;
