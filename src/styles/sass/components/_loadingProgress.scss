@@ -1,0 +1,69 @@
+
+.loading-progress-bar {
+  background: grey;
+  overflow: hidden;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 5px;
+
+  span {
+    display: block;
+  }
+
+  .bar {
+    background: grey;
+  
+    .progress {
+      animation: loader 1s ease forwards;
+      background: var(--success-color);
+      color: #fff;
+      padding: 1rem;
+      width: 0;
+    }
+  }
+}
+
+@keyframes loader {
+	0% {
+		width: 0;
+	}
+
+	20% {
+		width: 10%;
+	}
+
+	25% {
+		width: 24%;
+	}
+
+	43% {
+		width: 41%;
+	}
+
+	56% {
+		width: 50%;
+	}
+
+	66% {
+		width: 52%;
+	}
+
+	71% {
+		width: 60%;
+	}
+
+	75% {
+		width: 76%;
+    
+	}
+
+	94% {
+		width: 86%;
+	}
+
+	100% {
+		width: 100%;
+	}
+}
