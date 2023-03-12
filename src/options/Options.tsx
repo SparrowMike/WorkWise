@@ -1,16 +1,14 @@
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 
 import './../styles/sass/main.scss';
 import { ThemeContext } from '../popup/context/ThemeContext';
+import useLoadCurrentTheme from '../hooks/useLoadCurrentTheme';
 
 export function Options() {
-  const { isDark, toggleTheme } = useContext(ThemeContext);
+  const { isDark } = useContext(ThemeContext);
 
-  useEffect(() => {
-    chrome.runtime.sendMessage({ type: 'LOAD_THEME' }, (response) => {
-      toggleTheme(response.theme);
-    })
-  }, []);
+  useLoadCurrentTheme();
+  console.log(isDark)
 
   return (
     <div className={`App ${isDark ? 'dark' : 'light'}`}>

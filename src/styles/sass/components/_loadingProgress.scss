@@ -16,7 +16,7 @@
     background: grey;
   
     .progress {
-      animation: loader 1s ease forwards;
+      animation: loader .5s ease forwards;
       background: var(--success-color);
       color: #fff;
       padding: 1rem;

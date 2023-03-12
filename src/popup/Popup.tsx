@@ -10,17 +10,13 @@ import { ThemeContext } from './context/ThemeContext';
 
 import ThemeToggle from './components/ThemeToggler';
 import ProgressBar from './components/ProgressBar';
+import useLoadCurrentTheme from '../hooks/useLoadCurrentTheme';
 
 function Popup() {
-  const { isDark, toggleTheme } = useContext(ThemeContext);
+  const { isDark } = useContext(ThemeContext);
   const [showElement, setShowElement] = useState(false);
 
-  useEffect(() => {
-    chrome.runtime.sendMessage({ type: 'LOAD_THEME' }, (response) => {
-      toggleTheme(response.theme);
-    })
-  }, []);
-
+  useLoadCurrentTheme();
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -32,6 +28,8 @@ function Popup() {
     };
   }, []);
 
+  //! normal for this log to trigger multiple times, can look into it later.
+  console.log('Is current theme dark? ---', isDark)
 
   return (
     <div className={`App ${isDark ? 'dark' : 'light'}`}>
