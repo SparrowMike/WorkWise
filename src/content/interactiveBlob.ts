@@ -14,9 +14,7 @@ export function interactiveBlob() {
   </div>  
 `
 
-  const currentUrl = window.location.href;
-
-  if (!currentUrl.includes("glmmlghfolpmfcmgccdpnfknhcbhnabn" || "ilodfinadncakkokondgknkehonhcckc" || "dlkjllhiohiehadgjfbcjpcgnnppimba")) {
+  if (document.title !== 'Popup Extension') {
     document.body.insertAdjacentHTML('beforeend', elemHtml);
 
     const container = document.getElementById('work-wise__content-container') as HTMLElement;
