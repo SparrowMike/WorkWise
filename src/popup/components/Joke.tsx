@@ -1,12 +1,20 @@
-import { useApiCall } from "../../hooks/useApiCall";
-import { ChuckNorrisJoke } from '../../interfaces/api'
+import { useState } from 'react';
+import useApiRequest from '../../hooks/useApiRequest';
+import { ChuckNorrisJoke } from '../../interfaces/api';
 
 function Joke() {
-  const { data, isLoading, error, refetch } = useApiCall<ChuckNorrisJoke>('https://api.chucknorris.io/jokes/random');
+  const [shouldRefetch, setShouldRefetch] = useState(false);
 
-  const handleRefetchClick = () => {
-    refetch();
+  const { data, isLoading, error } = useApiRequest<ChuckNorrisJoke>({
+    url: 'https://api.chucknorris.io/jokes/random',
+    method: 'GET',
+    refetch: shouldRefetch, 
+  });
+
+  const handleRefetch = () => {
+    setShouldRefetch(!shouldRefetch);
   };
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -20,9 +28,9 @@ function Joke() {
   return (
     <>
       <h4>{joke?.value}</h4>
-      <button onClick={handleRefetchClick}>Refetch</button>
+      <button onClick={handleRefetch}>Refetch</button>
     </>
-  )
+  );
 }
 
-export default Joke
+export default Joke;

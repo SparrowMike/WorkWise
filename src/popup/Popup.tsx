@@ -9,40 +9,18 @@ import Quote from './components/Quote';
 import { ThemeContext } from './context/ThemeContext';
 
 import ThemeToggle from './components/ThemeToggler';
-import ProgressBar from './components/ProgressBar';
-import useLoadCurrentTheme from '../hooks/useLoadCurrentTheme';
 
 function Popup() {
   const { isDark } = useContext(ThemeContext);
-  const [showElement, setShowElement] = useState(false);
-
-  useLoadCurrentTheme();
-
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setShowElement(true);
-    }, 200);
-
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, []);
 
   return (
     <div className={`App ${isDark ? 'dark' : 'light'}`}>
-      {!showElement ? (
-        <ProgressBar />
-      ) : (
-        <>
-          <Clock />
-          {/* <Joke /> */}
-          <Quote />
-          <Tracker />
-          <ThemeToggle />
-        </>
-      )}
+      <Clock />
+      {/* <Joke /> */}
+      <Quote />
+      <Tracker />
+      <ThemeToggle />
     </div>
-  )
+  );
 }
-
-export default Popup
+export default Popup;
