@@ -98,7 +98,13 @@ export function interactiveBlob() {
           container.classList.remove('dragging');
         }, 10);
 
-        chrome.runtime.sendMessage({  type: 'SAVE_BLOB_POSITION', newPosition: { x: dragStartX, y: dragStartY } });
+        if (chrome.runtime && chrome.runtime.sendMessage) {
+          chrome.runtime.sendMessage({ type: 'SAVE_BLOB_POSITION', newPosition: { x: dragStartX, y: dragStartY } }, (response) => {
+            if (chrome.runtime.lastError) {
+              console.error(chrome.runtime.lastError);
+            }
+          });
+        }
       });
 
       container.addEventListener('click', (event) => {

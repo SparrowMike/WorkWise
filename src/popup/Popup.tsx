@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import './../styles/sass/main.scss';
 
 import Clock from './components/Clock';
@@ -9,10 +9,13 @@ import Quote from './components/Quote';
 import { ThemeContext } from './context/ThemeContext';
 
 import ThemeToggle from './components/ThemeToggler';
+import useLoadCurrentTheme from '../hooks/useLoadCurrentTheme';
 
 function Popup() {
   const { isDark } = useContext(ThemeContext);
 
+  useLoadCurrentTheme();
+  
   return (
     <div className={`App ${isDark ? 'dark' : 'light'}`}>
       <Clock />

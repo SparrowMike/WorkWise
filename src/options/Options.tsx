@@ -8,7 +8,6 @@ export function Options() {
   const { isDark } = useContext(ThemeContext);
 
   useLoadCurrentTheme();
-  console.log(isDark)
 
   return (
     <div className={`App ${isDark ? 'dark' : 'light'}`}>
