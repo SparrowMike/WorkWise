@@ -128,7 +128,6 @@ export function interactiveBlob() {
           if (inputValue !== "") {
             chrome.runtime.sendMessage({ type: "SAVE_REMINDER", title: inputValue });
             inputWrapper.style.display = "none";
-            changeBlobColor();
             input.value = "";
             container.classList.remove('input-active');
             // Start countdown
@@ -136,31 +135,6 @@ export function interactiveBlob() {
           }
         }
       });
-    }
-  }
-}
-
-// !================= temp var for toggle =======================
-let toggle = true;
-
-export function changeBlobColor() {
-  const path = document.getElementById('work-wise__blobSvg');
-  if (path) {
-    path.setAttribute('fill', 'url(#gradient)');
-    const gradient = path.querySelector('#gradient');
-    if (gradient) {
-      if (toggle) {
-        //@ts-ignore
-        gradient.querySelector('stop[offset="0%"]').style.stopColor = '#E90064';
-        //@ts-ignore
-        gradient.querySelector('stop[offset="100%"]').style.stopColor = '#B3005E';
-      } else {
-        //@ts-ignore
-        gradient.querySelector('stop[offset="0%"]').style.stopColor = '#7DCE13';
-        //@ts-ignore
-        gradient.querySelector('stop[offset="100%"]').style.stopColor = '#5BB318';
-      }
-      toggle = !toggle
     }
   }
 }
