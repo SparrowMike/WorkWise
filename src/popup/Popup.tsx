@@ -35,7 +35,7 @@ function Popup() {
       ) : (
         <>
           <Clock />
-          {/* <Joke /> */}
+          <Joke />
           <Quote />
           <Tracker />
           <ThemeToggle />

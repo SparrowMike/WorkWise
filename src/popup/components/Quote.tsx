@@ -1,10 +1,17 @@
-import { useApiCall } from "../../hooks/useApiCall";
+import useApiRequest from "../../hooks/useApiRequest";
 import { QuoteType } from "../../interfaces/api";
 
-function Quote() {
-  const { data, isLoading, error } = useApiCall<QuoteType[]>('https://type.fit/api/quotes');
+function isQuoteTypeArray(data: QuoteType | QuoteType[]): data is QuoteType[] {
+  return Array.isArray(data);
+}
 
-  if (isLoading) {
+function Quote() {
+  const { data, isLoading, error } = useApiRequest<QuoteType>({
+    url: "https://type.fit/api/quotes",
+    method: "GET",
+  });
+
+  if (isLoading || !data) {
     return <div>Loading...</div>;
   }
 
@@ -12,13 +19,14 @@ function Quote() {
     return <div>Error fetching data: {error.message}</div>;
   }
 
-  const randomIndex = Math.floor(Math.random() * (data?.length ?? 0));
+  const quoteData = isQuoteTypeArray(data) ? data : [data];
+  const randomIndex: number = Math.floor(Math.random() * quoteData.length);
 
   return (
     <div className="quote-list">
       <div className="quote">
         <blockquote className="sidekick">
-          {(data as QuoteType[])[randomIndex]?.text} <cite> {(data as QuoteType[])[randomIndex]?.author || 'Anonymous'} </cite>
+          {quoteData[randomIndex]?.text} <cite> {quoteData[randomIndex]?.author || 'Anonymous'} </cite>
         </blockquote>
       </div>
     </div>
