@@ -1,11 +1,16 @@
+import React, { useState } from 'react';
 import useApiRequest from "../../hooks/useApiRequest";
 import { QuoteType } from "../../interfaces/api";
+
+type Props = {
+  setIsQuoteReadyToRender: (isReady: boolean) => void;
+};
 
 function isQuoteTypeArray(data: QuoteType | QuoteType[]): data is QuoteType[] {
   return Array.isArray(data);
 }
 
-function Quote() {
+function Quote({ setIsQuoteReadyToRender }: Props) {
   const { data, isLoading, error } = useApiRequest<QuoteType>({
     url: "https://type.fit/api/quotes",
     method: "GET",
@@ -14,6 +19,8 @@ function Quote() {
   if (isLoading || !data) {
     return <div>Loading...</div>;
   }
+
+  setIsQuoteReadyToRender(true);
 
   if (error) {
     return <div>Error fetching data: {error.message}</div>;
@@ -33,4 +40,4 @@ function Quote() {
   );
 }
 
-export default Quote;
+export default React.memo(Quote);

@@ -14,35 +14,44 @@ import useLoadCurrentTheme from '../hooks/useLoadCurrentTheme';
 
 function Popup() {
   const { isDark } = useContext(ThemeContext);
-  const [showElement, setShowElement] = useState(false);
+  const [height, setHeight] = useState(10);
+  const [isQuoteReadyToRender, setIsQuoteReadyToRender] = useState(false);
 
   useLoadCurrentTheme();
 
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setShowElement(true);
-    }, 200);
+    const popupElement = document.getElementById('popup');
 
-    return () => {
-      clearTimeout(timeoutId);
-    };
+    if (popupElement) {
+      const timeoutId = setTimeout(() => {
+        setHeight(popupElement.scrollHeight);
+      }, 150);
+
+      return () => {
+        clearTimeout(timeoutId);
+      };
+    }
   }, []);
 
+  const popupStyle = {
+    height: isQuoteReadyToRender ? height : 10,
+    transition: 'height 0.1s ease-in-out',
+    overflow: 'hidden',
+  };
+  console.log(isQuoteReadyToRender)
+
   return (
-    <div className={`App ${isDark ? 'dark' : 'light'}`}>
-      {!showElement ? (
-        <ProgressBar />
-      ) : (
-        <>
-          <Clock />
-          {/* <Joke /> */}
-          <Quote />
-          <Tracker />
-          <ThemeToggle />
-        </>
-      )}
+    <div className="popup-container" style={popupStyle}>
+      <div className={`App ${isDark ? 'dark' : 'light'}`} id="popup">
+        {/* {!isQuoteReadyToRender && <ProgressBar/>} */}
+        <Clock />
+        {/* <Joke /> */}
+        <Quote setIsQuoteReadyToRender={setIsQuoteReadyToRender} />
+        <Tracker />
+        <ThemeToggle />
+      </div>
     </div>
-  )
+  );
 }
 
-export default Popup
+export default Popup;
