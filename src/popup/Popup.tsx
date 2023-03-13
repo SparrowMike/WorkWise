@@ -14,19 +14,20 @@ import useLoadCurrentTheme from '../hooks/useLoadCurrentTheme';
 
 function Popup() {
   const { isDark } = useContext(ThemeContext);
-  const [height, setHeight] = useState(10);
+  const [height, setHeight] = useState(27);
   const [isQuoteReadyToRender, setIsQuoteReadyToRender] = useState(false);
 
   useLoadCurrentTheme();
 
   useEffect(() => {
     const popupElement = document.getElementById('popup');
-
+  
     if (popupElement) {
       const timeoutId = setTimeout(() => {
         setHeight(popupElement.scrollHeight);
-      }, 150);
-
+        setIsQuoteReadyToRender(true);
+      }, 500);
+  
       return () => {
         clearTimeout(timeoutId);
       };
@@ -34,19 +35,18 @@ function Popup() {
   }, []);
 
   const popupStyle = {
-    height: isQuoteReadyToRender ? height : 10,
-    transition: 'height 0.1s ease-in-out',
+    height: isQuoteReadyToRender ? height : 27,
+    transition: 'height 0.3s ease-in-out',
     overflow: 'hidden',
   };
-  console.log(isQuoteReadyToRender)
 
   return (
     <div className="popup-container" style={popupStyle}>
       <div className={`App ${isDark ? 'dark' : 'light'}`} id="popup">
-        {/* {!isQuoteReadyToRender && <ProgressBar/>} */}
+        {!isQuoteReadyToRender && <ProgressBar/>}
         <Clock />
         {/* <Joke /> */}
-        <Quote setIsQuoteReadyToRender={setIsQuoteReadyToRender} />
+        <Quote />
         <Tracker />
         <ThemeToggle />
       </div>
