@@ -14,7 +14,7 @@ export function interactiveBlob() {
   </div>  
 `
 
-  if (document.title !== 'Popup Extension') {
+  if (!['WorkWise - Popup Extension', 'WorkWise - Options Extension'].includes(document.title)) {
     document.body.insertAdjacentHTML('beforeend', elemHtml);
 
     const container = document.getElementById('work-wise__content-container') as HTMLElement;
