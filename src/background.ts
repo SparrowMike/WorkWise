@@ -1,27 +1,51 @@
 let currentTabId: any;
 
-chrome.tabs.onActivated.addListener(function(activeInfo) {
+chrome.tabs.onActivated.addListener(function (activeInfo) {
   currentTabId = activeInfo.tabId;
+  console.log(activeInfo)
 });
+
+chrome.tabs.onActivated.addListener((activeInfo) => {
+  console.log(`Tab ${activeInfo.tabId} was activated`);
+  showWindowsAndTabs();
+});
+
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  console.log(`Tab ${tabId} was updated`);
+  showWindowsAndTabs();
+});
+
+chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
+  console.log(`Tab ${tabId} was removed`);
+  showWindowsAndTabs();
+});
+
+chrome.windows.onFocusChanged.addListener((windowId) => {
+  console.log(`Window ${windowId} received focus`);
+  showWindowsAndTabs();
+});
+
+function showWindowsAndTabs() {
+  chrome.tabs.query({}, (tabs) => {
+    console.log('current tabs----', tabs);
+  });
+  
+  chrome.windows.getAll({ populate: true }, (windows) => {
+    console.log('current windows----', windows);
+  });
+}
 
 chrome.runtime.onInstalled.addListener(() => {
   console.log('background loaded')
 })
 
+chrome.runtime.onConnect.addListener(() => {
+  console.log('connection made')
+  chrome.runtime.reload();
+})
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   //! it will likely grow - lets rewrite this with switch/case 
-
-  if (request.type === 'notification') {
-
-    // const notificationOptions = {
-    //   type: 'basic',
-    //   iconUrl: 'https://cdn-icons-png.flaticon.com/512/3449/3449750.png',
-    //   title: request.title || 'misisng title',
-    //   message: request.message || 'missing message',
-    // };
-    // chrome.notifications.create(notificationOptions);
-  }
-  
   if (request.type === 'SAVE_REMINDERS') {
     chrome.storage.sync.set({ reminders: JSON.stringify(request.reminders) }, () => {
       sendResponse({ success: true });
