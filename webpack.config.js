@@ -4,6 +4,8 @@ import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import webpack from 'webpack';
 
+import { spawn } from 'child_process';
+
 const isProd = process.env.NODE_ENV === 'production';
 
 export default {
@@ -67,14 +69,10 @@ export default {
         { from: `public/icons/${ isProd ? 'prod' : 'dev' }`, to: './icons' }
       ]
     }),
-    {
-      apply: (compiler) => {
-        compiler.hooks.afterEmit.tap('AfterEmitPlugin', () => {
-          if (typeof chrome !== 'undefined' && chrome.runtime) {
-            chrome.runtime.reload();
-          }
-        });
-      }
+    function () {
+      this.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
+        spawn('chrome.runtime.reload()', { shell: true });
+      });
     }
   ],
   watch: true
