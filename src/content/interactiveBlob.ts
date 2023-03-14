@@ -20,18 +20,7 @@ export function interactiveBlob() {
     const container = document.getElementById('work-wise__content-container') as HTMLElement;
     const inputWrapper = document.getElementById('work-wise__input-wrapper') as HTMLElement;
     const input = document.getElementById('work-wise__my-input') as HTMLInputElement;
-
-    chrome.runtime.sendMessage({ type: 'LOAD_BLOB_POSITION' }, (response) => {
-      if (chrome.runtime.lastError) {
-        console.error(chrome.runtime.lastError);
-      } else {
-        if (response && response.newPosition) {
-          container.style.left = `${response.newPosition.x}px`;
-          container.style.top = `${response.newPosition.y}px`;
-        }
-      }
-    });
-
+    
     let isDragging = false;
     let dragStartX = 0;
     let dragStartY = 0;
@@ -97,14 +86,6 @@ export function interactiveBlob() {
         setTimeout(() => {
           container.classList.remove('dragging');
         }, 10);
-
-        if (chrome.runtime && chrome.runtime.sendMessage) {
-          chrome.runtime.sendMessage({ type: 'SAVE_BLOB_POSITION', newPosition: { x: dragStartX, y: dragStartY } }, (response) => {
-            if (chrome.runtime.lastError) {
-              console.error(chrome.runtime.lastError);
-            }
-          });
-        }
       });
 
       container.addEventListener('click', (event) => {
