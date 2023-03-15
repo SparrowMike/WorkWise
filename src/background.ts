@@ -66,7 +66,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         sendResponse({ success: false, error: 'Failed to load reminders' });
       } else {
         const reminders = JSON.parse(data.reminders || '[]');
-        const newReminder = { title: request.title };
+        const newReminder = { id: request.id, title: request.title, timeLeft: request.timeLeft };
         reminders.push(newReminder);
         chrome.storage.sync.set({ reminders: JSON.stringify(reminders) }, () => {
           sendResponse({ success: true });
@@ -84,6 +84,26 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         sendResponse({ reminders: JSON.parse(data?.reminders) });
       }
     });
+  }
+
+  if (request.type === 'UDPATE_REMINDER_TIMELEFT') {
+    chrome.storage.sync.get('reminders', (data) => {
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError);
+        sendResponse({ reminders: null, error: `Failed to update time for reminder :: ${request.id}` });
+      } else {
+        const reminders = JSON.parse(data.reminders || '[]');
+        if (reminders && reminders.length > 0) {
+          const udpatedReminderIndex = reminders.findIndex((reminder: { id: string; }) => reminder.id === request.id);
+          if (udpatedReminderIndex > -1) {
+            reminders[udpatedReminderIndex].timeLeft = request.timeLeft;
+            chrome.storage.sync.set({ reminders: JSON.stringify(reminders) }, () => {
+              sendResponse({ success: true });
+            });
+          }
+        }
+      }
+    })
   }
 
   if (request.type === 'UPDATE_THEME') {

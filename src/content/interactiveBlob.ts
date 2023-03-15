@@ -1,6 +1,7 @@
 import { blobGreen } from "./blobs";
 import { blobFirst } from "./blobs";
 import { countdown } from "../utils/countdown";
+import { v4 as uuidv4 } from 'uuid';
 
 export function interactiveBlob() {
   let blob = blobGreen()
@@ -107,12 +108,13 @@ export function interactiveBlob() {
         if (event.key === 'Enter') {
           const inputValue = input.value.trim();
           if (inputValue !== "") {
-            chrome.runtime.sendMessage({ type: "SAVE_REMINDER", title: inputValue });
+            const id = uuidv4();
+            chrome.runtime.sendMessage({ type: "SAVE_REMINDER", id, title: inputValue, timeLeft: 60 });
             inputWrapper.style.display = "none";
             input.value = "";
             container.classList.remove('input-active');
             // Start countdown
-            countdown(1);
+            countdown(1, id);
           }
         }
       });
