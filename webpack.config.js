@@ -13,7 +13,7 @@ export default {
   entry: {
     popup: './src/popup/main.tsx',
     options: './src/options/main.tsx',
-    background: './src/background.ts',
+    background: './src/background/background.ts',
     content: './src/content/content.tsx',
   },
   devtool: isProd ? false : 'inline-source-map',
