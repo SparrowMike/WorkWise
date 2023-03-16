@@ -1,5 +1,4 @@
-import { countdown } from "../../utils/countdown";
-import { v4 as uuidv4 } from 'uuid';
+import { samplePref } from "./samplePref";
 
 export function createBlob() {
   const elemHtml = '<div id="work-wise__content"></div>';
@@ -9,12 +8,7 @@ export function createBlob() {
   }
 }
 
-export function interactiveBlob (
-  container: HTMLElement,
-) {
-
-    
-  
+export function interactiveBlob (container: HTMLElement) {
   let isActive = false;
   let isDragging = false;
   let dragStartX = 0;
@@ -117,12 +111,8 @@ export function interactiveBlob (
     container.addEventListener('click', (event) => {
       event.stopPropagation();
       if (!container.classList.contains('dragging') && !isDragging) {
-        // input.focus();
-        // inputWrapper.style.display = "block";
-
         chrome.storage.sync.get('preference', (data) => {
-          const preference = JSON.parse(data.preference || '{}');
-
+          const preference = samplePref || JSON.parse(data.preference || '{}'); //! TEMPORARY SAMPLE PREFERENCE
           if (!isActive) {
             isActive = true;
             container.classList.add('input-active');
@@ -132,31 +122,12 @@ export function interactiveBlob (
       }
     })
 
-
     document.addEventListener('click', event => {
-      // inputWrapper.style.display = "none";
-      // input.value = "";
-
       if (isActive) {
         isActive = false;
         container.classList.remove('input-active');
         chrome.runtime.sendMessage({ type: 'BLOB_ACTIVATED', preference: { isActive: false } });
       }
     });
-
-    // input.addEventListener('keyup', event => {
-    //   if (event.key === 'Enter') {
-    //     const inputValue = input.value.trim();
-    //     if (inputValue !== "") {
-    //       const id = uuidv4();
-    //       chrome.runtime.sendMessage({ type: "SAVE_REMINDER", id, title: inputValue, timeLeft: 60 });
-    //       inputWrapper.style.display = "none";
-    //       input.value = "";
-    //       container.classList.remove('input-active');
-    //       // Start countdown
-    //       countdown(1, id);
-    //     }
-    //   }
-    // });
   }
 }

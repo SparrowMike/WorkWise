@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Blob from './components/Blob';
 import Clock from '../popup/components/Clock';
 import useIsMounted from '../hooks/useIsMounted';
@@ -13,6 +13,8 @@ interface MessageRequest {
 
 const Content = () => {
   useIsMounted(); // checks if react mounted 
+
+  const inputRef = useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = useState('');
   const [preference, setPreference] = useState<Preference>({
     theme: true,
@@ -29,10 +31,13 @@ const Content = () => {
       sender: chrome.runtime.MessageSender,
       sendResponse: (response?: any) => void
     ) => {
-      console.log(request);
       if (request.type === 'BLOB_ACTIVATED' && request.preference) {
-        setPreference(request.preference); // Use type assertion here as isActive is optional in MessageRequest
+        setPreference(request.preference);
       }
+
+      // if (inputRef.current) {
+      //   inputRef.current.focus();
+      // }
     };
   
     chrome.runtime.onMessage.addListener(handleMessage);
@@ -51,9 +56,11 @@ const Content = () => {
 
         setInputValue('');
         setPreference({...preference, reminder: inputValue});
-        
+
+        // document.getElementById('work-wise__content')?.classList.remove('input-active'); //! somehow this doesn't work as expected and element unable to open up 
+
         // Start countdown
-        countdown(preference.sprintLength || 10, id);
+        // countdown(preference.sprintLength || 10, id); //! You can stack up the countdown event causing it to just go nuts, we need new approach
       }
     }
   };
@@ -72,9 +79,9 @@ const Content = () => {
               {preference.reminder}
             </div>
           }
-
           <input
             id="work-wise__my-input"
+            // ref="inputRef"
             type="text"
             value={inputValue}
             onKeyUp={handleKeyUp}
