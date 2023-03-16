@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { FormData } from "../../interfaces/user";
-import { isRunningAsChromeExtension } from "../../utils/helpers";
 
 function Tracker() {
   const formData: FormData = {
@@ -13,32 +12,21 @@ function Tracker() {
   const [taskArray, setTaskArray] = useState<FormData[]>([]);
   const [task, setTask] = useState<FormData>(formData);
   const [backupTrigger, setBackupTrigger] = useState(false);
-  const myAppIsRunningAsChromeExtension = isRunningAsChromeExtension();
-
-  const chrome = window.chrome;
 
   const handleOptionsClick = () => {
     chrome.runtime.openOptionsPage();
   };
 
   useEffect(() => {
-    if (myAppIsRunningAsChromeExtension) {
-      chrome.runtime.sendMessage({ type: 'LOAD_REMINDERS' }, (response) => {
-        if (chrome.runtime.lastError) {
-          console.error(chrome.runtime.lastError);
-        } else {
-          if (response && response.reminders) {
-            setTaskArray(response.reminders);
-          }
+    chrome.runtime.sendMessage({ type: 'LOAD_REMINDERS' }, (response) => {
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError);
+      } else {
+        if (response && response.reminders) {
+          setTaskArray(response.reminders);
         }
-      });
-    } else {
-      const storedMessage = localStorage.getItem('reminders');
-      if (storedMessage) {
-        const parsedMessage = JSON.parse(storedMessage);
-        setTaskArray(parsedMessage);
       }
-    }
+    });
   }, []);
 
   useEffect(() => {
@@ -49,11 +37,7 @@ function Tracker() {
   }, [backupTrigger, taskArray]);
 
   function backUpData() {
-    if (myAppIsRunningAsChromeExtension) {
-      chrome.runtime.sendMessage('', { type: 'SAVE_REMINDERS', reminders: taskArray });
-    } else {
-      localStorage.setItem('reminders', JSON.stringify(taskArray));
-    }
+    chrome.runtime.sendMessage('', { type: 'SAVE_REMINDERS', reminders: taskArray });
   }
 
   function handleSubmit(event: any) {
@@ -114,9 +98,8 @@ function Tracker() {
           </div>
         ))}
       </div>
-      {myAppIsRunningAsChromeExtension && 
-        <a onClick={handleOptionsClick} style={{ alignSelf: 'baseline', padding: '10px 5px', textDecoration: 'underline', cursor: 'pointer' }}>Options</a>
-      }
+      {/* ====   no plans for options in the MVP   ==== */}
+      {/* <a onClick={handleOptionsClick} style={{ alignSelf: 'baseline', padding: '10px 5px', textDecoration: 'underline', cursor: 'pointer' }}>Options</a> */}
     </div>
   )
 }
