@@ -50,8 +50,7 @@ function Tracker() {
 
   function backUpData() {
     if (myAppIsRunningAsChromeExtension) {
-      chrome.runtime.sendMessage('', { type: 'SAVE_REMINDERS', reminders: taskArray }, (response) => {
-      });
+      chrome.runtime.sendMessage('', { type: 'SAVE_REMINDERS', reminders: taskArray });
     } else {
       localStorage.setItem('reminders', JSON.stringify(taskArray));
     }

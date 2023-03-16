@@ -1,6 +1,6 @@
 @import './helpers/variables';
 
-#work-wise__content-container {
+#work-wise__content {
     width: 50px;
     height: 50px;
     position: fixed;
@@ -11,9 +11,17 @@
     cursor: pointer;
     transition: width .5s ease-in, height .5s ease-in-out;
 
+    #work-wise__content-container {
+        visibility: hidden;
+    }
+
     &.input-active {
         width: 200px;
         height: 200px;
+
+        #work-wise__content-container {
+            visibility: visible;
+        }
     }
 
     #work-wise__input-wrapper {
