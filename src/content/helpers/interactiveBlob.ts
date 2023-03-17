@@ -102,25 +102,39 @@ export function interactiveBlob (container: HTMLElement) {
       document.body.style.userSelect = userSelectStyle;
       setTimeout(() => {
         container.classList.remove('dragging');
-      }, 10); // timeout to prevent click event firing 
+      }, 10); //? timeout to prevent click event firing 
 
       const blobPosition = { left: container.style.left, top: container.style.top };
       chrome.runtime.sendMessage({ type: 'SAVE_BLOB_POSITION', blobPosition });
     });
 
+    // ? on click get the preference and the reminder that is to be displayed - send everything to the blob
     container.addEventListener('click', (event) => {
       event.stopPropagation();
       if (!container.classList.contains('dragging') && !isDragging) {
-        chrome.storage.sync.get('preference', (data) => {
-          const preference = samplePref || JSON.parse(data.preference || '{}'); //! TEMPORARY SAMPLE PREFERENCE
-          if (!isActive) {
-            isActive = true;
-            container.classList.add('input-active');
-            chrome.runtime.sendMessage({ type: 'BLOB_ACTIVATED', preference: { ...preference, isActive: true } });
+        chrome.storage.sync.get({ reminders: null, preference: null }, (data) => {
+          if (chrome.runtime.lastError) {
+            console.error(chrome.runtime.lastError);
+          } else {
+          // const preference = samplePref //! TEMPORARY <samplePref > SAMPLE PREFERENCE
+            const reminders = JSON.parse(data.reminders || '[]');
+            const preference = JSON.parse(data.preference || '{}');
+            if (!isActive) {
+              isActive = true;
+              container.classList.add('input-active');
+              chrome.storage.sync.set({ preference: JSON.stringify(preference) }, () => {
+                if (chrome.runtime.lastError) {
+                  console.error(chrome.runtime.lastError);
+                } else {
+                  const firstReminder = reminders[0] || null;
+                  chrome.runtime.sendMessage({ type: 'BLOB_ACTIVATED', preference: { ...preference, reminder: firstReminder.title, showReminder: true} });
+                }
+              });
+            }
           }
         });
       }
-    })
+    }); 
 
     document.addEventListener('click', event => {
       if (isActive) {

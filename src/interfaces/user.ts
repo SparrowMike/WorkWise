@@ -10,7 +10,7 @@ export interface Preference {
   isActive?: boolean;
   reminder?: string;
   showReminder?: boolean;
-  sprintLength?: number;
+  timeLeft?: number;
   showTime?: boolean;
   showDate?: boolean;
 }

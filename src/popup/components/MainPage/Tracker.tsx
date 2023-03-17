@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { FormData } from "../../interfaces/user";
+import { FormData } from "../../../interfaces/user";
 
 function Tracker() {
   const formData: FormData = {
@@ -45,7 +45,7 @@ function Tracker() {
 
     if (!task.title.length) return;
 
-    setTaskArray([...taskArray, task])
+    setTaskArray([task, ...taskArray])
     setTask(formData);
     setBackupTrigger(true);
     

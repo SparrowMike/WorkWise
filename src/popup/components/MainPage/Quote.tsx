@@ -1,6 +1,6 @@
 import React from 'react';
-import useApiRequest from "../../hooks/useApiRequest";
-import { QuoteType } from "../../interfaces/api";
+import useApiRequest from "../../../hooks/useApiRequest";
+import { QuoteType } from "../../../interfaces/api";
 
 function isQuoteTypeArray(data: QuoteType | QuoteType[]): data is QuoteType[] {
   return Array.isArray(data);

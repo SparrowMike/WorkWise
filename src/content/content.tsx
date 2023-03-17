@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import Blob from './components/Blob';
-import Clock from '../popup/components/Clock';
+import Clock from '../popup/components/Shared/Clock';
 import useIsMounted from '../hooks/useIsMounted';
 import { Preference } from '../interfaces/user';
 import { v4 as uuidv4 } from 'uuid';
@@ -21,7 +21,7 @@ const Content = () => {
     reminder: 'daily',
     isActive: false,
     showReminder: false,
-    sprintLength: 5,
+    timeLeft: 5,
   });
 
   // ! ============ REFACTORING NEEDED IN OTHER COMPONENTS SO THEY LISTEN FOR UPDATES
@@ -35,6 +35,7 @@ const Content = () => {
         setPreference(request.preference);
       }
 
+      // ! FIX ON FOCUS WHEN BLOB TRIGGERED
       // if (inputRef.current) {
       //   inputRef.current.focus();
       // }
@@ -49,22 +50,25 @@ const Content = () => {
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
+
       const trimmedValue = inputValue.trim();
       if (trimmedValue !== '') {
         const id = uuidv4();
         chrome.runtime.sendMessage({ type: 'SAVE_REMINDER', id, title: trimmedValue, timeLeft: 60 });
-
-        setInputValue('');
-        setPreference({...preference, reminder: inputValue});
-
-        // document.getElementById('work-wise__content')?.classList.remove('input-active'); //! somehow this doesn't work as expected and element unable to open up 
-
-        // Start countdown
-        // countdown(preference.sprintLength || 10, id); //! You can stack up the countdown event causing it to just go nuts, we need new approach
       }
+
+      setInputValue('');
+      setPreference({ ...preference, reminder: inputValue });
+
+      const container = document.getElementById('work-wise__content')?.classList.remove('input-active');
+      //! somehow this doesn't work as expected and element unable to open up 
+      console.log(container)
+
+      // Start countdown
+      // countdown(preference.timeLeft || 10, id); //! You can stack up the countdown event causing it to just go nuts, we need new approach
     }
   };
-  
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
   };
