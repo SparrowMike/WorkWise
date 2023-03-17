@@ -14,7 +14,7 @@ export default {
     popup: './src/popup/main.tsx',
     options: './src/options/main.tsx',
     background: './src/background/background.ts',
-    content: './src/content/content.tsx',
+    content: './src/content/main.tsx',
   },
   devtool: isProd ? false : 'inline-source-map',
   devServer: {
