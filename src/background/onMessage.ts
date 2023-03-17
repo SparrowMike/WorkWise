@@ -1,3 +1,4 @@
+
 export function onMessage() {
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     console.log(`onMessage, request type --- ${request.type}, sender --- ${sender.origin || sender.url}`)
@@ -67,9 +68,6 @@ export function onMessage() {
         });
         break;
 
-      case 'SAVE_BLOB_POSITION':
-        chrome.storage.sync.set({ blobPosition: JSON.stringify(request.blobPosition) });
-        break;
 
       case 'LOAD_BLOB_POSITION':
         chrome.storage.sync.get('blobPosition', (data) => {
@@ -77,37 +75,34 @@ export function onMessage() {
         });
         break;
 
-      case 'SAVE_BLOB_POSITION':
+      case 'SAVE_BLOB_POSITION': //! =================== construction 
         chrome.storage.sync.set({ blobPosition: JSON.stringify(request.blobPosition) }, () => {
-          // function sendUpdateToAllTabs(blobPosition: any) {
-          //   chrome.tabs.query({}, (tabs) => {
-          //     tabs.forEach((tab) => {
-          //       console.log('attempt to update')
-          //       if (tab.id) {
-          //         chrome.tabs.sendMessage(tab.id, {
-          //           type: 'UPDATE_BLOB_POSITION',
-          //           blobPosition: blobPosition,
-          //         });
-          //       }
-          //     });
-          //   });
-          // }
-
-          // sendUpdateToAllTabs(request.blobPosition);
-        });
-        break;
-
-      case 'UPDATE_BLOB_POSITION':
-        const blobPosition = request.blobPosition;
-        chrome.tabs.query({}, (tabs) => {
-          tabs.forEach((tab) => {
-            chrome.tabs.sendMessage(tab.id as number, {
-              type: 'UPDATE_BLOB_POSITION',
-              blobPosition: blobPosition,
+          chrome.tabs.query({ highlighted: true, active: false }, tabs => {
+            tabs.forEach(tab => {
+              if (tab.id) {
+                chrome.tabs.sendMessage(tab.id, {
+                  type: 'UPDATE_BLOB_POSITION',
+                  blobPosition: request.blobPosition,
+                });
+              }
             });
           });
         });
         break;
+
+      // case 'UPDATE_BLOB_POSITION':
+      //   const blobPosition = request.blobPosition;
+      //   chrome.tabs.query({ highlighted: true }, tabs => { // only query highlighted tabs
+      //     tabs.forEach(tab => {
+      //       if (tab.id && tab.url && tab.url.startsWith('http')) {
+      //         chrome.tabs.sendMessage(tab.id, {
+      //           type: 'UPDATE_BLOB_POSITION',
+      //           blobPosition: blobPosition,
+      //         });
+      //       }
+      //     });
+      //   });
+      //   break;
 
       case 'BLOB_ACTIVATED':
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {

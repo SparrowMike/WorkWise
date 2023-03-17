@@ -38,6 +38,12 @@ function Tracker() {
 
   function backUpData() {
     chrome.runtime.sendMessage('', { type: 'SAVE_REMINDERS', reminders: taskArray });
+    chrome.runtime.sendMessage({ type: 'BLOB_ACTIVATED', 
+    preference: { 
+      reminder: taskArray[0].title,
+      showReminder: true
+    } 
+  }); 
   }
 
   function handleSubmit(event: any) {

@@ -18,7 +18,7 @@ const Content = () => {
   const [inputValue, setInputValue] = useState('');
   const [preference, setPreference] = useState<Preference>({
     theme: true,
-    reminder: 'daily',
+    reminder: 'set preference sample',
     isActive: false,
     showReminder: false,
     timeLeft: 5,
@@ -60,9 +60,11 @@ const Content = () => {
       setInputValue('');
       setPreference({ ...preference, reminder: inputValue });
 
-      const container = document.getElementById('work-wise__content')?.classList.remove('input-active');
-      //! somehow this doesn't work as expected and element unable to open up 
-      console.log(container)
+      // ! need refactoring - once full data available in SEND_REMINDER updated the preference to isActive = false.
+      // const container = document.getElementById('work-wise__content')
+      // if (container?.classList.contains('input-active')) {
+      //   container.classList.remove('input-active')
+      // }
 
       // Start countdown
       // countdown(preference.timeLeft || 10, id); //! You can stack up the countdown event causing it to just go nuts, we need new approach

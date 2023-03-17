@@ -5,3 +5,26 @@ export const samplePref = {
   showReminder: true,
   timeLeft: 5,
 }
+
+const data = {
+  isBlobActive: false,
+  preference: {
+    theme: 'dark', // or boolean
+    showReminder: true, // inside the blob
+    sitckyBlob: false,
+    hideBlob: false,
+    springTiming: 5,
+    blobPosition: {
+      x: 10,
+      y: 10
+    }
+  },
+  reminders: [
+    {
+      title: '',
+      description: '',
+      priority: 0,
+      reminder: false,
+    }
+  ]
+}

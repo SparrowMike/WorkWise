@@ -98,14 +98,15 @@ export function interactiveBlob (container: HTMLElement) {
     });
 
     document.addEventListener('mouseup', event => {
-      isDragging = false;
-      document.body.style.userSelect = userSelectStyle;
-      setTimeout(() => {
-        container.classList.remove('dragging');
-      }, 10); //? timeout to prevent click event firing 
-
-      const blobPosition = { left: container.style.left, top: container.style.top };
-      chrome.runtime.sendMessage({ type: 'SAVE_BLOB_POSITION', blobPosition });
+      if (isDragging) {
+        const blobPosition = { left: container.style.left, top: container.style.top };
+        chrome.runtime.sendMessage({ type: 'SAVE_BLOB_POSITION', blobPosition });
+        isDragging = false;
+        document.body.style.userSelect = userSelectStyle;
+        setTimeout(() => {
+          container.classList.remove('dragging');
+        }, 10); //? timeout to prevent click event firing 
+      }
     });
 
     // ? on click get the preference and the reminder that is to be displayed - send everything to the blob
@@ -127,7 +128,13 @@ export function interactiveBlob (container: HTMLElement) {
                   console.error(chrome.runtime.lastError);
                 } else {
                   const firstReminder = reminders[0] || null;
-                  chrome.runtime.sendMessage({ type: 'BLOB_ACTIVATED', preference: { ...preference, reminder: firstReminder.title, showReminder: true} });
+                  chrome.runtime.sendMessage({ type: 'BLOB_ACTIVATED', 
+                    preference: { 
+                      ...preference, 
+                      reminder: firstReminder.title, 
+                      showReminder: true
+                    } 
+                  });
                 }
               });
             }
