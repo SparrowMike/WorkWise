@@ -19,7 +19,7 @@ export function onMessage() {
           } else {
             const reminders = JSON.parse(data.reminders || '[]');
             const newReminder = { id: request.id, title: request.title, timeLeft: request.timeLeft };
-            reminders.push(newReminder);
+            reminders.unshift(newReminder);
             chrome.storage.sync.set({ reminders: JSON.stringify(reminders) }, () => {
               sendResponse({ success: true });
             });
