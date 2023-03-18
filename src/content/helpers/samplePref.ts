@@ -9,15 +9,17 @@ export const samplePref = {
 const data = {
   isBlobActive: false,
   preference: {
-    theme: 'dark', // or boolean
-    showReminder: true, // inside the blob
+    theme: "light",
+    showReminder: true,
     stickyBlob: false,
     hideBlob: false,
+    showTime: true,
+    showDate: true,
     sprintTiming: 5,
     blobPosition: {
-      x: 10,
-      y: 10
-    }
+      x: 0,
+      y: 0,
+    },
   },
   reminders: [
     {

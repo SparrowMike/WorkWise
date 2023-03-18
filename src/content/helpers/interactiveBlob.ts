@@ -1,5 +1,3 @@
-import { samplePref } from "./samplePref";
-
 export function createBlob() {
   const elemHtml = '<div id="work-wise__content"></div>';
 
@@ -132,7 +130,6 @@ export function interactiveBlob (container: HTMLElement) {
                     preference: { 
                       ...preference, 
                       reminder: firstReminder.title, 
-                      showReminder: true
                     } 
                   });
                 }

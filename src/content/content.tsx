@@ -16,13 +16,7 @@ const Content = () => {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = useState('');
-  const [preference, setPreference] = useState<Preference>({
-    theme: 'dark',
-    reminder: 'set preference sample',
-    isActive: false,
-    showReminder: false,
-    timeLeft: 5,
-  });
+  const [preference, setPreference] = useState<Preference>({});
 
   // ! ============ REFACTORING NEEDED IN OTHER COMPONENTS SO THEY LISTEN FOR UPDATES
   useEffect(() => {
@@ -31,22 +25,29 @@ const Content = () => {
       sender: chrome.runtime.MessageSender,
       sendResponse: (response?: any) => void
     ) => {
-      if (request.type === 'BLOB_ACTIVATED' && request.preference) {
+      console.log('Content--------', request)
+      if (request.type === 'BLOB_ACTIVATED' && request.preference) { //! ============USE LOAD_PREFERENCE INSTEAD
         setPreference(request.preference);
       }
+      // if (request.type === 'LOAD_PREFERENCE' && request.preference) {
+      //   setPreference(request.preference);
+      // }
 
       // ! FIX ON FOCUS WHEN BLOB TRIGGERED
       // if (inputRef.current) {
       //   inputRef.current.focus();
       // }
     };
-  
+
+    console.log(preference)
+
     chrome.runtime.onMessage.addListener(handleMessage);
-  
+
     return () => {
       chrome.runtime.onMessage.removeListener(handleMessage);
     };
   }, []);
+
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -79,7 +80,7 @@ const Content = () => {
     <div>
       <div id="work-wise__content-container">
         <div id="work-wise__input-wrapper">
-          <Clock />
+          {preference.showDate && <Clock />} //! ======== extract Date and Time to individual components ?
           {preference.showReminder &&
             <div>
               {preference.reminder}

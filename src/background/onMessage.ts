@@ -59,7 +59,6 @@ export function onMessage() {
         break;
 
       case 'UPDATE_PREFERENCE':
-        console.log('update_preference data ------', request.preference)
         chrome.storage.sync.set({ preference: JSON.stringify(request.preference) });
         break;
 
@@ -69,14 +68,13 @@ export function onMessage() {
         });
         break;
 
-
       case 'LOAD_BLOB_POSITION':
         chrome.storage.sync.get('blobPosition', (data) => {
           sendResponse({ blobPosition: JSON.parse(data?.blobPosition) });
         });
         break;
 
-      case 'SAVE_BLOB_POSITION': //! =================== construction 
+      case 'SAVE_BLOB_POSITION': //! =================== construction ---TBC---
         chrome.storage.sync.set({ blobPosition: JSON.stringify(request.blobPosition) }, () => {
           chrome.tabs.query({ highlighted: true, active: false }, tabs => {
             tabs.forEach(tab => {

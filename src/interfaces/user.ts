@@ -6,8 +6,8 @@ export interface FormData {
 }
 
 export interface Preference {
-  theme: string;
-  showReminder: boolean;
+  theme?: string;
+  showReminder?: boolean;
   stickyBlob?: boolean;
   hideBlob?: boolean;
   showTime?: boolean;
