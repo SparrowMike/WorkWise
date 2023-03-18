@@ -11,9 +11,9 @@ const data = {
   preference: {
     theme: 'dark', // or boolean
     showReminder: true, // inside the blob
-    sitckyBlob: false,
+    stickyBlob: false,
     hideBlob: false,
-    springTiming: 5,
+    sprintTiming: 5,
     blobPosition: {
       x: 10,
       y: 10

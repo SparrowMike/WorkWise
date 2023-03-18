@@ -58,13 +58,14 @@ export function onMessage() {
         })
         break;
 
-      case 'UPDATE_THEME':
-        chrome.storage.sync.set({ theme: JSON.stringify(request.theme) });
+      case 'UPDATE_PREFERENCE':
+        console.log('update_preference data ------', request.preference)
+        chrome.storage.sync.set({ preference: JSON.stringify(request.preference) });
         break;
 
-      case 'LOAD_THEME':
-        chrome.storage.sync.get('theme', (data) => {
-          sendResponse({ theme: JSON.parse(data?.theme) });
+      case 'LOAD_PREFERENCE':
+        chrome.storage.sync.get('preference', (data) => {
+          sendResponse({ preference: JSON.parse(data?.preference) });
         });
         break;
 

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import useApiRequest from '../../hooks/useApiRequest';
-import { ChuckNorrisJoke } from '../../interfaces/api';
+import useApiRequest from '../../../hooks/useApiRequest';
+import { ChuckNorrisJoke } from '../../../interfaces/api';
 
 function Joke() {
   const [shouldRefetch, setShouldRefetch] = useState(false);

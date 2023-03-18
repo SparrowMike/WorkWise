@@ -17,7 +17,7 @@ const Content = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = useState('');
   const [preference, setPreference] = useState<Preference>({
-    theme: true,
+    theme: 'dark',
     reminder: 'set preference sample',
     isActive: false,
     showReminder: false,
