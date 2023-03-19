@@ -10,7 +10,7 @@ export function Options() {
   useLoadPreference();
 
   return (
-    <div className={`App ${preference.theme && 'dark'}`}>
+    <div id="Work-Wise" className={`${preference.theme || 'dark'}`}>
       <h1>My options component</h1>
     </div>
   );

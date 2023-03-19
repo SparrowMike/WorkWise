@@ -2,18 +2,20 @@ import { useContext } from "react";
 import { PreferenceContext } from "../../../context/PreferenceContext";
 import { Link } from "react-router-dom";
 
-const SettingsToggle: React.FC<{ title: string; checked: boolean; onToggle: () => void }> = ({
+const SettingsToggle: React.FC<{ title: string; checked: boolean; onToggle: () => void; index: number; }> = ({
   title,
   checked,
   onToggle,
+  index
 }) => {
+  const inputId = `toggle-${index}`;
   return (
     <div className="settings-toggle">
       <span>{title}</span>
-      <label className="switch">
-        <input type="checkbox" checked={checked} onChange={onToggle} />
-        <span className="slider round"></span>
-      </label>
+      <div className="switch">
+        <input id={inputId} type="checkbox" checked={checked} onChange={onToggle} />
+        <label htmlFor={inputId} className="slider round"></label>
+      </div>
     </div>
   );
 };
@@ -21,48 +23,48 @@ const SettingsToggle: React.FC<{ title: string; checked: boolean; onToggle: () =
 const SettingsPage: React.FC = () => {
   const { preference, setPreference } = useContext(PreferenceContext);
 
-  console.log(preference)
-  
+  const messageType = 'UPDATE_PREFERENCE';
+
   const handleThemeToggle = () => {
     const newPreference = { ...preference, theme: preference.theme === 'dark' ? 'light' : 'dark' };
     setPreference(newPreference);
-    chrome.runtime.sendMessage({ type: 'UPDATE_PREFERENCE', preference: newPreference });
+    chrome.runtime.sendMessage({ type: messageType, preference: newPreference });
   };
 
   const handleShowReminderToggle = () => {
     const newPreference = { ...preference, showReminder: !preference.showReminder };
     setPreference(newPreference);
-    chrome.runtime.sendMessage({ type: 'UPDATE_PREFERENCE', preference: newPreference });
+    chrome.runtime.sendMessage({ type: messageType, preference: newPreference });
   };
 
   const handleStickyBlobToggle = () => {
     const newPreference = { ...preference, stickyBlob: !preference.stickyBlob };
     setPreference(newPreference);
-    chrome.runtime.sendMessage({ type: 'UPDATE_PREFERENCE', preference: newPreference });
+    chrome.runtime.sendMessage({ type: messageType, preference: newPreference });
   };
 
   const handleHideBlobToggle = () => {
     const newPreference = { ...preference, hideBlob: !preference.hideBlob };
     setPreference(newPreference);
-    chrome.runtime.sendMessage({ type: 'UPDATE_PREFERENCE', preference: newPreference });
+    chrome.runtime.sendMessage({ type: messageType, preference: newPreference });
   };
 
   const handleShowTimeToggle = () => {
     const newPreference = { ...preference, showTime: !preference.showTime };
     setPreference(newPreference);
-    chrome.runtime.sendMessage({ type: 'UPDATE_PREFERENCE', preference: newPreference });
+    chrome.runtime.sendMessage({ type: messageType, preference: newPreference });
   };
 
   const handleShowDateToggle = () => {
     const newPreference = { ...preference, showDate: !preference.showDate };
     setPreference(newPreference);
-    chrome.runtime.sendMessage({ type: 'UPDATE_PREFERENCE', preference: newPreference });
+    chrome.runtime.sendMessage({ type: messageType, preference: newPreference });
   };
 
   const handleSprintTimingChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newPreference = { ...preference, sprintTiming: parseInt(event.target.value) };
     setPreference(newPreference);
-    chrome.runtime.sendMessage({ type: 'UPDATE_PREFERENCE', preference: newPreference });
+    chrome.runtime.sendMessage({ type: messageType, preference: newPreference });
   };
 
   return (
@@ -73,32 +75,42 @@ const SettingsPage: React.FC = () => {
           title="Theme"
           checked={preference.theme === 'dark'}
           onToggle={handleThemeToggle}
+          index={1}
         />
+
         <SettingsToggle
           title="Show Reminder"
-          checked={preference.showReminder}
+          checked={preference.showReminder || false}
           onToggle={handleShowReminderToggle}
+          index={2}
         />
+
         <SettingsToggle
           title="Sticky Blob"
-          checked={preference.stickyBlob}
+          checked={preference.stickyBlob || false}
           onToggle={handleStickyBlobToggle}
+          index={3}
         />
+
         <SettingsToggle
           title="Hide Blob"
-          checked={preference.hideBlob}
+          checked={preference.hideBlob || false}
           onToggle={handleHideBlobToggle}
+          index={4}
         />
+
         <SettingsToggle
           title="Show Time"
-          checked={preference.showTime}
+          checked={preference.showTime || false}
           onToggle={handleShowTimeToggle}
+          index={5}
         />
 
         <SettingsToggle
           title="Show Date"
-          checked={preference.showDate}
+          checked={preference.showDate || false}
           onToggle={handleShowDateToggle}
+          index={6}
         />
         <label htmlFor="spring-timing-input">Sprint Time:</label>
         <input
@@ -110,7 +122,9 @@ const SettingsPage: React.FC = () => {
           onChange={handleSprintTimingChange}
         />
       </div>
-      <Link to="/popup.html">Got to settings</Link>
+      <div className="navigation-container">
+        <Link className="link" to="/popup.html">Go to main</Link>
+      </div>
     </div>
   )
 }

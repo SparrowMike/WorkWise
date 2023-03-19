@@ -17,7 +17,7 @@ function Popup() {
   useLoadPreference();
   
   return (
-    <div className={`App ${preference.theme || 'dark'}`}>
+    <div id="Work-Wise" className={`${preference.theme || 'dark'}`}>
       <Clock />
       <Routes>
         <Route path="/popup.html" element={<MainPage />} />
