@@ -112,15 +112,18 @@ const SettingsPage: React.FC = () => {
           onToggle={handleShowDateToggle}
           index={6}
         />
-        <label htmlFor="spring-timing-input">Sprint Time:</label>
-        <input
-          title="Sprint Time"
-          type="number"
-          min="1"
-          max="10"
-          value={preference.sprintTiming && preference.sprintTiming.toString()}
-          onChange={handleSprintTimingChange}
-        />
+        <div className="settings-toggle">
+          <span>Sprint Time</span>
+          <input
+            title="Sprint Time"
+            type="number"
+            className="number-field"
+            min="1"
+            max="10"
+            value={preference.sprintTiming && preference.sprintTiming.toString()}
+            onChange={handleSprintTimingChange}
+          />
+        </div>
       </div>
       <div className="navigation-container">
         <Link className="link" to="/popup.html">Go to main</Link>

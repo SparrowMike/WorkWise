@@ -12,6 +12,14 @@
         padding: 5px;
         font-size: 0;
 
+        .number-field {
+          width: 48px;
+          height: 23px;
+          border-radius: 6px;
+          padding: 5px;
+          border: none;
+        }
+
         .switch {
           // display: inline-block;
           // height: 20px;

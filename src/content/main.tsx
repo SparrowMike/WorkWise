@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBlob } from './helpers/interactiveBlob';
 import './../styles/sass/content.scss';
-import Content from './Content';
+import Content from './content';
 
 import { preferenceReady, remindersReady } from '../background/background';
 import { Preference, RemindersInterface } from '../interfaces/user';
