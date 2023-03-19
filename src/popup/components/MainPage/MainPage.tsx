@@ -9,7 +9,9 @@ function MainPage() {
       {/* <Joke /> */}
       <Quote />
       <Tracker />
-      <Link to="/settings">Got to settings</Link>
+      <div className="navigation-container">
+        <Link className="link" to="/settings">Go to settings</Link>
+      </div>
     </div>
   )
 }

@@ -2,72 +2,86 @@ import { useState, useEffect, useRef } from 'react';
 import Blob from './components/Blob';
 import Clock from '../popup/components/Shared/Clock';
 import useIsMounted from '../hooks/useIsMounted';
-import { Preference } from '../interfaces/user';
+import { Preference, RemindersInterface } from '../interfaces/user';
 import { v4 as uuidv4 } from 'uuid';
 import { countdown } from '../utils/countdown';
 
 interface MessageRequest {
   type: string;
   preference?: Preference;
+  isActive?: boolean;
+  reminders: RemindersInterface[]
 }
 
-const Content = () => {
+interface ContentProps {
+  data: Preference;
+  reminders: RemindersInterface[];
+}
+
+const Content = (props: ContentProps) => {
   useIsMounted(); // checks if react mounted 
 
   const inputRef = useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = useState('');
-  const [preference, setPreference] = useState<Preference>({
-    theme: true,
-    reminder: 'set preference sample',
-    isActive: false,
-    showReminder: false,
-    timeLeft: 5,
-  });
+  const [preference, setPreference] = useState<Preference>(props.data);
+  const [reminders, setReminders] = useState<RemindersInterface[]>(props.reminders)
 
-  // ! ============ REFACTORING NEEDED IN OTHER COMPONENTS SO THEY LISTEN FOR UPDATES
+  // ! ======TBC====== REFACTORING NEEDED IN OTHER COMPONENTS SO THEY LISTEN FOR UPDATES
   useEffect(() => {
     const handleMessage = (
       request: MessageRequest,
       sender: chrome.runtime.MessageSender,
       sendResponse: (response?: any) => void
     ) => {
-      if (request.type === 'BLOB_ACTIVATED' && request.preference) {
-        setPreference(request.preference);
+      if (request.type === 'BLOB_ACTIVATED' && request.preference || request.isActive) {
+        setPreference({...preference, ...request.preference, isActive: request.isActive});
+        if (request.reminders) {
+          setReminders(request.reminders)
+        }
       }
-
+      
       // ! FIX ON FOCUS WHEN BLOB TRIGGERED
       // if (inputRef.current) {
       //   inputRef.current.focus();
       // }
     };
-  
+
     chrome.runtime.onMessage.addListener(handleMessage);
-  
+
     return () => {
       chrome.runtime.onMessage.removeListener(handleMessage);
     };
   }, []);
 
+
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
 
+      const reminder: RemindersInterface = {
+        title: inputValue,
+        description: '',
+        priority: 1,
+        reminder: true
+      }
+      
+      const updatedReminders = [ reminder, ...reminders];
       const trimmedValue = inputValue.trim();
+      const id = uuidv4();
+
       if (trimmedValue !== '') {
-        const id = uuidv4();
-        chrome.runtime.sendMessage({ type: 'SAVE_REMINDER', id, title: trimmedValue, timeLeft: 60 });
+        chrome.runtime.sendMessage('', { type: 'SAVE_REMINDERS', reminders: updatedReminders });
+        setReminders(updatedReminders);
+        setInputValue('');
       }
 
-      setInputValue('');
-      setPreference({ ...preference, reminder: inputValue });
-
-      // ! need refactoring - once full data available in SEND_REMINDER updated the preference to isActive = false.
+      // ! ======TBC===== need refactoring - once full data available in SEND_REMINDER updated the preference to isActive = false.
       // const container = document.getElementById('work-wise__content')
       // if (container?.classList.contains('input-active')) {
       //   container.classList.remove('input-active')
       // }
 
       // Start countdown
-      // countdown(preference.timeLeft || 10, id); //! You can stack up the countdown event causing it to just go nuts, we need new approach
+      countdown(preference.sprintTiming || 10, id); //! You can stack up the countdown event causing it to just go nuts, we need new approach
     }
   };
 
@@ -75,14 +89,20 @@ const Content = () => {
     setInputValue(event.target.value);
   };
 
+  //! ====TBC==== extract Date and Time to individual components ?
+
+  if (preference.hideBlob) {
+    return null;
+  }
+
   return (
     <div>
       <div id="work-wise__content-container">
         <div id="work-wise__input-wrapper">
-          <Clock />
+          {preference.showDate && <Clock />}
           {preference.showReminder &&
             <div>
-              {preference.reminder}
+              {reminders[0]?.title || ''}
             </div>
           }
           <input

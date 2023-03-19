@@ -2,16 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom/client'
 import { Options } from './Options';
 
-import ThemeProvider from '../popup/context/ThemeContext';
+import PreferenceProvider from '../context/PreferenceContext';
 
 const optionsElement = document.getElementById('options-root');
 if (optionsElement) {
   const optionsRoot = ReactDOM.createRoot(optionsElement);
   optionsRoot.render(
     <React.StrictMode>
-    <ThemeProvider>
+    <PreferenceProvider>
       <Options />
-    </ThemeProvider>
+    </PreferenceProvider>
   </React.StrictMode>,
   );
 }

@@ -3,29 +3,26 @@ import './../styles/sass/main.scss';
 
 import Clock from './components/Shared/Clock';
 
-import { ThemeContext } from './context/ThemeContext';
+import { PreferenceContext } from '../context/PreferenceContext';
 
-import useLoadCurrentTheme from '../hooks/useLoadCurrentTheme';
 import MainPage from './components/MainPage/MainPage';
 import { Route, Routes } from "react-router-dom";
 
 import SettingsPage from './components/SettingsPage/SettingsPage';
-import ThemeToggle from './components/Shared/ThemeToggler';
+import useLoadPreference from '../hooks/useLoadPreference';
 
 function Popup() {
-  const { isDark } = useContext(ThemeContext);
-
-  useLoadCurrentTheme();
+  const { preference } = useContext(PreferenceContext);
+  
+  useLoadPreference();
   
   return (
-    <div className={`App ${isDark ? 'dark' : 'light'}`}>
+    <div id="Work-Wise" className={`${preference.theme || 'dark'}`}>
       <Clock />
       <Routes>
         <Route path="/popup.html" element={<MainPage />} />
         <Route path="/settings" element={<SettingsPage />} />
       </Routes>
-
-      {/* <ThemeToggle /> */}
     </div>
   );
 }

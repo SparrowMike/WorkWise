@@ -1,5 +1,15 @@
+import { Preference, RemindersInterface } from "../../interfaces/user";
 
-export function onMessage() {
+function updateBlob(preference: Preference, reminders?: RemindersInterface[], isActive?: boolean) {
+  chrome.tabs.query({ active: true, currentWindow: true, }, (tabs) => {
+    const activeTab: any | undefined = tabs[0];
+    if (activeTab) {
+      chrome.tabs.sendMessage(activeTab.id, { type: 'BLOB_ACTIVATED', preference: preference, reminders: reminders, isActive: isActive });
+    }
+  });
+}
+
+export function onMessage(preference: Preference, reminders: RemindersInterface[]) {
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     console.log(`onMessage, request type --- ${request.type}, sender --- ${sender.origin || sender.url}`)
 
@@ -9,22 +19,8 @@ export function onMessage() {
         chrome.storage.sync.set({ reminders: JSON.stringify(request.reminders) }, () => {
           sendResponse({ success: true });
         });
-        break;
-
-      case 'SAVE_REMINDER':
-        chrome.storage.sync.get('reminders', (data) => {
-          if (chrome.runtime.lastError) {
-            console.error(chrome.runtime.lastError);
-            sendResponse({ success: false, error: 'Failed to load reminders' });
-          } else {
-            const reminders = JSON.parse(data.reminders || '[]');
-            const newReminder = { id: request.id, title: request.title, timeLeft: request.timeLeft };
-            reminders.unshift(newReminder);
-            chrome.storage.sync.set({ reminders: JSON.stringify(reminders) }, () => {
-              sendResponse({ success: true });
-            });
-          }
-        });
+        reminders = { ...reminders, ...request.reminders }
+        updateBlob(preference, request.reminders);
         break;
 
       case 'LOAD_REMINDERS':
@@ -58,25 +54,21 @@ export function onMessage() {
         })
         break;
 
-      case 'UPDATE_THEME':
-        chrome.storage.sync.set({ theme: JSON.stringify(request.theme) });
+      case 'UPDATE_PREFERENCE':
+        chrome.storage.sync.set({ preference: JSON.stringify(request.preference) });
+        updateBlob(request.preference);
+        preference = { ...preference, ...request.preference }
         break;
 
-      case 'LOAD_THEME':
-        chrome.storage.sync.get('theme', (data) => {
-          sendResponse({ theme: JSON.parse(data?.theme) });
+      case 'LOAD_PREFERENCE':
+        chrome.storage.sync.get('preference', (data) => {
+          sendResponse({ preference: JSON.parse(data?.preference) });
         });
         break;
 
-
-      case 'LOAD_BLOB_POSITION':
-        chrome.storage.sync.get('blobPosition', (data) => {
-          sendResponse({ blobPosition: JSON.parse(data?.blobPosition) });
-        });
-        break;
-
-      case 'SAVE_BLOB_POSITION': //! =================== construction 
-        chrome.storage.sync.set({ blobPosition: JSON.stringify(request.blobPosition) }, () => {
+      case 'SAVE_BLOB_POSITION': //! =================== construction ---TBC---
+        preference = { ...preference, blobPosition: request.blobPosition }
+        chrome.storage.sync.set({ preference: JSON.stringify(preference) }, () => {
           chrome.tabs.query({ highlighted: true, active: false }, tabs => {
             tabs.forEach(tab => {
               if (tab.id) {
@@ -90,7 +82,7 @@ export function onMessage() {
         });
         break;
 
-      // case 'UPDATE_BLOB_POSITION':
+      // case 'UPDATE_BLOB_POSITION': //! ====== updated all chrome blob positions
       //   const blobPosition = request.blobPosition;
       //   chrome.tabs.query({ highlighted: true }, tabs => { // only query highlighted tabs
       //     tabs.forEach(tab => {
@@ -105,12 +97,7 @@ export function onMessage() {
       //   break;
 
       case 'BLOB_ACTIVATED':
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-          const activeTab: any | undefined = tabs[0];
-          if (activeTab) {
-            chrome.tabs.sendMessage(activeTab.id, { type: 'BLOB_ACTIVATED', preference: request.preference });
-          }
-        });
+        updateBlob(request.preference, request.reminders, request.isActive)
         break;
     }
 

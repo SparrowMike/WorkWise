@@ -1,16 +1,16 @@
 import { useContext } from 'react';
 
 import './../styles/sass/main.scss';
-import { ThemeContext } from '../popup/context/ThemeContext';
-import useLoadCurrentTheme from '../hooks/useLoadCurrentTheme';
+import { PreferenceContext } from '../context/PreferenceContext';
+import useLoadPreference from '../hooks/useLoadPreference';
 
 export function Options() {
-  const { isDark } = useContext(ThemeContext);
+  const { preference } = useContext(PreferenceContext);
 
-  useLoadCurrentTheme();
+  useLoadPreference();
 
   return (
-    <div className={`App ${isDark ? 'dark' : 'light'}`}>
+    <div id="Work-Wise" className={`${preference.theme || 'dark'}`}>
       <h1>My options component</h1>
     </div>
   );

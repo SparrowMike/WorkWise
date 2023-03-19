@@ -16,7 +16,7 @@ export function countdown(minutes: number, id: string): void {
         }
 
         let timeLeft = minutes * 60 + seconds;
-        chrome.runtime.sendMessage({ type: "UDPATE_REMINDER_TIMELEFT", id, timeLeft });
+        // chrome.runtime.sendMessage({ type: "UDPATE_REMINDER_TIMELEFT", id, timeLeft });
         updateGradientColor(timeLeft, initialTime);
     }, 1000);
 }

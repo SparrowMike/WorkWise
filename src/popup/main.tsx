@@ -4,7 +4,7 @@ import Popup from './Popup'
 
 import { BrowserRouter } from 'react-router-dom';
 
-import ThemeProvider from './context/ThemeContext';
+import PreferenceProvider from '../context/PreferenceContext';
 
 const popupElement = document.getElementById('popup-root');
 if (popupElement) {
@@ -12,9 +12,9 @@ if (popupElement) {
   popupRoot.render(
     <React.StrictMode>
       <BrowserRouter>
-        <ThemeProvider>
+        <PreferenceProvider>
           <Popup />
-        </ThemeProvider>
+        </PreferenceProvider>
       </BrowserRouter>
     </React.StrictMode>,
   );
