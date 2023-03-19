@@ -5,6 +5,8 @@ import useIsMounted from '../hooks/useIsMounted';
 import { Preference, RemindersInterface } from '../interfaces/user';
 import { v4 as uuidv4 } from 'uuid';
 import { countdown } from '../utils/countdown';
+import Time from '../popup/components/Shared/Time';
+import CurrentDate from '../popup/components/Shared/Date';
 
 interface MessageRequest {
   type: string;
@@ -99,7 +101,9 @@ const Content = (props: ContentProps) => {
     <div>
       <div id="work-wise__content-container">
         <div id="work-wise__input-wrapper">
-          {preference.showDate && <Clock />}
+          {preference.showTime && <Time />}
+          {preference.showDate && <CurrentDate />}
+
           {preference.showReminder &&
             <div>
               {reminders[0]?.title || ''}
