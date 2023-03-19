@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
-import { FormData } from "../../../interfaces/user";
+import { RemindersInterface } from "../../../interfaces/user";
 
 function Tracker() {
-  const formData: FormData = {
+  const RemindersInterface: RemindersInterface = {
     title: '',
     description: '',
     priority: 0,
     reminder: false,
   };
 
-  const [taskArray, setTaskArray] = useState<FormData[]>([]);
-  const [task, setTask] = useState<FormData>(formData);
+  const [taskArray, setTaskArray] = useState<RemindersInterface[]>([]);
+  const [task, setTask] = useState<RemindersInterface>(RemindersInterface);
   const [backupTrigger, setBackupTrigger] = useState(false);
 
   const handleOptionsClick = () => {
@@ -18,15 +18,17 @@ function Tracker() {
   };
 
   useEffect(() => {
-    chrome.runtime.sendMessage({ type: 'LOAD_REMINDERS' }, (response) => {
-      if (chrome.runtime.lastError) {
-        console.error(chrome.runtime.lastError);
-      } else {
-        if (response && response.reminders) {
-          setTaskArray(response.reminders);
+    if (!taskArray.length) {
+      chrome.runtime.sendMessage({ type: 'LOAD_REMINDERS' }, (response) => {
+        if (chrome.runtime.lastError) {
+          console.error(chrome.runtime.lastError);
+        } else {
+          if (response && response.reminders) {
+            setTaskArray(response.reminders);
+          }
         }
-      }
-    });
+      });
+    }
   }, []);
 
   useEffect(() => {
@@ -38,12 +40,6 @@ function Tracker() {
 
   function backUpData() {
     chrome.runtime.sendMessage('', { type: 'SAVE_REMINDERS', reminders: taskArray });
-    chrome.runtime.sendMessage({ type: 'BLOB_ACTIVATED', 
-    preference: { 
-      reminder: taskArray[0].title,
-      showReminder: true
-    } 
-  }); 
   }
 
   function handleSubmit(event: any) {
@@ -52,9 +48,9 @@ function Tracker() {
     if (!task.title.length) return;
 
     setTaskArray([task, ...taskArray])
-    setTask(formData);
+    setTask(RemindersInterface);
     setBackupTrigger(true);
-    
+
   }
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {

@@ -1,4 +1,4 @@
-export interface FormData {
+export interface RemindersInterface {
   title: string;
   description: string;
   priority: number;
@@ -14,8 +14,8 @@ export interface Preference {
   showDate?: boolean;
   sprintTiming?: number;
   blobPosition?: {
-    x: number;
-    y: number;
+    left: string;
+    top: string;
   };
 
   timeLeft? : number; //!===== tbc

@@ -7,25 +7,13 @@ interface PreferenceContextProps {
 }
 
 export const PreferenceContext = createContext<PreferenceContextProps>({
-  preference: {
-    theme: "light",
-    showReminder: true,
-    stickyBlob: false,
-    hideBlob: false,
-    showTime: true,
-    showDate: true,
-    sprintTiming: 5,
-    blobPosition: {
-      x: 0,
-      y: 0,
-    },
-  },
+  preference: {} as Preference,
   setPreference: () => {},
 });
 
 const PreferenceProvider = ({ children }: any) => {
   const [state, setState] = useState<Preference>(
-    useContext(PreferenceContext).preference // get the default preference value from the context
+    useContext(PreferenceContext).preference 
   );
   const setPreference = (preference: Preference) => {
     setState(preference);

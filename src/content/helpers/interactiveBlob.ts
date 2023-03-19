@@ -1,3 +1,6 @@
+import { preference } from "../../background/background";
+import { reminders } from "../../background/background";
+
 export function createBlob() {
   const elemHtml = '<div id="work-wise__content"></div>';
 
@@ -6,39 +9,39 @@ export function createBlob() {
   }
 }
 
-export function interactiveBlob (container: HTMLElement) {
+export function interactiveBlob(container: HTMLElement) {
   let isActive = false;
   let isDragging = false;
   let dragStartX = 0;
   let dragStartY = 0;
 
-  chrome.storage.sync.get('blobPosition', (data) => {
-    const blobPosition = JSON.parse(data.blobPosition || '{}');
-    
+  const blobPosition = preference?.blobPosition
+
+  if (blobPosition) {
     if (blobPosition.left && blobPosition.top) {
       // Get the size of the container
       const containerWidth = container.offsetWidth;
       const containerHeight = container.offsetHeight;
-  
+
       // Get the size of the viewport
       const viewportWidth = window.innerWidth;
       const viewportHeight = window.innerHeight;
-  
+
       // Calculate the maximum and minimum values for the left and top CSS properties
       const maxLeft = viewportWidth - containerWidth;
       const maxTop = viewportHeight - containerHeight;
       const minLeft = 0;
       const minTop = 0;
-  
+
       // Adjust the maximum and minimum values for the left and top CSS properties
       let newLeft = Math.max(minLeft, Math.min(maxLeft, parseFloat(blobPosition.left)));
       let newTop = Math.max(minTop, Math.min(maxTop, parseFloat(blobPosition.top)));
-  
+
       container.style.left = `${newLeft}px`;
       container.style.top = `${newTop}px`;
     }
-  });
-  
+  }
+
   if (container) {
     const userSelectStyle = window.getComputedStyle(container).userSelect;
 
@@ -111,32 +114,16 @@ export function interactiveBlob (container: HTMLElement) {
     container.addEventListener('click', (event) => {
       event.stopPropagation();
       if (!container.classList.contains('dragging') && !isDragging) {
-        chrome.storage.sync.get({ reminders: null, preference: null }, (data) => {
-          if (chrome.runtime.lastError) {
-            console.error(chrome.runtime.lastError);
-          } else {
-          // const preference = samplePref //! TEMPORARY <samplePref > SAMPLE PREFERENCE
-            const reminders = JSON.parse(data.reminders || '[]');
-            const preference = JSON.parse(data.preference || '{}');
-            if (!isActive) {
-              isActive = true;
-              container.classList.add('input-active');
-              chrome.storage.sync.set({ preference: JSON.stringify(preference) }, () => {
-                if (chrome.runtime.lastError) {
-                  console.error(chrome.runtime.lastError);
-                } else {
-                  const firstReminder = reminders[0] || null;
-                  chrome.runtime.sendMessage({ type: 'BLOB_ACTIVATED', 
-                    preference: { 
-                      ...preference, 
-                      reminder: firstReminder.title, 
-                    } 
-                  });
-                }
-              });
-            }
-          }
-        });
+        if (!isActive) {
+          isActive = true;
+          container.classList.add('input-active');
+          chrome.runtime.sendMessage({
+            type: 'BLOB_ACTIVATED',
+            preference: preference,
+            reminders: reminders,
+            isActive: true
+          });
+        }
       }
     }); 
 
@@ -144,7 +131,7 @@ export function interactiveBlob (container: HTMLElement) {
       if (isActive) {
         isActive = false;
         container.classList.remove('input-active');
-        chrome.runtime.sendMessage({ type: 'BLOB_ACTIVATED', preference: { isActive: false } });
+        chrome.runtime.sendMessage({ type: 'BLOB_ACTIVATED',  isActive: false });
       }
     });
   }
