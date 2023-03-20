@@ -1,8 +1,10 @@
 export interface RemindersInterface {
+  id: string;
   title: string;
   description: string;
   priority: number;
   reminder: boolean;
+  timeLeft? : number; 
 }
 
 export interface Preference {

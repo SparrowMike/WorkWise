@@ -14,6 +14,11 @@ interface MessageRequest {
   reminders: RemindersInterface[]
 }
 
+interface countdownInterface {
+  id: string;
+  timeLeft: number;
+}
+
 interface ContentProps {
   data: Preference;
   reminders: RemindersInterface[];
@@ -25,7 +30,8 @@ const Content = (props: ContentProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = useState('');
   const [preference, setPreference] = useState<Preference>(props.data);
-  const [reminders, setReminders] = useState<RemindersInterface[]>(props.reminders)
+  const [reminders, setReminders] = useState<RemindersInterface[]>(props.reminders);
+  const [countdownInfo, setCountdownInfo] = useState<countdownInterface>();
 
   // ! ======TBC====== REFACTORING NEEDED IN OTHER COMPONENTS SO THEY LISTEN FOR UPDATES
   useEffect(() => {
@@ -54,11 +60,20 @@ const Content = (props: ContentProps) => {
     };
   }, []);
 
+  useEffect(() => {
+    return () => {
+      chrome.runtime.sendMessage({ type: "UDPATE_REMINDER_TIMELEFT", id: countdownInfo?.id, timeLeft: countdownInfo?.timeLeft });
+    }
+  }, [countdownInfo]);
+
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
 
+      const id = uuidv4();
+
       const reminder: RemindersInterface = {
+        id,
         title: inputValue,
         description: '',
         priority: 1,
@@ -69,7 +84,6 @@ const Content = (props: ContentProps) => {
 
       const updatedReminders = [ reminder, ...reminders];
       const trimmedValue = inputValue.trim();
-      const id = uuidv4();
 
       console.log('updatedReminders',updatedReminders)
 
@@ -86,7 +100,12 @@ const Content = (props: ContentProps) => {
       // }
 
       // Start countdown
-      // countdown(preference.sprintTiming || 10, id); //! You can stack up the countdown event causing it to just go nuts, we need new approach
+      countdown(preference.sprintTiming || 10, (timeLeft) => {
+        setCountdownInfo({
+          id,
+          timeLeft
+        });
+      });
     }
   };
 
