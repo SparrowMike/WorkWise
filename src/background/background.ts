@@ -1,5 +1,5 @@
 import { Preference, RemindersInterface } from "../interfaces/user";
-import { onFocusChanged } from "./listeners/onFocusChanged";
+import { onTabFocusChanged } from "./listeners/onTabFocusChanged";
 import { onMessage } from "./listeners/onMessage";
 
 export let globalReminders: RemindersInterface[];
@@ -16,7 +16,7 @@ export let globalPreference: Preference = {
   sprintTiming: 5,
   blobPosition: {
     left: '20px',
-    top: '23px'
+    top: '20px'
   },
 };
 export function updatePreference(newPreference: Preference) {
@@ -106,7 +106,7 @@ function startApp(preference: Preference, reminders: RemindersInterface[]): void
       chrome.runtime.reload();
     })
 
-    onFocusChanged(preference, reminders);
+    onTabFocusChanged();
     onMessage(preference, reminders);
   }
 }

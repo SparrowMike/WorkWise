@@ -2,13 +2,51 @@ import { Preference, RemindersInterface } from "../../interfaces/user";
 import { globalPreference, globalReminders } from "../background";
 import { updatePreference, updateReminders } from "../background";
 
-function updateBlob(preference: Preference, reminders?: RemindersInterface[], isActive?: boolean) {
-  chrome.tabs.query({ active: true, currentWindow: true, }, (tabs) => {
-    const activeTab: any | undefined = tabs[0];
-    if (activeTab) {
-      chrome.tabs.sendMessage(activeTab.id, { type: 'BLOB_ACTIVATED', preference: preference, reminders: reminders, isActive: isActive });
-    }
+function updateBlobDataPosition(position: { left: string, right: string }) {
+  chrome.storage.sync.set({ preference: JSON.stringify(globalPreference) }, () => {
+    chrome.tabs.getCurrent((currentTab) => {
+      chrome.tabs.query({ active: true, highlighted: true }, (tabs) => {
+        tabs
+          .filter((tab) => tab.id !== currentTab?.id)
+          .forEach((tab: any) => {
+            try {
+              chrome.tabs.sendMessage(tab.id, {
+                type: 'SAVE_BLOB_POSITION',
+                blobPosition: position,
+              });
+            } catch (e) {
+              console.log("Unable to update the content blob data");
+            }
+          });
+      });
+    });
   });
+}
+
+//! =============== data does not update across the tabs if the blob is not active
+// ! ==== probably due to the interactiveBlob click send msg 
+function updateBlobData(preference: Preference, reminders?: RemindersInterface[], isActive?: boolean) {
+  // ? get current tab and loop over all of the tabs that are currently highlighted(visible on screen) and update the preference and reminders
+  chrome.tabs.getCurrent((currentTab) => {
+    // chrome.tabs.query({}, (tabs) => {
+    chrome.tabs.query({ active: true, highlighted: true }, (tabs) => {
+      tabs
+        .filter((tab) => tab.id !== currentTab?.id)
+        .forEach((tab: any) => {
+          try {
+            chrome.tabs.sendMessage(tab.id, {
+              type: "BLOB_ACTIVATED",
+              preference: preference,
+              reminders: reminders,
+              isActive: isActive,
+            });
+          } catch (e) {
+            console.log("Unable to update the content blob data");
+          }
+        });
+    });
+  });
+
 }
 
 export function onMessage(preference: Preference, reminders: RemindersInterface[]) {
@@ -21,8 +59,8 @@ export function onMessage(preference: Preference, reminders: RemindersInterface[
         chrome.storage.sync.set({ reminders: JSON.stringify(request.reminders) }, () => {
           sendResponse({ success: true });
         });
-        updateReminders({ ...globalReminders, ...request.reminders })
-        updateBlob(globalPreference, globalReminders);
+        updateReminders(request.reminders)
+        updateBlobData(globalPreference, globalReminders);
         break;
 
       case 'LOAD_REMINDERS':
@@ -33,6 +71,37 @@ export function onMessage(preference: Preference, reminders: RemindersInterface[
           } else {
             sendResponse({ reminders: JSON.parse(data?.reminders) });
           }
+        });
+        break;
+
+      case 'UPDATE_PREFERENCE':
+        chrome.storage.sync.set({ preference: JSON.stringify(request.preference) });
+        updatePreference({ ...globalPreference, ...request.preference })
+        updateBlobData(globalPreference);
+        break;
+
+      case 'LOAD_PREFERENCE':
+        chrome.storage.sync.get('preference', (data) => {
+          sendResponse({ preference: JSON.parse(data?.preference) });
+        });
+        break;
+
+      case 'SAVE_BLOB_POSITION':
+        console.log("SAVE_BLOB_POITION-------", request)
+        updatePreference({ ...globalPreference, blobPosition: request.blobPosition });
+        updateBlobDataPosition(request.blobPosition);
+        break;
+
+      case 'BLOB_ACTIVATED':
+        updateReminders(request.reminders);
+        updatePreference(request.preference)
+        // console.log("BLOB_ACTIVATED-------", request)
+        updateBlobData(request.preference, request.reminders, request.isActive)
+        break;
+
+      case 'CLEAR_ALL_DATA': //! =========== TBC ============
+        chrome.storage.sync.clear(() => {
+          console.log('Sync data cleared');
         });
         break;
 
@@ -55,54 +124,7 @@ export function onMessage(preference: Preference, reminders: RemindersInterface[
           }
         })
         break;
-
-      case 'UPDATE_PREFERENCE':
-        chrome.storage.sync.set({ preference: JSON.stringify(request.preference) });
-        updatePreference({ ...globalPreference, ...request.preference })
-        updateBlob(globalPreference);
-        break;
-
-      case 'LOAD_PREFERENCE':
-        chrome.storage.sync.get('preference', (data) => {
-          sendResponse({ preference: JSON.parse(data?.preference) });
-        });
-        break;
-
-      case 'SAVE_BLOB_POSITION': //! =================== construction ---TBC---
-        preference = { ...preference, blobPosition: request.blobPosition }
-        chrome.storage.sync.set({ preference: JSON.stringify(preference) }, () => {
-          chrome.tabs.query({ highlighted: true, active: false }, tabs => {
-            tabs.forEach(tab => {
-              if (tab.id) {
-                chrome.tabs.sendMessage(tab.id, {
-                  type: 'UPDATE_BLOB_POSITION',
-                  blobPosition: request.blobPosition,
-                });
-              }
-            });
-          });
-        });
-        break;
-
-      // case 'UPDATE_BLOB_POSITION': //! ====== updated all chrome blob positions
-      //   const blobPosition = request.blobPosition;
-      //   chrome.tabs.query({ highlighted: true }, tabs => { // only query highlighted tabs
-      //     tabs.forEach(tab => {
-      //       if (tab.id && tab.url && tab.url.startsWith('http')) {
-      //         chrome.tabs.sendMessage(tab.id, {
-      //           type: 'UPDATE_BLOB_POSITION',
-      //           blobPosition: blobPosition,
-      //         });
-      //       }
-      //     });
-      //   });
-      //   break;
-
-      case 'BLOB_ACTIVATED':
-        updateBlob(request.preference, request.reminders, request.isActive)
-        break;
     }
-
     return true;
   });
 }

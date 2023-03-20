@@ -11,7 +11,7 @@ if (popupElement) {
   const popupRoot = ReactDOM.createRoot(popupElement);
   popupRoot.render(
     <React.StrictMode>
-      <BrowserRouter>
+      <BrowserRouter basename="popup.html">
         <PreferenceProvider>
           <Popup />
         </PreferenceProvider>

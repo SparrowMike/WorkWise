@@ -20,6 +20,7 @@ function Tracker() {
   useEffect(() => {
     if (!taskArray.length) {
       chrome.runtime.sendMessage({ type: 'LOAD_REMINDERS' }, (response) => {
+        console.log('tracker response -------------- ', response)
         if (chrome.runtime.lastError) {
           console.error(chrome.runtime.lastError);
         } else {

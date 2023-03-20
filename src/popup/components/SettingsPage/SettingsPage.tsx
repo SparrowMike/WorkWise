@@ -69,7 +69,6 @@ const SettingsPage: React.FC = () => {
 
   return (
     <div className="settings-page">
-      <h1>Settings</h1>
       <div className="settings-container">
         <SettingsToggle
           title="Theme"
@@ -126,7 +125,7 @@ const SettingsPage: React.FC = () => {
         </div>
       </div>
       <div className="navigation-container">
-        <Link className="link" to="/popup.html">Go to main</Link>
+        <Link className="link" to="/">Go to main</Link>
       </div>
     </div>
   )

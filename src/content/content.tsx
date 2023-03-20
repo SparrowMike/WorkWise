@@ -65,9 +65,13 @@ const Content = (props: ContentProps) => {
         reminder: true
       }
       
+      console.log('Reminders',reminders)
+
       const updatedReminders = [ reminder, ...reminders];
       const trimmedValue = inputValue.trim();
       const id = uuidv4();
+
+      console.log('updatedReminders',updatedReminders)
 
       if (trimmedValue !== '') {
         chrome.runtime.sendMessage('', { type: 'SAVE_REMINDERS', reminders: updatedReminders });
@@ -82,7 +86,7 @@ const Content = (props: ContentProps) => {
       // }
 
       // Start countdown
-      countdown(preference.sprintTiming || 10, id); //! You can stack up the countdown event causing it to just go nuts, we need new approach
+      // countdown(preference.sprintTiming || 10, id); //! You can stack up the countdown event causing it to just go nuts, we need new approach
     }
   };
 
