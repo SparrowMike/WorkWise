@@ -1,9 +1,12 @@
 import { Preference, RemindersInterface } from "../interfaces/user";
-import { onFocusChanged } from "./listeners/onFocusChanged";
+import { onTabFocusChanged } from "./listeners/onTabFocusChanged";
 import { onMessage } from "./listeners/onMessage";
 
-export let reminders: RemindersInterface[];
-export let preference: Preference = {
+export let globalReminders: RemindersInterface[];
+export function updateReminders(newReminders: RemindersInterface[]) {
+  globalReminders = newReminders;
+}
+export let globalPreference: Preference = {
   theme: "light",
   showReminder: false,
   stickyBlob: false,
@@ -13,34 +16,37 @@ export let preference: Preference = {
   sprintTiming: 5,
   blobPosition: {
     left: '20px',
-    top: '23px'
+    top: '20px'
   },
 };
+export function updatePreference(newPreference: Preference) {
+  globalPreference = newPreference;
+}
 
 let currentTabId: any;
 
 export const preferenceReady = new Promise((resolve) => {
   chrome.storage.sync.get('preference', (data) => {
-    preference = Object.assign({}, preference, JSON.parse(data?.preference || "{}"));
-    resolve(preference);
+    globalPreference = Object.assign({}, globalPreference, JSON.parse(data?.preference || "{}"));
+    resolve(globalPreference);
   });
 });
 
 export const remindersReady = new Promise((resolve) => {
   chrome.storage.sync.get('reminders', (data) => {
-    reminders = JSON.parse(data?.reminders || []);
-    resolve(reminders);
+    globalReminders = JSON.parse(data?.reminders || []);
+    resolve(globalReminders);
   });
 });
 
 export function initializeAppWithPreference(): void {
   chrome.storage.sync.get('preference', (preferenceData) => {
-    preference = Object.assign({}, preference, JSON.parse(preferenceData?.preference || "{}"));
+    globalPreference = Object.assign({}, globalPreference, JSON.parse(preferenceData?.preference || "{}"));
 
     chrome.storage.sync.get('reminders', (remindersData) => {
-      reminders = JSON.parse(remindersData?.reminders || "[]");
+      globalReminders = JSON.parse(remindersData?.reminders || "[]");
 
-      startApp(preference, reminders);
+      startApp(globalPreference, globalReminders);
     });
   });
 }
@@ -100,10 +106,9 @@ function startApp(preference: Preference, reminders: RemindersInterface[]): void
       chrome.runtime.reload();
     })
 
-    onFocusChanged(preference, reminders);
+    onTabFocusChanged();
+    onMessage(preference, reminders);
   }
-
-  onMessage(preference, reminders);
 }
 
 initializeAppWithPreference();

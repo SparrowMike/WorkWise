@@ -20,7 +20,7 @@ function Popup() {
     <div id="Work-Wise" className={`${preference.theme || 'dark'}`}>
       <Clock />
       <Routes>
-        <Route path="/popup.html" element={<MainPage />} />
+        <Route path="/" element={<MainPage />} />
         <Route path="/settings" element={<SettingsPage />} />
       </Routes>
     </div>
