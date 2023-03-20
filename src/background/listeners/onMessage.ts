@@ -1,4 +1,6 @@
 import { Preference, RemindersInterface } from "../../interfaces/user";
+import { globalPreference, globalReminders } from "../background";
+import { updatePreference, updateReminders } from "../background";
 
 function updateBlob(preference: Preference, reminders?: RemindersInterface[], isActive?: boolean) {
   chrome.tabs.query({ active: true, currentWindow: true, }, (tabs) => {
@@ -19,8 +21,8 @@ export function onMessage(preference: Preference, reminders: RemindersInterface[
         chrome.storage.sync.set({ reminders: JSON.stringify(request.reminders) }, () => {
           sendResponse({ success: true });
         });
-        reminders = { ...reminders, ...request.reminders }
-        updateBlob(preference, request.reminders);
+        updateReminders({ ...globalReminders, ...request.reminders })
+        updateBlob(globalPreference, globalReminders);
         break;
 
       case 'LOAD_REMINDERS':
@@ -56,8 +58,8 @@ export function onMessage(preference: Preference, reminders: RemindersInterface[
 
       case 'UPDATE_PREFERENCE':
         chrome.storage.sync.set({ preference: JSON.stringify(request.preference) });
-        updateBlob(request.preference);
-        preference = { ...preference, ...request.preference }
+        updatePreference({ ...globalPreference, ...request.preference })
+        updateBlob(globalPreference);
         break;
 
       case 'LOAD_PREFERENCE':

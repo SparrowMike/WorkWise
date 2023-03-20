@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import Blob from './components/Blob';
-import Clock from '../popup/components/Shared/Clock';
 import useIsMounted from '../hooks/useIsMounted';
 import { Preference, RemindersInterface } from '../interfaces/user';
 import { v4 as uuidv4 } from 'uuid';

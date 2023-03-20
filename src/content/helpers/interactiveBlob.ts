@@ -1,5 +1,5 @@
-import { preference } from "../../background/background";
-import { reminders } from "../../background/background";
+import { globalPreference } from "../../background/background";
+import { globalReminders } from "../../background/background";
 
 export function createBlob() {
   const elemHtml = '<div id="work-wise__content"></div>';
@@ -15,7 +15,7 @@ export function interactiveBlob(container: HTMLElement) {
   let dragStartX = 0;
   let dragStartY = 0;
 
-  const blobPosition = preference?.blobPosition
+  const blobPosition = globalPreference?.blobPosition
 
   if (blobPosition) {
     if (blobPosition.left && blobPosition.top) {
@@ -119,8 +119,8 @@ export function interactiveBlob(container: HTMLElement) {
           container.classList.add('input-active');
           chrome.runtime.sendMessage({
             type: 'BLOB_ACTIVATED',
-            preference: preference,
-            reminders: reminders,
+            preference: globalPreference,
+            reminders: globalReminders,
             isActive: true
           });
         }
