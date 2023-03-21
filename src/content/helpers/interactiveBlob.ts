@@ -1,5 +1,6 @@
 import { globalPreference } from "../../background/background";
 import { globalReminders } from "../../background/background";
+//! above two - globalPreference and globalReminders - load on start and are not getting updated
 
 export function createBlob() {
   const elemHtml = '<div id="work-wise__content"></div>';
@@ -119,8 +120,6 @@ export function interactiveBlob(container: HTMLElement) {
           container.classList.add('input-active');
           chrome.runtime.sendMessage({
             type: 'BLOB_ACTIVATED',
-            preference: globalPreference,
-            reminders: globalReminders,
             isActive: true
           });
         }
@@ -131,7 +130,10 @@ export function interactiveBlob(container: HTMLElement) {
       if (isActive) {
         isActive = false;
         container.classList.remove('input-active');
-        chrome.runtime.sendMessage({ type: 'BLOB_ACTIVATED',  isActive: false });
+        chrome.runtime.sendMessage({
+          type: 'BLOB_ACTIVATED', 
+          isActive: false
+        });
       }
     });
   }

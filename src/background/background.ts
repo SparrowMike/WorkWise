@@ -105,7 +105,7 @@ function startApp(preference: Preference, reminders: RemindersInterface[]): void
     /**
      * Registers a message listener with chrome.runtime.onMessage.
      */
-    onMessage(preference, reminders);
+    onMessage();
   }
 }
 

@@ -3,6 +3,7 @@ import { RemindersInterface } from "../../../interfaces/user";
 
 function Tracker() {
   const RemindersInterface: RemindersInterface = {
+    id: '',
     title: '',
     description: '',
     priority: 0,
