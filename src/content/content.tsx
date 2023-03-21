@@ -41,6 +41,7 @@ const Content = (props: ContentProps) => {
       sendResponse: (response?: any) => void
     ) => {
       if (request.type === 'BLOB_ACTIVATED' && request.preference || request.isActive) {
+        console.log('content attempt BLOB_ACTIVATED', request)
         setPreference({...preference, ...request.preference, isActive: request.isActive});
         if (request.reminders) {
           setReminders(request.reminders)
@@ -60,11 +61,12 @@ const Content = (props: ContentProps) => {
     };
   }, []);
 
-  useEffect(() => {
-    return () => {
-      chrome.runtime.sendMessage({ type: "UDPATE_REMINDER_TIMELEFT", id: countdownInfo?.id, timeLeft: countdownInfo?.timeLeft });
-    }
-  }, [countdownInfo]);
+  // useEffect(() => {
+  //   return () => {
+      // ! will trigger sync timeout as it stacks up 
+      // chrome.runtime.sendMessage({ type: "UDPATE_REMINDER_TIMELEFT", id: countdownInfo?.id, timeLeft: countdownInfo?.timeLeft });
+  //   }
+  // }, [countdownInfo]);
 
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -79,8 +81,6 @@ const Content = (props: ContentProps) => {
         priority: 1,
         reminder: true
       }
-      
-      console.log('Reminders',reminders)
 
       const updatedReminders = [ reminder, ...reminders];
       const trimmedValue = inputValue.trim();
@@ -112,8 +112,6 @@ const Content = (props: ContentProps) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
   };
-
-  //! ====TBC==== extract Date and Time to individual components ?
 
   if (preference.hideBlob) {
     return null;
