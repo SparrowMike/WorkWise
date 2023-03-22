@@ -2,8 +2,6 @@ import { Preference, RemindersInterface } from "../../interfaces/user";
 import { globalPreference, globalReminders } from "../background";
 import { updatePreference, updateReminders } from "../background";
 
-
-
 //!=============================================TBC
 //! needs a script to update the position of the other blobs
 
@@ -23,15 +21,17 @@ function updateBlobDataPosition(position: { left: string, right: string }) {
         // chrome.tabs.query({ active: true, highlighted: true }, (tabs) => {
         chrome.tabs.query({}, (tabs) => {
           tabs
-            // .filter((tab) => tab.id !== currentTab?.id)
+            .filter((tab) => tab.id !== currentTab?.id)
             .forEach((tab: any) => {
-              try {
-                chrome.tabs.sendMessage(tab.id, {
-                  type: 'SAVE_BLOB_POSITION',
-                  blobPosition: position,
-                });
-              } catch (e) {
-                console.log("Unable to update the content blob data:", e);
+              if (!tab.url.startsWith('chrome://extensions/')) {
+                try {
+                  chrome.tabs.sendMessage(tab.id, {
+                    type: 'BLOB_POSITION_UPDATE',
+                    blobPosition: position,
+                  });
+                } catch (e) {
+                  console.log("Unable to update the content blob data:", e);
+                }
               }
             });
         });
@@ -52,27 +52,30 @@ function updateBlobData(isActive?: boolean) {
   // ? get current tab and loop over all of the tabs that are currently highlighted(visible on screen) and update the preference and reminders
   chrome.tabs.getCurrent((currentTab: any) => {
     // chrome.tabs.query({ active: true, highlighted: true }, (tabs) => {
-    chrome.tabs.query({}, (tabs) => {
+      chrome.tabs.query({}, (tabs) => {
+      console.log('available tabs-----', tabs)
       tabs
+        .filter((tab) => tab.id !== currentTab?.id)
         .forEach((tab: any) => {
-          try {
-            // .filter((tab) => tab.id !== currentTab?.id)
-            chrome.tabs.sendMessage(tab.id, {
-              type: "BLOB_ACTIVATED",
-              preference: globalPreference,
-              reminders: globalReminders,
-              isActive: isActive,
-            }, (response) => {
-              if (chrome.runtime.lastError) {
-                console.log("Unable to update the content blob data:", chrome.runtime.lastError);
-              } else if (response && response.success === false) {
-                console.log("Unable to update the content blob data:", response.error);
-              } else {
-                console.log("Content blob data updated successfully:", response);
-              }
-            });
-          } catch (e) {
-            console.log("Unable to update the content blob data:", e);
+          if (!tab.url.startsWith('chrome://extensions/')) {
+            try {
+              chrome.tabs.sendMessage(tab.id, {
+                type: "BLOB_ACTIVATED",
+                preference: globalPreference,
+                reminders: globalReminders,
+                isActive: isActive,
+              }, (response) => {
+                if (chrome.runtime.lastError) {
+                  console.log("Unable to update the content blob data:", chrome.runtime.lastError);
+                } else if (response && response.success === false) {
+                  console.log("Unable to update the content blob data:", response.error);
+                } else {
+                  console.log("Content blob data updated successfully:", response);
+                }
+              });
+            } catch (e) {
+              console.log("Unable to update the content blob data:", e);
+            }
           }
         });
     });
@@ -162,6 +165,11 @@ export function onMessage() {
         updateBlobData(request.isActive);
         sendResponse({ success: true });
         break;
+
+
+
+
+
 
       // case 'CLEAR_ALL_DATA': //! =========== TBC ============
       //   chrome.storage.sync.clear(() => {

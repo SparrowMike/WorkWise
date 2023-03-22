@@ -10,6 +10,19 @@ export function createBlob() {
   }
 }
 
+function updateBlob(request: any, sender: any, sendResponse: any) {
+  console.log(request)
+  if (request.type === 'BLOB_POSITION_UPDATE') {
+    const container = document.getElementById('work-wise__content') 
+    if (container) {
+      container.style.left = request.blobPosition.left;
+      container.style.top = request.blobPosition.top;
+    }
+  }
+}
+chrome.runtime.onMessage.removeListener(updateBlob);
+chrome.runtime.onMessage.addListener(updateBlob);
+
 export function interactiveBlob(container: HTMLElement) {
   let isActive = false;
   let isDragging = false;
