@@ -1,11 +1,22 @@
-export interface RemindersInterface {
-  id: string;
+export interface ReminderInterface {
+  id?: string;
   title: string;
-  description: string;
-  priority: number;
-  reminder: boolean;
-  timeLeft? : number; 
+  description?: string;
+  duration?: number;
+  createdAt?: Date;
+  priority?: number;
+  reminder?: boolean;
+  timeLeft?: number;
+  dueDate?: Date;
+  category?: string;
+  tags?: string[];
+  completed?: boolean;
+  completedAt?: Date;
+  isOverdue?(): boolean;
+  extendTime?(minutes: number): void;
+  delete?(): void;
 }
+
 
 export interface PreferenceInterface {
   theme?: string;
