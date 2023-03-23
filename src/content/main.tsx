@@ -5,11 +5,11 @@ import './../styles/sass/content.scss';
 import Content from './content';
 
 import { preferenceReady, remindersReady } from '../background/background';
-import { Preference, RemindersInterface } from '../interfaces/user';
+import { PreferenceInterface, ReminderInterface } from '../interfaces/user';
 
 (async function () {
-  const preference = await (preferenceReady as Promise<Preference>);
-  const reminders = await (remindersReady as Promise<RemindersInterface[]>);
+  const preference = await (preferenceReady as Promise<PreferenceInterface>);
+  const reminders = await (remindersReady as Promise<ReminderInterface[]>);
 
   createBlob(); //? creates the parent element for the this instance of react
 

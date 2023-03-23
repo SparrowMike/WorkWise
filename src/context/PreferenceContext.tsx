@@ -1,21 +1,21 @@
 import { createContext, useContext, useState } from "react";
-import { Preference } from "../interfaces/user";
+import { PreferenceInterface } from "../interfaces/user";
 
 interface PreferenceContextProps {
-  preference: Preference;
-  setPreference: (preference: Preference) => void;
+  preference: PreferenceInterface;
+  setPreference: (preference: PreferenceInterface) => void;
 }
 
 export const PreferenceContext = createContext<PreferenceContextProps>({
-  preference: {} as Preference,
+  preference: {} as PreferenceInterface,
   setPreference: () => {},
 });
 
 const PreferenceProvider = ({ children }: any) => {
-  const [state, setState] = useState<Preference>(
+  const [state, setState] = useState<PreferenceInterface>(
     useContext(PreferenceContext).preference 
   );
-  const setPreference = (preference: Preference) => {
+  const setPreference = (preference: PreferenceInterface) => {
     setState(preference);
   };
 

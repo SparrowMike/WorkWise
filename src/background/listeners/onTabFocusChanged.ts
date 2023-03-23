@@ -1,4 +1,4 @@
-import { Preference, RemindersInterface } from "../../interfaces/user";
+import { PreferenceInterface, ReminderInterface } from "../../interfaces/user";
 import { globalPreference, globalReminders } from "../background";
 
 export function onTabFocusChanged() {

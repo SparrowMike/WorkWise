@@ -1,6 +1,12 @@
 import { globalPreference } from "../../background/background";
-import { globalReminders } from "../../background/background";
-//! above two - globalPreference and globalReminders - load on start and are not getting updated
+import { checkForStickyBlob } from "./stickyBlob";
+//! globalPreference - load on start and are not getting updated
+
+//!=======================================TBC==========================================
+//! ===================== stickyBlob pref to follow loom behaviour ====================
+
+//! ================================ CONSTRUCTIONS ====================================
+let isSticky = globalPreference.stickyBlob;
 
 export function createBlob() {
   const elemHtml = '<div id="work-wise__content"></div>';
@@ -10,18 +16,18 @@ export function createBlob() {
   }
 }
 
-function updateBlob(request: any, sender: any, sendResponse: any) {
-  console.log(request)
+function updateBlobPosition(request: any, sender: any, sendResponse: any) {
   if (request.type === 'BLOB_POSITION_UPDATE') {
     const container = document.getElementById('work-wise__content') 
     if (container) {
-      container.style.left = request.blobPosition.left;
-      container.style.top = request.blobPosition.top;
+      checkForStickyBlob(request.stickyBlob, request.blobPosition, request.width, request.height, container);
+      isSticky = request.stickyBlob;
     }
+    sendResponse({ status: true })
   }
 }
-chrome.runtime.onMessage.removeListener(updateBlob);
-chrome.runtime.onMessage.addListener(updateBlob);
+chrome.runtime.onMessage.removeListener(updateBlobPosition);
+chrome.runtime.onMessage.addListener(updateBlobPosition);
 
 export function interactiveBlob(container: HTMLElement) {
   let isActive = false;
@@ -66,56 +72,66 @@ export function interactiveBlob(container: HTMLElement) {
       dragStartY = event.clientY;
     });
 
-    document.addEventListener('mousemove', event => {
+    document.addEventListener("mousemove", (event) => {
       if (isDragging) {
-        container.classList.add('dragging');
-        
+        container.classList.add("dragging");
+    
         document.body.style.userSelect = "none";
-
+    
         // Get the size of the container
         const containerWidth = container.offsetWidth;
         const containerHeight = container.offsetHeight;
-
+    
         // Get the size of the viewport
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
-
+    
         // Calculate the maximum and minimum values for the left and top CSS properties
-        const maxLeft = viewportWidth - containerWidth / 2;
-        const maxTop = viewportHeight - containerHeight / 2;
-        const minLeft = -containerWidth / 2;
-        const minTop = -containerHeight / 2;
-
+        const maxLeft = viewportWidth - containerWidth;
+        const maxTop = viewportHeight - containerHeight;
+        const minLeft = 0;
+        const minTop = 0;
+    
         // Update the left and top CSS properties of the container element
         let newLeft = container.offsetLeft + event.clientX - dragStartX;
         let newTop = container.offsetTop + event.clientY - dragStartY;
-
+    
         // Adjust the maximum and minimum values for the left and top CSS properties
         if (newLeft > maxLeft) {
           newLeft = maxLeft;
         } else if (newLeft < minLeft) {
           newLeft = minLeft;
         }
-
+    
         if (newTop > maxTop) {
           newTop = maxTop;
         } else if (newTop < minTop) {
           newTop = minTop;
         }
-
+    
         container.style.left = `${newLeft}px`;
         container.style.top = `${newTop}px`;
-
+    
         // Update the drag start position
         dragStartX = event.clientX;
         dragStartY = event.clientY;
       }
     });
+    
 
     document.addEventListener('mouseup', event => {
       if (isDragging) {
         const blobPosition = { left: container.style.left, top: container.style.top };
-        chrome.runtime.sendMessage({ type: 'SAVE_BLOB_POSITION', blobPosition });
+        chrome.runtime.sendMessage({ type: 'SAVE_BLOB_POSITION', stickyBlob: isSticky,  blobPosition });
+
+        // If isSticky is true, make the container stick to the closest edge
+        if (isSticky) {
+          const blobPosition = {
+            left: `${container.offsetLeft}px`,
+            top: `${container.offsetTop}px`,
+          };
+          checkForStickyBlob(true, blobPosition, window.innerWidth, window.innerHeight, container);
+        }
         isDragging = false;
         document.body.style.userSelect = userSelectStyle;
         setTimeout(() => {
@@ -131,10 +147,18 @@ export function interactiveBlob(container: HTMLElement) {
         if (!isActive) {
           isActive = true;
           container.classList.add('input-active');
-          chrome.runtime.sendMessage({
-            type: 'BLOB_ACTIVATED',
-            isActive: true
-          });
+          try {
+            chrome.runtime.sendMessage({
+              type: 'BLOB_ACTIVATED',
+              isActive: true
+            }, (response) => {
+              if (chrome.runtime.lastError) {
+                console.error(chrome.runtime.lastError);
+              } 
+            });
+          } catch (error) {
+            console.error('Error sending message:', error);
+          }
         }
       }
     }); 
@@ -143,10 +167,18 @@ export function interactiveBlob(container: HTMLElement) {
       if (isActive) {
         isActive = false;
         container.classList.remove('input-active');
-        chrome.runtime.sendMessage({
-          type: 'BLOB_ACTIVATED', 
-          isActive: false
-        });
+        try {
+          chrome.runtime.sendMessage({
+            type: 'BLOB_ACTIVATED',
+            isActive: false
+          }, (response) => {
+            if (chrome.runtime.lastError) {
+              console.error(chrome.runtime.lastError);
+            } 
+          });
+        } catch (error) {
+          console.error('Error sending message:', error);
+        }
       }
     });
   }

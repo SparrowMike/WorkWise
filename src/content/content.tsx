@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Blob from './components/Blob';
 import useIsMounted from '../hooks/useIsMounted';
-import { Preference, RemindersInterface } from '../interfaces/user';
+import { PreferenceInterface, ReminderInterface } from '../interfaces/user';
 import { v4 as uuidv4 } from 'uuid';
 import { countdown } from '../utils/countdown';
 import Time from '../popup/components/Shared/Time';
@@ -9,9 +9,9 @@ import CurrentDate from '../popup/components/Shared/Date';
 
 interface MessageRequest {
   type: string;
-  preference?: Preference;
+  preference?: PreferenceInterface;
   isActive?: boolean;
-  reminders: RemindersInterface[]
+  reminders: ReminderInterface[]
 }
 
 interface countdownInterface {
@@ -20,8 +20,8 @@ interface countdownInterface {
 }
 
 interface ContentProps {
-  data: Preference;
-  reminders: RemindersInterface[];
+  data: PreferenceInterface;
+  reminders: ReminderInterface[];
 }
 
 const Content = (props: ContentProps) => {
@@ -29,8 +29,8 @@ const Content = (props: ContentProps) => {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = useState('');
-  const [preference, setPreference] = useState<Preference>(props.data);
-  const [reminders, setReminders] = useState<RemindersInterface[]>(props.reminders);
+  const [preference, setPreference] = useState<PreferenceInterface>(props.data);
+  const [reminders, setReminders] = useState<ReminderInterface[]>(props.reminders);
   const [countdownInfo, setCountdownInfo] = useState<countdownInterface>();
 
   // ! ======TBC====== REFACTORING NEEDED IN OTHER COMPONENTS SO THEY LISTEN FOR UPDATES
@@ -40,12 +40,12 @@ const Content = (props: ContentProps) => {
       sender: chrome.runtime.MessageSender,
       sendResponse: (response?: any) => void
     ) => {
-      if (request.type === 'BLOB_ACTIVATED' && request.preference || request.isActive) {
-        console.log('content attempt BLOB_ACTIVATED', request)
+      if (request.type === 'BLOB_DATA_UPDATE' && request.preference || request.isActive) {
         setPreference({...preference, ...request.preference, isActive: request.isActive});
         if (request.reminders) {
           setReminders(request.reminders)
         }
+        sendResponse({status: true});
       }
       
       // ! FIX ON FOCUS WHEN BLOB TRIGGERED
@@ -74,7 +74,7 @@ const Content = (props: ContentProps) => {
 
       const id = uuidv4();
 
-      const reminder: RemindersInterface = {
+      const reminder: ReminderInterface = {
         id,
         title: inputValue,
         description: '',

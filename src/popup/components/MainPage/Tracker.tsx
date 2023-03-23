@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { RemindersInterface } from "../../../interfaces/user";
+import { ReminderInterface } from "../../../interfaces/user";
 
 function Tracker() {
-  const RemindersInterface: RemindersInterface = {
+  const ReminderInterface: ReminderInterface = {
     id: '',
     title: '',
     description: '',
@@ -10,8 +10,8 @@ function Tracker() {
     reminder: false,
   };
 
-  const [taskArray, setTaskArray] = useState<RemindersInterface[]>([]);
-  const [task, setTask] = useState<RemindersInterface>(RemindersInterface);
+  const [taskArray, setTaskArray] = useState<ReminderInterface[]>([]);
+  const [task, setTask] = useState<ReminderInterface>(ReminderInterface);
   const [backupTrigger, setBackupTrigger] = useState(false);
 
   const handleOptionsClick = () => {
@@ -50,7 +50,7 @@ function Tracker() {
     if (!task.title.length) return;
 
     setTaskArray([task, ...taskArray])
-    setTask(RemindersInterface);
+    setTask(ReminderInterface);
     setBackupTrigger(true);
 
   }

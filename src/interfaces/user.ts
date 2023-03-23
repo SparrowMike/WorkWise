@@ -7,7 +7,7 @@ export interface RemindersInterface {
   timeLeft? : number; 
 }
 
-export interface Preference {
+export interface PreferenceInterface {
   theme?: string;
   showReminder?: boolean;
   stickyBlob?: boolean;
