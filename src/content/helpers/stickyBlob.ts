@@ -1,12 +1,13 @@
 export function checkForStickyBlob(stickyBlob: boolean, blobPosition: { left: string, top: string }, width: number, height: number, container: HTMLElement) {
-  if (stickyBlob) {
-    // get the position of the stickyBlob element as strings
-    const stickyBlobLeftString: string = blobPosition.left;
-    const stickyBlobTopString: string = blobPosition.top;
+  // get the position of the stickyBlob element as strings
+  const stickyBlobLeftString: string = blobPosition.left;
+  const stickyBlobTopString: string = blobPosition.top;
 
-    // convert the string positions to numbers
-    const stickyBlobLeft: number = parseInt(stickyBlobLeftString);
-    const stickyBlobTop: number = parseInt(stickyBlobTopString);
+  // convert the string positions to numbers
+  const stickyBlobLeft: number = parseInt(stickyBlobLeftString);
+  const stickyBlobTop: number = parseInt(stickyBlobTopString);
+
+  if (stickyBlob) {
 
     // calculate the distances between the stickyBlob element and each side of the window
     const distances: Record<string, number> = {
@@ -43,7 +44,7 @@ export function checkForStickyBlob(stickyBlob: boolean, blobPosition: { left: st
         break;
     }
   } else {
-    container.style.left = blobPosition.left;
-    container.style.top = blobPosition.top;
+    container.style.left = stickyBlobLeft < width ? blobPosition.left : `${width - 50}px`;
+    container.style.top = stickyBlobTop < height ? blobPosition.top : `${height - 50}px`;
   }
 }
