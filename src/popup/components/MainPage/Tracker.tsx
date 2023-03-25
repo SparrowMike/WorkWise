@@ -8,6 +8,7 @@ function Tracker() {
     description: '',
     priority: 0,
     reminder: false,
+    isFocused: false,
   };
 
   const [taskArray, setTaskArray] = useState<ReminderInterface[]>([]);
@@ -69,6 +70,12 @@ function Tracker() {
   }
 
 
+  function handleFocus(index: number) {
+    setTaskArray((prevItems) =>
+      prevItems.map((item, i) => (i === index ? { ...item, isFocused: true } : item))
+    );
+  }
+
   const handleItemUpdate = (index: number, value: string | null, name: string) => {
     if (!value?.length) {
       handleTaskDelete(index);
@@ -76,31 +83,38 @@ function Tracker() {
     }
 
     setTaskArray((prevItems) =>
-      prevItems.map((item, i) => (i === index ? { ...item, [name]: value } : item))
+      prevItems.map((item, i) => (i === index ? { ...item, [name]: value, isFocused: false } : item))
     );
     setBackupTrigger(true);
   };
 
   return (
     <div className="tracker">
-      <form onSubmit={handleSubmit}>
-        <input id="work-wise__my-input" type="text" name="title" value={task.title} onChange={(event) => handleChange(event)} />
+      <form className="input container" onSubmit={handleSubmit}>
+        <input id="work-wise__my-input" type="text" name="title" placeholder="What's your next focus?" value={task.title} onChange={(event) => handleChange(event)} />
       </form>
-      <div className="reminders">
-        {taskArray?.map((task, index) => (
-          <div key={index} className="reminder">
-            <h4 contentEditable
+      <div className="reminders container">
+        {taskArray.length ? taskArray?.map((task, index) => (
+          <div key={index} className={`reminder ${task.isFocused && 'focused'}`}>
+            <h4 className="title" 
+              contentEditable
               suppressContentEditableWarning
               onBlur={(event) => handleItemUpdate(index, event.target.textContent, 'title')}
-              style={{ display: "inline-block" }}>
+              onFocus={() => handleFocus(index)}>
               {task.title}
             </h4>
-            <div className="delete" onClick={() => handleTaskDelete(index)}><svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M5.4 13.5L8 10.9L10.6 13.5L12 12.1L9.4 9.5L12 6.9L10.6 5.5L8 8.1L5.4 5.5L4 6.9L6.6 9.5L4 12.1L5.4 13.5ZM3 18C2.45 18 1.979 17.804 1.587 17.412C1.195 17.02 0.999333 16.5493 1 16V3H0V1H5V0H11V1H16V3H15V16C15 16.55 14.804 17.021 14.412 17.413C14.02 17.805 13.5493 18.0007 13 18H3ZM13 3H3V16H13V3Z" />
-            </svg>
+            <div className="delete" onClick={() => handleTaskDelete(index)}>
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10.6985 17.3016L17.3018 10.6983M17.3018 17.3016L10.6985 10.6983M10.5002 25.6666H17.5002C23.3335 25.6666 25.6668 23.3333 25.6668 17.4999V10.4999C25.6668 4.66659 23.3335 2.33325 17.5002 2.33325H10.5002C4.66683 2.33325 2.3335 4.66659 2.3335 10.4999V17.4999C2.3335 23.3333 4.66683 25.6666 10.5002 25.6666Z" stroke="var(--primary-1)" fill="var(--background-1)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
             </div>
           </div>
-        ))}
+        )) :
+          <div className="none">
+            <h1>
+              No reminders
+            </h1>
+          </div>}
       </div>
       {/* ====   no plans for options in the MVP   ==== */}
       {/* <a onClick={handleOptionsClick} style={{ alignSelf: 'baseline', padding: '10px 5px', textDecoration: 'underline', cursor: 'pointer' }}>Options</a> */}

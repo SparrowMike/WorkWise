@@ -27,7 +27,8 @@ function Quote() {
     <div className="quote-list">
       <div className="quote">
         <blockquote className="sidekick">
-          {quoteData[randomIndex]?.text} <cite> {quoteData[randomIndex]?.author || 'Anonymous'} </cite>
+          <p>{quoteData[randomIndex]?.text}</p>
+          <cite> {quoteData[randomIndex]?.author || 'Anonymous'} </cite>
         </blockquote>
       </div>
     </div>

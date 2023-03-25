@@ -3,10 +3,13 @@ export interface ReminderInterface {
   title: string;
   description?: string;
   duration?: number;
+  isFocused?: boolean;
   createdAt?: Date;
+
+
+  timeLeft?: number;
   priority?: number;
   reminder?: boolean;
-  timeLeft?: number;
   dueDate?: Date;
   category?: string;
   tags?: string[];

@@ -3,28 +3,83 @@
   flex-direction: column;
   align-items: center;
 
+  .input {
+    height: 5.5rem !important;
+  }
+
   form input {
     border-radius: 10px;
     padding: 5px 10px;
     border: none;
     width: 100%;
+    height: 100%;
+    font-size: $font-heading-3;
+    background: var(--background-1);
+    color: var(--primary-1);
+    border: 2px solid transparent;
+    transition: border .2s linear;
+
+    &:focus-visible {
+      outline: none;
+    }
+
+    &:focus {
+      border-color: var(--accent);
+    }
   }
 
   .reminders {
     width: 100%;
-    max-height: 200px;
+    max-height: 25rem;
     overflow: auto;
+  
+    .none {
+      height: 5.2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--primary-2);
+    }
 
     .reminder {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.5rem;
-      font-size: 1.5rem;
+      padding: 1rem 1.4rem;
+      font-size: $font-heading-3;
+      background: var(--background-1);
+      border-radius: 10px; 
+      border: 2px solid transparent;
+      transition: border-color .2s linear;
+
+      &.focused {
+        border-color: var(--accent);
+      }
+
+      &:not(:last-child) {
+        margin-bottom: .8rem;
+      }
       
+      .title {
+        width: calc(100% - 3rem);
+        color: var(--primary-1);
+
+        &:focus-visible {
+          outline: none;
+        }
+      }
+
       .delete {
         cursor: pointer;
         line-height: 0;
+       
+        svg path {
+          transition: stroke .2s linear;
+        }
+
+        &:hover svg path {
+          stroke: var(--accent);
+        }
       }
     }
   }

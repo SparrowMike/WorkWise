@@ -5,26 +5,36 @@
         font-size: 2rem;
       }
 
+      .type {
+        color: var(--primary-1);
+        font-size: $font-heading-2;
+        font-weight: 400;
+      }
+
+      .settings {
+        padding: .4rem .6rem;
+        color: var(--primary-2);
+        font-size: $font-heading-3;
+      }
+
       .settings-toggle {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 5px;
+        padding: .5rem;
         font-size: 0;
 
         .number-field {
-          width: 48px;
-          height: 23px;
-          border-radius: 6px;
-          padding: 5px;
+          width: 4.8rem;
+          height: 2.3rem;
+          border-radius: 1rem;
+          padding: .5rem;
           border: none;
+          color: var(--primary-2);
+          background-color: var(--background-1);
         }
 
         .switch {
-          // display: inline-block;
-          // height: 20px;
-          // width: 50px;
-
           input[type=checkbox] {
             height: 0;
             width: 0;
@@ -36,7 +46,7 @@
             text-indent: -9999px;
             width: 50px;
             height: 20px;
-            background: grey;
+            background: var(--background-1);
             display: block;
             border-radius: 100px;
             position: relative;
@@ -45,21 +55,21 @@
           .slider:after {
             content: '';
             position: absolute;
-            top: 5px;
-            left: 5px;
-            width: 10px;
-            height: 10px;
-            background: #fff;
-            border-radius: 90px;
+            top: .5rem;
+            left: .5rem;
+            width: 1rem;
+            height: 1rem;
+            background: var(--primary-1);
+            border-radius: 9rem;
             transition: 0.3s;
           }
 
           input:checked+.slider {
-            background: #bada55;
+            background: var(--accent);
           }
 
           input:checked+.slider:after {
-            left: calc(100% - 5px);
+            left: calc(100% - .5rem);
             transform: translateX(-100%);
           }
 

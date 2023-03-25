@@ -1,0 +1,37 @@
+#Work-Wise {
+  .container {
+    background-color: var(--background-2);
+    border-radius: 10px;
+    height: fit-content;
+    box-shadow: 0 4px 8px var(--shadow);
+    padding: .8rem 1.2rem;
+    width: 100%;
+    position: relative;
+  }
+  
+  .container:not(:last-child) {
+    margin-bottom: 1.2rem;
+  }
+
+  .popup {
+    .popup__header {
+      display: flex;
+
+      .settings-icon {
+        margin-right: .8rem;
+        line-height: 0;
+      } 
+
+      .settings-icon svg path {
+        float: left;
+        margin-right: .8rem;
+        transition: stroke .2s linear;
+      }
+
+      .settings-icon:hover path {
+        stroke: var(--accent);
+      }
+    }
+  }
+
+}
