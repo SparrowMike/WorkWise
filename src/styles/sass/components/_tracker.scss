@@ -82,8 +82,8 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 1.4rem;
-      font-size: $font-heading-3;
+      padding: .8rem 1.2rem;
+      font-size: $font-body-text;
       background: var(--background-1);
       border-radius: 10px; 
       border: 2px solid transparent;
@@ -100,6 +100,7 @@
       .title {
         width: calc(100% - 3rem);
         color: var(--primary-1);
+        font-weight: 400;
 
         &:focus-visible {
           outline: none;

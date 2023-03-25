@@ -72,8 +72,14 @@ export function updateReminders(newReminders: ReminderInterface[]) {
 export const preferenceReady = new Promise((resolve) => {
   if (chrome && chrome.storage && chrome.storage.sync) {
     chrome.storage.sync.get('preference', (data) => {
-      globalPreference = Object.assign({}, globalPreference, JSON.parse(data?.preference || "{}"));
-      resolve(globalPreference);
+      if (data && data.preference) {
+        globalPreference = JSON.parse(data.preference);
+        resolve(globalPreference);
+      } else {
+        chrome.storage.sync.set({ preference: JSON.stringify(globalPreference) }, () => {
+          resolve(globalPreference);
+        });
+      }
     });
   }
 });

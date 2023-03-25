@@ -37,6 +37,10 @@ function Quote() {
   // const quoteData = isQuoteTypeArray(data) ? data : [data];
   // const randomIndex: number = Math.floor(Math.random() * quoteData.length);
 
+  if (!quote) {
+    return null;
+  }
+
   return (
     <div className="quote-list">
       <div className="quote">

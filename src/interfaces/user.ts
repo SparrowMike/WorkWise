@@ -34,7 +34,6 @@ export interface PreferenceInterface {
     top: string;
   };
 
-  quote?: any;
   reminder?: string; //! ==== same as single reminder from the array TBC
   isActive?: boolean; //! ==== tbc
 }
