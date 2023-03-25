@@ -14,21 +14,20 @@
 }
 
 *::-webkit-scrollbar-track {
-  background: var(--background-dark);
+  background: var(--background-2);
   border-radius: 20px;
 }
 
 *::-webkit-scrollbar-thumb {
-  background: var(--background-dark);
-  border: 2px solid var(--text-light);
+  background: var(--background-1);
+  border: 2px solid var(--accent);
   border-radius: 20px;
 }
 
 html {
   font-size: 62.5%;
   font-family: 'Roboto', serif;
-  width: 300px;
-  max-width: 350px;
+  width: 330px;
   margin: 0 auto;
 }
 
@@ -38,28 +37,9 @@ html {
 }
 
 #Work-Wise {
-  background: var(--background-dark);
-  color: var(--text-light);
-  padding: 2rem;
+  background: var(--background-1);
+  color: var(--primary-1);
+  padding: 1.2rem;
   transition: background .2s linear, color .1s linear;
   position: relative;
-
-  .navigation-container {
-    padding-top: 10px;
-    text-align: end;
-
-    .link {
-      align-self: end;
-      padding: 5px 10px;
-      text-decoration: none;
-      font-size: 1.5rem;
-      color: var(--text-light);
-      text-transform: capitalize;
-      text-align: end;
-      
-      &:hover {
-        color: var(--primary-color)
-      }
-    }
-  }
 }

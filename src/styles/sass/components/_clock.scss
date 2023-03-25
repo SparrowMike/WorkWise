@@ -3,6 +3,11 @@
   align-items: center;
   justify-content: space-between;
   font-size: 1.75rem;
-
+  width: 100%;
   font-weight: bold;
+  
+  .time, .date {
+    font-size: $font-heading-2;
+    font-weight: 400;
+  }
 }

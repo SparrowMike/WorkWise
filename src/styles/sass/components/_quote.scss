@@ -1,20 +1,37 @@
 .quote {
   padding: 1.5rem;
-  
+
   .sidekick {
     position: relative;
-    font-size: 2.2rem;
-    line-height: 1;
+    font-size: $font-heading-2;
+    line-height: 1.1;
     font-weight: 300;
     text-align: center;
+    color: var(--primary-1);
+
+    p:before,
+    p:after {
+      font-family: Calibri;
+      color: var(--accent);
+    }
+
+    p:after {
+      content: '\201c';
+    }
+
+    p:before {
+      content: '\201e';
+    }
+
+    cite {
+      font-size: 50%;
+      text-align: center;
+      top: 50%;
+      color: var(--primary-2);
+
+      &:before {
+        content: '\2015';
+      }
+    }
   }
-  .sidekick:before, .sidekick:after {
-    font-family: Calibri;
-    color: var(--primary-color);
-    font-size: 2rem;
-  }
-  .sidekick:before {content: '\201e'}
-  .sidekick:after {content: '\201c';}
-  .sidekick cite {font-size: 50%; text-align:center; top:50%}
-  .sidekick cite:before {content: ' \2015 '}
 }
