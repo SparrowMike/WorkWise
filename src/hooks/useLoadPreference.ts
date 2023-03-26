@@ -7,7 +7,7 @@ function useLoadPreference() {
   useEffect(() => {
     chrome.runtime.sendMessage({ type: 'LOAD_PREFERENCE' }, (response) => {
       if (response && response.preference !== undefined && response.preference !== null) {
-        const newPreference = { ...response.preference, quote: response.quote };
+        const newPreference = { ...response.preference };
         setPreference(newPreference);
       } else {
         console.error('Error loading preference:', response);

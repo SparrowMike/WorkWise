@@ -88,6 +88,10 @@ export function onMessage() {
 
     switch (request.type) {
 
+      case 'LOAD_QUOTE':
+        sendResponse({ quote: dailyQuote });
+        break;
+
       case 'SAVE_REMINDERS':
         chrome.storage.sync.set({ reminders: JSON.stringify(request.reminders) }, () => {
           if (chrome.runtime.lastError) {
@@ -137,10 +141,10 @@ export function onMessage() {
             sendResponse({ preference: null, error: 'Failed to load preference' });
           } else {
             try {
-              sendResponse({ preference: JSON.parse(data?.preference), quote: dailyQuote });
+              sendResponse({ preference: JSON.parse(data?.preference) });
               updatePreference({ ...globalPreference, ...data.preference });
             } catch(e) {
-              sendResponse({ preference: globalPreference, quote: dailyQuote });
+              sendResponse({ preference: globalPreference });
             }
           }
         });
