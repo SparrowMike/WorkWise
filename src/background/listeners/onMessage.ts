@@ -1,6 +1,7 @@
 import { PreferenceInterface, ReminderInterface } from "../../interfaces/user";
 import { globalPreference, globalReminders } from "../background";
 import { updatePreference, updateReminders } from "../background";
+import { dailyQuote } from "../background";
 
 /**
  * Updates the position of the content blob.
@@ -20,7 +21,6 @@ function updateBlobDataPosition(position: { left: string, right: string }, stick
           tabs
             .filter((tab) => tab.id !== currentTab?.id)
             .forEach((tab: any) => {
-              if (!tab.url.startsWith('chrome://')) {
                 try {
                   chrome.tabs.sendMessage(tab.id, {
                     type: 'BLOB_POSITION_UPDATE',
@@ -38,7 +38,6 @@ function updateBlobDataPosition(position: { left: string, right: string }, stick
                 } catch (e) {
                   console.log("Unable to update the blob position:", e);
                 }
-              }
             });
         });
       });
@@ -58,7 +57,6 @@ function updateBlobData(isActive?: boolean) {
       tabs
         .filter((tab) => tab.id !== currentTab?.id)
         .forEach((tab: any) => {
-          if (!tab.url.startsWith('chrome://')) {
             try {
               chrome.tabs.sendMessage(tab.id, {
                 type: "BLOB_DATA_UPDATE",
@@ -75,7 +73,6 @@ function updateBlobData(isActive?: boolean) {
             } catch (e) {
               console.log("Unable to update the content blob data:", e);
             }
-          }
         });
     });
   })
@@ -110,7 +107,11 @@ export function onMessage() {
             console.error(chrome.runtime.lastError);
             sendResponse({ reminders: null, error: 'Failed to load reminders' });
           } else {
-            sendResponse({ reminders: JSON.parse(data?.reminders) });
+            try {
+              sendResponse({ reminders: JSON.parse(data?.reminders) });
+            } catch(e) {
+              sendResponse({ reminders: [] });
+            }
           }
         });
         break;
@@ -135,7 +136,12 @@ export function onMessage() {
             console.error(chrome.runtime.lastError);
             sendResponse({ preference: null, error: 'Failed to load preference' });
           } else {
-            sendResponse({ preference: JSON.parse(data?.preference) });
+            try {
+              sendResponse({ preference: JSON.parse(data?.preference), quote: dailyQuote });
+              updatePreference({ ...globalPreference, ...data.preference });
+            } catch(e) {
+              sendResponse({ preference: globalPreference, quote: dailyQuote });
+            }
           }
         });
         break;
@@ -163,10 +169,6 @@ export function onMessage() {
         updateBlobData(request.isActive);
         sendResponse({ success: true });
         break;
-
-
-
-
 
 
       // case 'CLEAR_ALL_DATA': //! =========== TBC ============
