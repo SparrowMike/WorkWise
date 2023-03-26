@@ -4,7 +4,44 @@
   align-items: center;
 
   .input {
-    height: 5.5rem !important;
+
+    .timing-tracker {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.4rem 0.8rem;
+
+      .time {
+        font-size: 1.4rem;
+        float: left;
+
+        span {
+          color: var(--accent);
+        }
+      }
+
+      .actions {
+        display: flex;
+
+        .completed {
+          margin-right: .4rem;
+        }
+      
+        .icon {
+          line-height: 0;
+          cursor: pointer;
+          
+          svg path {
+            transition: stroke .150s ease;
+          }
+
+          &:hover svg path {
+            stroke: var(--accent);
+          }
+        }
+      }
+
+    }
   }
 
   form input {
@@ -17,7 +54,7 @@
     background: var(--background-1);
     color: var(--primary-1);
     border: 2px solid transparent;
-    transition: border .2s linear;
+    transition: border .150s ease;
 
     &:focus-visible {
       outline: none;
@@ -50,7 +87,7 @@
       background: var(--background-1);
       border-radius: 10px; 
       border: 2px solid transparent;
-      transition: border-color .2s linear;
+      transition: border-color .150s ease;
 
       &.focused {
         border-color: var(--accent);
@@ -74,7 +111,7 @@
         line-height: 0;
        
         svg path {
-          transition: stroke .2s linear;
+          transition: stroke .150s ease;
         }
 
         &:hover svg path {

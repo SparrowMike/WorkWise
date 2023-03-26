@@ -79,13 +79,12 @@ const Content = (props: ContentProps) => {
         title: inputValue,
         description: '',
         priority: 1,
+        createdAt: new Date,
         reminder: true
       }
 
       const updatedReminders = [ reminder, ...reminders];
       const trimmedValue = inputValue.trim();
-
-      console.log('updatedReminders',updatedReminders)
 
       if (trimmedValue !== '') {
         chrome.runtime.sendMessage('', { type: 'SAVE_REMINDERS', reminders: updatedReminders });

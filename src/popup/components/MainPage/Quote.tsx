@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { PreferenceContext } from '../../../context/PreferenceContext';
 import useApiRequest from "../../../hooks/useApiRequest";
 import { QuoteType } from "../../../interfaces/api";
 
@@ -7,6 +8,8 @@ function isQuoteTypeArray(data: QuoteType | QuoteType[]): data is QuoteType[] {
 }
 
 function Quote() {
+  const { preference } = useContext(PreferenceContext);
+
   const { data, isLoading, error } = useApiRequest<QuoteType>({
     url: "https://type.fit/api/quotes",
     method: "GET",
@@ -22,13 +25,19 @@ function Quote() {
 
   const quoteData = isQuoteTypeArray(data) ? data : [data];
   const randomIndex: number = Math.floor(Math.random() * quoteData.length);
+  
+  //?======================= feeding quote from preference to avoiding the delay when loading popup
 
   return (
     <div className="quote-list">
       <div className="quote">
         <blockquote className="sidekick">
-          <p>{quoteData[randomIndex]?.text}</p>
-          <cite> {quoteData[randomIndex]?.author || 'Anonymous'} </cite>
+
+          {/* <p>{quoteData[randomIndex]?.text}</p>
+          <cite> {quoteData[randomIndex]?.author || 'Anonymous'} </cite> */}
+
+          <p>{preference.quote?.text}</p>
+          <cite> {preference.quote?.author || 'Anonymous'} </cite>
         </blockquote>
       </div>
     </div>
