@@ -4,7 +4,44 @@
   align-items: center;
 
   .input {
-    height: 5.5rem !important;
+
+    .timing-tracker {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.4rem 0.8rem;
+
+      .time {
+        font-size: 1.4rem;
+        float: left;
+
+        span {
+          color: var(--accent);
+        }
+      }
+
+      .actions {
+        display: flex;
+
+        .completed {
+          margin-right: .4rem;
+        }
+      
+        .icon {
+          line-height: 0;
+          cursor: pointer;
+          
+          svg path {
+            transition: stroke .150s ease;
+          }
+
+          &:hover svg path {
+            stroke: var(--accent);
+          }
+        }
+      }
+
+    }
   }
 
   form input {
@@ -17,7 +54,7 @@
     background: var(--background-1);
     color: var(--primary-1);
     border: 2px solid transparent;
-    transition: border .2s linear;
+    transition: border .150s ease;
 
     &:focus-visible {
       outline: none;
@@ -45,12 +82,12 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 1.4rem;
-      font-size: $font-heading-3;
+      padding: .8rem 1.2rem;
+      font-size: $font-body-text;
       background: var(--background-1);
       border-radius: 10px; 
       border: 2px solid transparent;
-      transition: border-color .2s linear;
+      transition: border-color .150s ease;
 
       &.focused {
         border-color: var(--accent);
@@ -63,6 +100,7 @@
       .title {
         width: calc(100% - 3rem);
         color: var(--primary-1);
+        font-weight: 400;
 
         &:focus-visible {
           outline: none;
@@ -74,7 +112,7 @@
         line-height: 0;
        
         svg path {
-          transition: stroke .2s linear;
+          transition: stroke .150s ease;
         }
 
         &:hover svg path {

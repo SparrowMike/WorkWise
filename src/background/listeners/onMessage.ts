@@ -1,6 +1,7 @@
 import { PreferenceInterface, ReminderInterface } from "../../interfaces/user";
 import { globalPreference, globalReminders } from "../background";
 import { updatePreference, updateReminders } from "../background";
+import { dailyQuote } from "../background";
 
 /**
  * Updates the position of the content blob.
@@ -20,24 +21,22 @@ function updateBlobDataPosition(position: { left: string, right: string }, stick
           tabs
             .filter((tab) => tab.id !== currentTab?.id)
             .forEach((tab: any) => {
-              if (!tab.url.startsWith('chrome://')) {
-                try {
-                  chrome.tabs.sendMessage(tab.id, {
-                    type: 'BLOB_POSITION_UPDATE',
-                    blobPosition: position,
-                    stickyBlob: sticky,
-                    width: tab.width,
-                    height: tab.height
-                  }, (response) => {
-                    if (chrome.runtime.lastError) {
-                      console.log("Unable to update the blob position:", chrome.runtime.lastError);
-                    } else if (response && response.success === false) {
-                      console.log("Unable to update the blob position:", response.error);
-                    }
-                  });
-                } catch (e) {
-                  console.log("Unable to update the blob position:", e);
-                }
+              try {
+                chrome.tabs.sendMessage(tab.id, {
+                  type: 'BLOB_POSITION_UPDATE',
+                  blobPosition: position,
+                  stickyBlob: sticky,
+                  width: tab.width,
+                  height: tab.height
+                }, (response) => {
+                  if (chrome.runtime.lastError) {
+                    console.log("Unable to update the blob position:", chrome.runtime.lastError);
+                  } else if (response && response.success === false) {
+                    console.log("Unable to update the blob position:", response.error);
+                  }
+                });
+              } catch (e) {
+                console.log("Unable to update the blob position:", e);
               }
             });
         });
@@ -54,27 +53,25 @@ function updateBlobDataPosition(position: { left: string, right: string }, stick
 function updateBlobData(isActive?: boolean) {
   // ? get current tab and loop over all of the tabs that are currently highlighted(visible on screen) and update the preference and reminders
   chrome.tabs.getCurrent((currentTab: any) => {
-      chrome.tabs.query({}, (tabs) => {
+    chrome.tabs.query({}, (tabs) => {
       tabs
         .filter((tab) => tab.id !== currentTab?.id)
         .forEach((tab: any) => {
-          if (!tab.url.startsWith('chrome://')) {
-            try {
-              chrome.tabs.sendMessage(tab.id, {
-                type: "BLOB_DATA_UPDATE",
-                preference: globalPreference,
-                reminders: globalReminders,
-                isActive: isActive,
-              }, (response) => {
-                if (chrome.runtime.lastError) {
-                  console.log("Unable to update the content blob data:", chrome.runtime.lastError);
-                } else if (response && response.success === false) {
-                  console.log("Unable to update the content blob data:", response.error);
-                }
-              });
-            } catch (e) {
-              console.log("Unable to update the content blob data:", e);
-            }
+          try {
+            chrome.tabs.sendMessage(tab.id, {
+              type: "BLOB_DATA_UPDATE",
+              preference: globalPreference,
+              reminders: globalReminders,
+              isActive: isActive,
+            }, (response) => {
+              if (chrome.runtime.lastError) {
+                console.log("Unable to update the content blob data:", chrome.runtime.lastError);
+              } else if (response && response.success === false) {
+                console.log("Unable to update the content blob data:", response.error);
+              }
+            });
+          } catch (e) {
+            console.log("Unable to update the content blob data:", e);
           }
         });
     });
@@ -90,6 +87,10 @@ export function onMessage() {
     // console.log(`onMessage, request type --- ${request.type}, sender --- ${sender.origin || sender.url}`)
 
     switch (request.type) {
+
+      case 'LOAD_QUOTE':
+        sendResponse({ quote: dailyQuote });
+        break;
 
       case 'SAVE_REMINDERS':
         chrome.storage.sync.set({ reminders: JSON.stringify(request.reminders) }, () => {
@@ -110,7 +111,11 @@ export function onMessage() {
             console.error(chrome.runtime.lastError);
             sendResponse({ reminders: null, error: 'Failed to load reminders' });
           } else {
-            sendResponse({ reminders: JSON.parse(data?.reminders) });
+            try {
+              sendResponse({ reminders: JSON.parse(data?.reminders) });
+            } catch (e) {
+              sendResponse({ reminders: [] });
+            }
           }
         });
         break;
@@ -121,9 +126,9 @@ export function onMessage() {
             console.error(chrome.runtime.lastError);
             sendResponse({ success: false, error: 'Failed to update preference' });
           } else {
-            updateBlobDataPosition(request.preference.blobPosition, request.preference.stickyBlob);
-            updatePreference({ ...globalPreference, ...request.preference });
+            updatePreference(request.preference);
             updateBlobData();
+            updateBlobDataPosition(request.preference.blobPosition, request.preference.stickyBlob);
             sendResponse({ success: true });
           }
         });
@@ -135,7 +140,13 @@ export function onMessage() {
             console.error(chrome.runtime.lastError);
             sendResponse({ preference: null, error: 'Failed to load preference' });
           } else {
-            sendResponse({ preference: JSON.parse(data?.preference) });
+            try {
+              const response = JSON.parse(data?.preference)
+              sendResponse({ preference: response });
+              updatePreference(response);
+            } catch (e) {
+              console.log('Error loading preference.')
+            }
           }
         });
         break;
@@ -165,34 +176,10 @@ export function onMessage() {
         break;
 
 
-
-
-
-
       // case 'CLEAR_ALL_DATA': //! =========== TBC ============
       //   chrome.storage.sync.clear(() => {
       //     console.log('Sync data cleared');
       //   });
-      //   break;
-
-      // case 'UDPATE_REMINDER_TIMELEFT':
-      //   chrome.storage.sync.get('reminders', (data) => {
-      //     if (chrome.runtime.lastError) {
-      //       console.error(chrome.runtime.lastError);
-      //       sendResponse({ reminders: null, error: `Failed to update time for reminder :: ${request.id}` });
-      //     } else {
-      //       const reminders = JSON.parse(data.reminders || '[]');
-      //       if (reminders && reminders.length > 0) {
-      //         const udpatedReminderIndex = reminders.findIndex((reminder: { id: string; }) => reminder.id === request.id);
-      //         if (udpatedReminderIndex > -1) {
-      //           reminders[udpatedReminderIndex].timeLeft = request.timeLeft;
-      //           chrome.storage.sync.set({ reminders: JSON.stringify(reminders) }, () => {
-      //             sendResponse({ success: true });
-      //           });
-      //         }
-      //       }
-      //     }
-      //   })
       //   break;
     }
     return true;

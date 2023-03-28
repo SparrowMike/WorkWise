@@ -10,7 +10,7 @@
 
 *::-webkit-scrollbar {
   width: 8px;
-  transition: background .2s linear, border .2s linear;
+  transition: background .150s ease, border .150s ease;
 }
 
 *::-webkit-scrollbar-track {
@@ -40,6 +40,6 @@ html {
   background: var(--background-1);
   color: var(--primary-1);
   padding: 1.2rem;
-  transition: background .2s linear, color .1s linear;
+  transition: background .150s ease, color .1s ease;
   position: relative;
 }
