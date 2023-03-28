@@ -38,7 +38,7 @@ function Quote() {
   // const randomIndex: number = Math.floor(Math.random() * quoteData.length);
 
   if (!quote) {
-    return null;
+    setQuote({ text: "Be yourself; everyone else is already taken.", author: "Oscar Wilde" })
   }
 
   return (

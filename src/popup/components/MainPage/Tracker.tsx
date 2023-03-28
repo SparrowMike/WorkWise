@@ -144,7 +144,15 @@ function Tracker() {
               </div>
             </div>
           }
-          <input id="work-wise__my-input" type="text" name="title" placeholder="What's your next focus?" value={task.title} onChange={(event) => handleChange(event)} />
+          <input
+            id="work-wise__my-input"
+            type="text"
+            name="title"
+            placeholder="What's your next focus?"
+            value={task.title}
+            onChange={(event) => handleChange(event)}
+            autoComplete="off"
+          />
         </form>
       </div>
       <div className="reminders container">

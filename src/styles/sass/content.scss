@@ -1,26 +1,69 @@
 @import './helpers/variables';
 
+@keyframes stroke-animation {
+  0% {
+    stroke: var(--accent-1);
+  }
+  25% {
+    stroke: var(--accent-2);
+  }
+  50% {
+    stroke: var(--accent-1)
+  }
+  70% {
+    stroke: var(--accent-2);
+  }
+  100% {
+    stroke: var(--accent-1)
+  }
+}
+
 #work-wise__content {
-    width: 50px;
-    height: 50px;
+    // width: calc(min(50px, 100%));
+    // height: fit-content;
+    transition: width .5s ease-in-out, height .5s ease-in-out;
     position: fixed;
-    top: 133px;
-    left: 152px;
     border-radius: 50%;
     z-index: 2147483647;
     cursor: pointer;
-    transition: width .5s ease-in, height .5s ease-in-out;
+    
+    transform: scale(.25);
+    // transition: max-width .5s ease-in, max-height .5s ease-in-out;
+    transition: transform .5s ease-in-out;
+
+
+    
+    #work-wise__blobSvg {
+        animation: stroke-animation 4s ease infinite;
+        stroke-width: 10;
+        
+        path {
+            fill: var(--background-2);
+        }
+        
+        &.active path {
+            stroke-width: 50;
+            fill: url(#gradient);
+        }
+    }
 
     #work-wise__content-container {
         visibility: hidden;
     }
 
     &.input-active {
-        width: 200px;
-        height: 200px;
+        width: fit-content;
+        height: fit-content;
+
+        transform: scale(1);
 
         #work-wise__content-container {
             visibility: visible;
+        }
+
+        svg path {
+            stroke-width: 5 !important;
+            fill: var(--background-2) !important;
         }
     }
 
@@ -32,13 +75,42 @@
         z-index: 99;
         left: 50%;
         transform: translate(-50%, -50%);
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        color: var(--primary-1);
+
+        .reminder {
+            text-align: center;
+            padding-bottom: .2rem;
+            font-weight: 500;
+            width: 100%;
+        }
+        .time, .date {
+            font-size: .9rem;
+            font-weight: bold;
+            padding: .2rem 0;
+        }
         
         input {
-            background-color: black;
-            width: 100%;
-            color: white;
-            border: none;
             border-radius: 50px;
+            padding: 4px 8px;
+            border: none;
+            width: 100%;
+            height: 100%;
+            font-size: 1.2rem;
+            background: var(--background-1);
+            color: var(--primary-1);
+            border: 2px solid transparent;
+            transition: border 0.15s ease;
+            
+            &:focus-visible {
+                outline: none;
+            }
+          
+            &:focus {
+                border-color: var(--accent-1);
+            }
         }
     }
 }
