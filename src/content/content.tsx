@@ -117,14 +117,14 @@ const Content = (props: ContentProps) => {
   }
 
   return (
-    <div>
+    <div className={`${preference.theme || 'dark'}`}>
       <div id="work-wise__content-container">
         <div id="work-wise__input-wrapper">
           {preference.showTime && <Time />}
           {preference.showDate && <CurrentDate />}
 
           {preference.showReminder &&
-            <div>
+            <div className='reminder'>
               {reminders[0]?.title || ''}
             </div>
           }
@@ -135,6 +135,7 @@ const Content = (props: ContentProps) => {
             value={inputValue}
             onKeyUp={handleKeyUp}
             onChange={handleChange}
+            autoComplete="off"
           />
         </div>
       </div>
