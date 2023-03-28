@@ -16,7 +16,7 @@
         float: left;
 
         span {
-          color: var(--accent);
+          color: var(--accent-1);
         }
       }
 
@@ -36,7 +36,7 @@
           }
 
           &:hover svg path {
-            stroke: var(--accent);
+            stroke: var(--accent-1);
           }
         }
       }
@@ -61,7 +61,7 @@
     }
 
     &:focus {
-      border-color: var(--accent);
+      border-color: var(--accent-1);
     }
   }
 
@@ -90,7 +90,7 @@
       transition: border-color .150s ease;
 
       &.focused {
-        border-color: var(--accent);
+        border-color: var(--accent-1);
       }
 
       &:not(:last-child) {
@@ -116,7 +116,7 @@
         }
 
         &:hover svg path {
-          stroke: var(--accent);
+          stroke: var(--accent-1);
         }
       }
     }
