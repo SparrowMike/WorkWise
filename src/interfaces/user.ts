@@ -28,7 +28,7 @@ export interface PreferenceInterface {
   hideBlob: boolean;
   showTime: boolean;
   showDate: boolean;
-  sprintTiming: number;
+  sprintTiming: string;
   blobPosition?: {
     left: string;
     top: string;

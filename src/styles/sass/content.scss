@@ -19,22 +19,29 @@
 }
 
 #work-wise__content {
-    // width: calc(min(50px, 100%));
-    // height: fit-content;
     transition: width .5s ease-in-out, height .5s ease-in-out;
     position: fixed;
     border-radius: 50%;
     z-index: 2147483647;
     cursor: pointer;
     
-    transform: scale(.25);
-    // transition: max-width .5s ease-in, max-height .5s ease-in-out;
+    transform: scale(.25) !important;
     transition: transform .5s ease-in-out;
 
 
+    .time-left {
+        font-size: 65px;
+        position: absolute;
+        font-weight: bold;
+        top: 50%;
+        left: 50%;
+        z-index: 999999;
+        transform: translate(-50%, -50%);
+        color: var(--primary-1)
+    }
     
     #work-wise__blobSvg {
-        animation: stroke-animation 4s ease infinite;
+        animation: stroke-animation 3s ease infinite;
         stroke-width: 10;
         
         path {
@@ -55,7 +62,7 @@
         width: fit-content;
         height: fit-content;
 
-        transform: scale(1);
+        transform: scale(1) !important;
 
         #work-wise__content-container {
             visibility: visible;
@@ -65,44 +72,52 @@
             stroke-width: 5 !important;
             fill: var(--background-2) !important;
         }
+
+        .time-left {
+            visibility: hidden;
+        }
     }
 
     #work-wise__input-wrapper {
         position: absolute;
-        width: fit-content;
-        position: absolute;
         top: 50%;
-        z-index: 99;
+        z-index: 9;
         left: 50%;
         transform: translate(-50%, -50%);
         display: flex;
-        flex-wrap: wrap;
+        align-items: center;
         justify-content: space-between;
         color: var(--primary-1);
+        width: 60%;
+        flex-direction: column;
 
-        .reminder {
-            text-align: center;
-            padding-bottom: .2rem;
-            font-weight: 500;
-            width: 100%;
-        }
         .time, .date {
-            font-size: .9rem;
+            font-size: 18px;
             font-weight: bold;
-            padding: .2rem 0;
+            padding: 4px 0;
+            color: inherit;
         }
         
+        .reminder {
+            text-align: center;
+            padding: 4px 0;
+            font-weight: 500;
+            width: 100%;
+            font-size: 16px;
+            color: var(--accent-1);
+            
+        }
+
         input {
             border-radius: 50px;
             padding: 4px 8px;
             border: none;
-            width: 100%;
-            height: 100%;
-            font-size: 1.2rem;
+            font-size: 14px;
             background: var(--background-1);
             color: var(--primary-1);
             border: 2px solid transparent;
             transition: border 0.15s ease;
+            width: inherit;
             
             &:focus-visible {
                 outline: none;

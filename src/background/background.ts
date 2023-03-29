@@ -37,7 +37,7 @@ export let globalPreference: PreferenceInterface = {
   hideBlob: false,
   showTime: true,
   showDate: true,
-  sprintTiming: 5,
+  sprintTiming: '5',
   blobPosition: {
     left: '20px',
     top: '20px'

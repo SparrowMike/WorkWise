@@ -1,6 +1,6 @@
-export function getTimeLeft(createdAt: Date, durationMinutes: number): string {
+export function getTimeLeft(createdAt: Date, durationMinutes: string): string {
   const now = new Date().getTime();
-  const target = createdAt.getTime() + (durationMinutes * 60 * 1000);
+  const target = createdAt.getTime() + (Number(durationMinutes) * 60 * 1000);
   const timeLeft = target - now;
   if (timeLeft < 0) {
     return '00:00';

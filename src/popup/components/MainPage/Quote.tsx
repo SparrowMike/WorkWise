@@ -16,7 +16,7 @@ function Quote() {
       if (response && response.quote !== undefined && response.quote !== null) {
         setQuote(response.quote);
       } else {
-        console.error('Error loading quote:', response);
+        setQuote({ text: "Be yourself; everyone else is already taken.", author: "Oscar Wilde" })
       }
     });
   }, []);
@@ -36,10 +36,6 @@ function Quote() {
 
   // const quoteData = isQuoteTypeArray(data) ? data : [data];
   // const randomIndex: number = Math.floor(Math.random() * quoteData.length);
-
-  if (!quote) {
-    setQuote({ text: "Be yourself; everyone else is already taken.", author: "Oscar Wilde" })
-  }
 
   return (
     <div className="quote-list">

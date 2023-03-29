@@ -6,10 +6,11 @@ import { v4 as uuidv4 } from 'uuid';
 import { countdown } from '../utils/countdown';
 import Time from '../popup/components/Shared/Time';
 import CurrentDate from '../popup/components/Shared/Date';
+import { getTimeLeft } from '../utils/getTimeLeft';
 
 interface MessageRequest {
   type: string;
-  preference?: PreferenceInterface;
+  preference: PreferenceInterface;
   isActive?: boolean;
   reminders: ReminderInterface[]
 }
@@ -31,6 +32,7 @@ const Content = (props: ContentProps) => {
   const [inputValue, setInputValue] = useState('');
   const [preference, setPreference] = useState<PreferenceInterface>(props.data);
   const [reminders, setReminders] = useState<ReminderInterface[]>(props.reminders);
+  const [timeLeft, setTimeLeft] = useState('');
   const [countdownInfo, setCountdownInfo] = useState<countdownInterface>();
 
   // ! ======TBC====== REFACTORING NEEDED IN OTHER COMPONENTS SO THEY LISTEN FOR UPDATES
@@ -41,13 +43,13 @@ const Content = (props: ContentProps) => {
       sendResponse: (response?: any) => void
     ) => {
       if (request.type === 'BLOB_DATA_UPDATE' && request.preference || request.isActive) {
-        setPreference({...preference, ...request.preference, isActive: request.isActive});
+        setPreference({ ...request.preference, isActive: request.isActive });
         if (request.reminders) {
           setReminders(request.reminders)
         }
-        sendResponse({status: true});
+        sendResponse({ status: true });
       }
-      
+
       // ! FIX ON FOCUS WHEN BLOB TRIGGERED
       // if (inputRef.current) {
       //   inputRef.current.focus();
@@ -63,11 +65,35 @@ const Content = (props: ContentProps) => {
 
   // useEffect(() => {
   //   return () => {
-      // ! will trigger sync timeout as it stacks up 
-      // chrome.runtime.sendMessage({ type: "UDPATE_REMINDER_TIMELEFT", id: countdownInfo?.id, timeLeft: countdownInfo?.timeLeft });
+  // ! will trigger sync timeout as it stacks up 
+  // chrome.runtime.sendMessage({ type: "UDPATE_REMINDER_TIMELEFT", id: countdownInfo?.id, timeLeft: countdownInfo?.timeLeft });
   //   }
   // }, [countdownInfo]);
 
+
+
+  const updateRemainingTime = () => {
+    console.log('loggerrr')
+    const timeLeft = getTimeLeft(new Date(reminders[0]?.createdAt), preference.sprintTiming);
+    if (reminders[0]) {
+      setTimeLeft(timeLeft);
+    }
+    const blob = document.getElementById('work-wise__blobSvg');
+
+    if (blob?.classList.contains('active')) {
+      blob?.classList.remove('active');
+    }
+
+    if (timeLeft === '00:00' && !blob?.classList.contains('active')) {
+      blob?.classList.add('active');
+    }
+  };
+
+  useEffect(() => {
+    updateRemainingTime();
+    const intervalId = setInterval(updateRemainingTime, 1000);
+    return () => clearInterval(intervalId);
+  }, [reminders[0]?.createdAt, preference.sprintTiming]);
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -83,7 +109,7 @@ const Content = (props: ContentProps) => {
         reminder: true
       }
 
-      const updatedReminders = [ reminder, ...reminders];
+      const updatedReminders = [reminder, ...reminders];
       const trimmedValue = inputValue.trim();
 
       if (trimmedValue !== '') {
@@ -99,12 +125,12 @@ const Content = (props: ContentProps) => {
       // }
 
       // Start countdown
-      countdown(preference.sprintTiming || 10, (timeLeft) => {
-        setCountdownInfo({
-          id,
-          timeLeft
-        });
-      });
+      // countdown(preference.sprintTiming || 10, (timeLeft) => {
+      //   setCountdownInfo({
+      //     id,
+      //     timeLeft
+      //   });
+      // });
     }
   };
 
@@ -139,6 +165,7 @@ const Content = (props: ContentProps) => {
           />
         </div>
       </div>
+      {timeLeft && <div className='time-left'>{timeLeft}</div>}
       <Blob />
     </div>
   );

@@ -76,6 +76,10 @@
       justify-content: center;
       align-items: center;
       color: var(--primary-2);
+    
+      h4 {
+        font-size: $font-body-text;
+      }
     }
 
     .reminder {

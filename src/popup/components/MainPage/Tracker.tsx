@@ -173,9 +173,9 @@ function Tracker() {
           </div>
         )) :
           <div className="none">
-            <h1>
+            <h4>
               No reminders
-            </h1>
+            </h4>
           </div>}
       </div>
       {/* ====   no plans for options in the MVP   ==== */}

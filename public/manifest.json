@@ -1,7 +1,7 @@
 {
   "name": "WorkWise",
   "description": "Stay motivated and organized. Get time, quotes, and a task manager. Add, update, or delete messages anytime.",
-  "version": "0.0.7",
+  "version": "0.0.6",
   "manifest_version": 3,
   "action": {
     "default_popup": "popup.html"
@@ -14,13 +14,16 @@
     "open_in_tab": false
   },
   "permissions": [
-    "storage",
-    "tabs"
+    "storage"
   ],
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"]
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ]
     }
   ],
   "icons": {

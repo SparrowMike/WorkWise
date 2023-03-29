@@ -63,7 +63,7 @@ const SettingsPage: React.FC = () => {
   };
 
   const handleSprintTimingChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newPreference = { ...preference, sprintTiming: parseInt(event.target.value) };
+    const newPreference = { ...preference, sprintTiming: event.target.value };
     setPreference(newPreference);
     chrome.runtime.sendMessage({ type: messageType, preference: newPreference });
   };
