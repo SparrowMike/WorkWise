@@ -1,5 +1,6 @@
 import { ReminderInterface } from "../interfaces/user";
 
+//! ------------------------- future concept if ever
 export class Reminder implements ReminderInterface {
   id: string;
   title: string;

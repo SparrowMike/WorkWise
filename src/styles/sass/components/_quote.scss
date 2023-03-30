@@ -5,7 +5,7 @@
     position: relative;
     font-size: $font-heading-3;
     line-height: 1.1;
-    font-weight: 300;
+    font-weight: 350;
     text-align: center;
     color: var(--primary-1);
 
@@ -24,9 +24,8 @@
     }
 
     cite {
-      font-size: 50%;
+      font-size: 1.2rem;
       text-align: center;
-      top: 50%;
       color: var(--primary-2);
 
       &:before {

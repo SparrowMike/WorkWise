@@ -30,9 +30,9 @@
 
 
     .time-left {
-        font-size: 65px;
+        font-size: 55px;
         position: absolute;
-        font-weight: bold;
+        font-weight: 500;
         top: 50%;
         left: 50%;
         z-index: 999999;
@@ -92,8 +92,8 @@
         flex-direction: column;
 
         .time, .date {
-            font-size: 18px;
-            font-weight: bold;
+            font-size: 16px;
+            font-weight: 500;
             padding: 4px 0;
             color: inherit;
         }

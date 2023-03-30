@@ -63,33 +63,24 @@ const Content = (props: ContentProps) => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   return () => {
-  // ! will trigger sync timeout as it stacks up 
-  // chrome.runtime.sendMessage({ type: "UDPATE_REMINDER_TIMELEFT", id: countdownInfo?.id, timeLeft: countdownInfo?.timeLeft });
-  //   }
-  // }, [countdownInfo]);
-
-
-
-  const updateRemainingTime = () => {
-    console.log('loggerrr')
-    const timeLeft = getTimeLeft(new Date(reminders[0]?.createdAt), preference.sprintTiming);
-    if (reminders[0]) {
-      setTimeLeft(timeLeft);
-    }
-    const blob = document.getElementById('work-wise__blobSvg');
-
-    if (blob?.classList.contains('active')) {
-      blob?.classList.remove('active');
-    }
-
-    if (timeLeft === '00:00' && !blob?.classList.contains('active')) {
-      blob?.classList.add('active');
-    }
-  };
-
   useEffect(() => {
+    const updateRemainingTime = () => {
+      const timeLeft = getTimeLeft(new Date(reminders[0]?.createdAt), preference.sprintTiming);
+      if (reminders[0]) {
+        setTimeLeft(timeLeft);
+      }
+      const blob = document.getElementById('work-wise__blobSvg');
+  
+      if (blob?.classList.contains('active')) {
+        blob?.classList.remove('active');
+      }
+  
+      if (timeLeft === '00:00' && !blob?.classList.contains('active')) {
+        blob?.classList.add('active');
+        clearInterval(intervalId);
+      }
+    };
+
     updateRemainingTime();
     const intervalId = setInterval(updateRemainingTime, 1000);
     return () => clearInterval(intervalId);
@@ -165,7 +156,7 @@ const Content = (props: ContentProps) => {
           />
         </div>
       </div>
-      {timeLeft && <div className='time-left'>{timeLeft}</div>}
+      {reminders[0] && timeLeft && <div className='time-left'>{timeLeft}</div>}
       <Blob />
     </div>
   );

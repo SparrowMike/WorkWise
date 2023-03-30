@@ -158,7 +158,7 @@ function Tracker() {
       <div className="reminders container">
         {taskArray.length ? taskArray?.map((task, index) => (
           <div key={index} className={`reminder ${task.isFocused && 'focused'}`}>
-            <h4 className="title"
+            <h4 className={`title t-${index}`} 
               contentEditable
               suppressContentEditableWarning
               onBlur={(event) => handleItemUpdate(index, event.target.textContent, 'title')}

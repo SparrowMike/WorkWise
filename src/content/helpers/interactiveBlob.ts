@@ -1,14 +1,8 @@
 import { globalPreference, globalReminders } from "../../background/background";
 import { checkForStickyBlob } from "./stickyBlob";
-import { getTimeLeft } from "../../utils/getTimeLeft";
 
-//! globalPreference - load on start and are not getting updated
-
-//!=======================================TBC==========================================
-//! ===================== stickyBlob pref to follow loom behaviour ====================
-
-//! ================================ CONSTRUCTIONS ====================================
 let isSticky = globalPreference.stickyBlob;
+let blobPosition = globalPreference?.blobPosition;
 
 export function createBlob() {
   const elemHtml = '<div id="work-wise__content"></div>';
@@ -34,12 +28,13 @@ chrome.runtime.onMessage.addListener(updateTheBlob);
 //? ================================================================================
 
 export function interactiveBlob(container: HTMLElement) {
+  isSticky = globalPreference.stickyBlob;
+  blobPosition = globalPreference.blobPosition; 
+
   let isActive = false;
   let isDragging = false;
   let dragStartX = 0;
   let dragStartY = 0;
-
-  const blobPosition = globalPreference?.blobPosition
 
   if (blobPosition) {
     if (blobPosition.left && blobPosition.top) {
@@ -61,8 +56,16 @@ export function interactiveBlob(container: HTMLElement) {
       let newLeft = Math.max(minLeft, Math.min(maxLeft, parseFloat(blobPosition.left)));
       let newTop = Math.max(minTop, Math.min(maxTop, parseFloat(blobPosition.top)));
 
-      container.style.left = `${newLeft}px`;
-      container.style.top = `${newTop}px`;
+      if (isSticky) {
+        const blobPosition = {
+          left: `${newLeft}px`,
+          top: `${newTop}px`,
+        };
+        checkForStickyBlob(true, blobPosition, window.innerWidth, window.innerHeight, container);
+      } else {
+        container.style.left = `${newLeft}px`;
+        container.style.top = `${newTop}px`;
+      }
     }
   }
 

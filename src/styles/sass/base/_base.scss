@@ -27,7 +27,7 @@
 html {
   font-size: 62.5%;
   font-family: 'Roboto', serif;
-  width: 330px;
+  width: 310px;
   margin: 0 auto;
 }
 
@@ -40,6 +40,21 @@ html {
   background: var(--background-1);
   color: var(--primary-1);
   padding: 1.2rem;
+  padding-bottom: 0;
   transition: background .150s ease, color .1s ease;
   position: relative;
+
+  .feedback {
+    display: table;
+    margin-left: auto;
+    cursor: pointer;
+    color: var(--primary-2);
+    padding: 0.5rem;
+    transition: color .1s linear;
+    font-size: 1rem;
+    
+    &:hover {
+      color: var(--accent-1);
+    }
+  }
 }
