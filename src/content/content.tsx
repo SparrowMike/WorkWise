@@ -33,7 +33,7 @@ const Content = (props: ContentProps) => {
   const [preference, setPreference] = useState<PreferenceInterface>(props.data);
   const [reminders, setReminders] = useState<ReminderInterface[]>(props.reminders);
   const [timeLeft, setTimeLeft] = useState('');
-  const [countdownInfo, setCountdownInfo] = useState<countdownInterface>();
+  // const [countdownInfo, setCountdownInfo] = useState<countdownInterface>();
 
   // ! ======TBC====== REFACTORING NEEDED IN OTHER COMPONENTS SO THEY LISTEN FOR UPDATES
   useEffect(() => {
@@ -50,10 +50,9 @@ const Content = (props: ContentProps) => {
         sendResponse({ status: true });
       }
 
-      // ! FIX ON FOCUS WHEN BLOB TRIGGERED
-      // if (inputRef.current) {
-      //   inputRef.current.focus();
-      // }
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
     };
 
     chrome.runtime.onMessage.addListener(handleMessage);
@@ -79,6 +78,10 @@ const Content = (props: ContentProps) => {
         blob?.classList.add('active');
         clearInterval(intervalId);
       }
+
+      if (!reminders.length) {
+        clearInterval(intervalId);
+      }
     };
 
     updateRemainingTime();
@@ -92,7 +95,7 @@ const Content = (props: ContentProps) => {
       const id = uuidv4();
 
       const reminder: ReminderInterface = {
-        id,
+        // id,
         title: inputValue,
         description: '',
         priority: 1,
@@ -108,12 +111,6 @@ const Content = (props: ContentProps) => {
         setReminders(updatedReminders);
         setInputValue('');
       }
-
-      // ! ======TBC===== need refactoring - once full data available in SEND_REMINDER updated the preference to isActive = false.
-      // const container = document.getElementById('work-wise__content')
-      // if (container?.classList.contains('input-active')) {
-      //   container.classList.remove('input-active')
-      // }
 
       // Start countdown
       // countdown(preference.sprintTiming || 10, (timeLeft) => {
@@ -147,7 +144,7 @@ const Content = (props: ContentProps) => {
           }
           <input
             id="work-wise__my-input"
-            // ref="inputRef"
+            ref={inputRef}
             type="text"
             value={inputValue}
             onKeyUp={handleKeyUp}
