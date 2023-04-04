@@ -1,8 +1,9 @@
 import { PreferenceInterface, ReminderInterface } from "../interfaces/user";
-import { onTabFocusChanged } from "./listeners/onTabFocusChanged";
 import { onMessage } from "./listeners/onMessage";
-import { onListeners } from "./listeners/onListeners";
 import { QuoteType } from "../interfaces/api";
+
+import { onTabFocusChanged } from "./listeners/onTabFocusChanged";
+import { onListeners } from "./listeners/onListeners";
 
 /**
  * Daily quote.
@@ -44,6 +45,7 @@ export let globalPreference: PreferenceInterface = {
   },
 };
 
+//! ========================= CLEAR THE DATA
 // chrome.storage.sync.clear(() => {
 //   console.log('Sync data cleared');
 // });
@@ -120,22 +122,24 @@ export function initializeAppWithPreference(): void {
   }
 }
 
-function startApp(): void {
+function startApp() {
   if (chrome.tabs) {
     /**
-     * Handles tab focus changes.
-     */
-    onTabFocusChanged();
-
-    /**
-     * ! ===========TBC==========
-     */
-    onListeners();
-
-    /**
      * Registers a message listener with chrome.runtime.onMessage.
-     */
-    onMessage();
+    */
+   onMessage();
+
+
+  //  ! ======= unsed =========
+   /**
+    * Handles tab focus changes.
+    */
+   // onTabFocusChanged();
+
+   /**
+    * ! ===========TBC==========
+    */
+   // onListeners();
   }
 }
 

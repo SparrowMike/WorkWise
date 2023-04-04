@@ -25,7 +25,8 @@
 }
 
 html {
-  font-size: 62.5%;
+  // font-size: 62.5%;
+  font-size: 10px; // prevent the chrome settings font-sizing
   font-family: 'Roboto', serif;
   width: 310px;
   margin: 0 auto;

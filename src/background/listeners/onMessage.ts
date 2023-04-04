@@ -1,6 +1,10 @@
-import { globalPreference, globalReminders } from "../background";
+import { globalPreference, globalReminders, initializeAppWithPreference } from "../background";
 import { updatePreference, updateReminders } from "../background";
 import { dailyQuote } from "../background";
+
+if (!globalPreference || !globalReminders) {
+  initializeAppWithPreference();
+}
 
 /**
  * Updates the position of the content blob.

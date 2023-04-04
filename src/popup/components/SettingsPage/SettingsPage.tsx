@@ -100,7 +100,7 @@ const SettingsPage: React.FC = () => {
               className="number-field"
               min="1"
               max="10"
-              value={preference.sprintTiming && preference.sprintTiming.toString()}
+              value={preference.sprintTiming ? preference.sprintTiming.toString() : '5'} 
               onChange={handleSprintTimingChange}
             />
           </div>
