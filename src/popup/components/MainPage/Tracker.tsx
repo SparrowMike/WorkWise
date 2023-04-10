@@ -2,9 +2,10 @@ import { useState, useEffect, useContext } from "react";
 import { getTimeLeft } from "../../../utils/getTimeLeft";
 import { ReminderInterface } from "../../../interfaces/user";
 import { PreferenceContext } from "../../../context/PreferenceContext";
+import { RemindersContext } from "../../../context/RemindersContext";
 
 function Tracker() {
-  const ReminderInterface: ReminderInterface = {
+  const initialReminder: ReminderInterface = {
     id: '',
     title: '',
     description: '',
@@ -14,40 +15,27 @@ function Tracker() {
     isFocused: false,
   };
 
-  const [taskArray, setTaskArray] = useState<ReminderInterface[]>([]);
-  const [task, setTask] = useState<ReminderInterface>(ReminderInterface);
+  const { preference } = useContext(PreferenceContext);
+  const { reminders, setReminders } = useContext(RemindersContext);
+
+  const [task, setTask] = useState<ReminderInterface>(initialReminder);
   const [backupTrigger, setBackupTrigger] = useState(false);
   const [timeLeft, setTimeLeft] = useState('');
 
-  const { preference } = useContext(PreferenceContext);
 
   const handleOptionsClick = () => {
     chrome.runtime.openOptionsPage();
   };
 
   useEffect(() => {
-    if (!taskArray.length) {
-      chrome.runtime.sendMessage({ type: 'LOAD_REMINDERS' }, (response) => {
-        if (chrome.runtime.lastError) {
-          console.error(chrome.runtime.lastError);
-        } else {
-          if (response && response.reminders) {
-            setTaskArray(response.reminders);
-          }
-        }
-      });
-    }
-  }, []);
-
-  useEffect(() => {
     if (backupTrigger) {
       backUpData();
       setBackupTrigger(false);
     }
-  }, [backupTrigger, taskArray]);
+  }, [backupTrigger, reminders]);
 
   function backUpData() {
-    chrome.runtime.sendMessage('', { type: 'SAVE_REMINDERS', reminders: taskArray });
+    chrome.runtime.sendMessage('', { type: 'SAVE_REMINDERS', reminders: reminders });
   }
 
   function handleSubmit(event: any) {
@@ -55,8 +43,8 @@ function Tracker() {
 
     if (!task.title.length) return;
 
-    setTaskArray([task, ...taskArray])
-    setTask(ReminderInterface);
+    setReminders([task, ...reminders])
+    setTask(initialReminder);
     setBackupTrigger(true);
 
   }
@@ -74,13 +62,13 @@ function Tracker() {
     if (updatedTaskArray.length) {
       updatedTaskArray[0].createdAt = new Date();
     }
-    setTaskArray(updatedTaskArray);
+    setReminders(updatedTaskArray);
     setBackupTrigger(true);
   };
 
   function handleTaskDelete(index: number) {
-    const updatedArr = taskArray.filter((_, i) => index !== i)
-    setTaskArray(updatedArr);
+    const updatedArr = reminders.filter((_, i) => index !== i)
+    setReminders(updatedArr);
     if (index === 0) {
       handleDueTimeUpdate(updatedArr);
     }
@@ -89,7 +77,7 @@ function Tracker() {
 
 
   function handleFocus(index: number) {
-    setTaskArray((prevItems) =>
+    setReminders((prevItems) =>
       prevItems.map((item, i) => (i === index ? { ...item, isFocused: true } : item))
     );
   }
@@ -100,15 +88,15 @@ function Tracker() {
       return;
     }
 
-    setTaskArray((prevItems) =>
+    setReminders((prevItems) =>
       prevItems.map((item, i) => (i === index ? { ...item, [name]: value, isFocused: false } : item))
     );
     setBackupTrigger(true);
   };
 
   const updateRemainingTime = () => {
-    const timeLeft = getTimeLeft(new Date(taskArray[0]?.createdAt), preference.sprintTiming);
-    if (taskArray[0]) {
+    const timeLeft = getTimeLeft(new Date(reminders[0]?.createdAt), preference.sprintTiming);
+    if (reminders[0]) {
       setTimeLeft(timeLeft);
     }
   };
@@ -117,13 +105,13 @@ function Tracker() {
     updateRemainingTime();
     const intervalId = setInterval(updateRemainingTime, 1000);
     return () => clearInterval(intervalId);
-  }, [taskArray[0]?.createdAt]);
+  }, [reminders[0]?.createdAt]);
 
   return (
     <div className="tracker">
       <div className="container">
         <form className="input" onSubmit={handleSubmit}>
-          {(taskArray[0] && !timeLeft.includes('NaN')) &&
+          {(reminders[0] && !timeLeft.includes('NaN')) &&
             <div className="timing-tracker">
               <h4 className="time">Remaining time: <span>{timeLeft}</span></h4>
               <div className="actions">
@@ -133,7 +121,7 @@ function Tracker() {
                     <path d="M9.0415 13.9999L12.3432 17.3016L18.9582 10.6982" stroke="var(--primary-1)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
-                <div className="repeat icon" onClick={() => handleDueTimeUpdate(taskArray)}>
+                <div className="repeat icon" onClick={() => handleDueTimeUpdate(reminders)}>
                   <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M9 9.95996H17.6333C18.6717 9.95996 19.5 10.8 19.5 11.8266V13.8916" stroke="var(--primary-1)" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
                     <path d="M10.9717 8L9 9.96L10.9717 11.9317M19.5 18.5H10.8667C9.82833 18.5 9 17.66 9 16.6333V14.5683" stroke="var(--primary-1)" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
@@ -156,7 +144,7 @@ function Tracker() {
         </form>
       </div>
       <div className="reminders container">
-        {taskArray.length ? taskArray?.map((task, index) => (
+        {reminders.length ? reminders?.map((task, index) => (
           <div key={index} className={`reminder ${task.isFocused && 'focused'}`}>
             <h4 className={`title t-${index}`} 
               contentEditable
