@@ -77,9 +77,15 @@ function Tracker() {
 
 
   function handleFocus(index: number) {
-    setReminders((prevItems) =>
-      prevItems.map((item, i) => (i === index ? { ...item, isFocused: true } : item))
-    );
+    const updatedReminders = reminders.map((item, i) => {
+      if (i === index) {
+        return { ...item, isFocused: true };
+      } else {
+        return item;
+      }
+    });
+    
+    setReminders(updatedReminders);
   }
 
   const handleItemUpdate = (index: number, value: string | null, name: string) => {
@@ -88,9 +94,15 @@ function Tracker() {
       return;
     }
 
-    setReminders((prevItems) =>
-      prevItems.map((item, i) => (i === index ? { ...item, [name]: value, isFocused: false } : item))
-    );
+    const updatedReminders = reminders.map((item, i) => {
+      if (i === index) {
+        return { ...item, [name]: value, isFocused: false };
+      } else {
+        return item;
+      }
+    });
+    
+    setReminders(updatedReminders);
     setBackupTrigger(true);
   };
 
