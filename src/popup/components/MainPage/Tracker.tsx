@@ -23,9 +23,9 @@ function Tracker() {
   const [timeLeft, setTimeLeft] = useState('');
 
 
-  const handleOptionsClick = () => {
-    chrome.runtime.openOptionsPage();
-  };
+  // const handleOptionsClick = () => {
+  //   chrome.runtime.openOptionsPage();
+  // };
 
   useEffect(() => {
     if (backupTrigger) {
@@ -53,8 +53,15 @@ function Tracker() {
     const target = event.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
-
+  
     setTask({ ...task, [name]: value, createdAt: new Date() });
+  }
+  
+  function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.keyCode === 13) {
+      const target = event.target as HTMLInputElement;
+      target.blur();
+    }
   }
 
   function handleDueTimeUpdate(arr: ReminderInterface[]) {
@@ -162,7 +169,8 @@ function Tracker() {
               contentEditable
               suppressContentEditableWarning
               onBlur={(event) => handleItemUpdate(index, event.target.textContent, 'title')}
-              onFocus={() => handleFocus(index)}>
+              onFocus={() => handleFocus(index)}
+              onKeyDown={handleKeyDown}>
               {task.title}
             </h4>
             <div className="delete" onClick={() => handleTaskDelete(index)}>
