@@ -18,6 +18,7 @@
     - Within the `Extensions` tab, pin the extension for easy access
     - Note that each time you update the extension, you will need to reload it for the changes to take effect
 
-
 ## Attribution for icons
 `Icons from Home Based Business pack from www.flaticon.com`
+
+<a href="https://chrome.google.com/webstore/detail/workwise/ilodfinadncakkokondgknkehonhcckc" target="_blank">Click here to try out the Chrome extension</a>
