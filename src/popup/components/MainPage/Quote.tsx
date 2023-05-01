@@ -21,30 +21,14 @@ function Quote() {
     });
   }, []);
 
-  // const { data, isLoading, error } = useApiRequest<QuoteType>({
-  //   url: "https://type.fit/api/quotes",
-  //   method: "GET",
-  // });
-
-  // if (isLoading || !data) {
-  //   return <div>Loading...</div>;
-  // }
-
-  // if (error) {
-  //   return <div>Error fetching data: {error.message}</div>;
-  // }
-
-  // const quoteData = isQuoteTypeArray(data) ? data : [data];
-  // const randomIndex: number = Math.floor(Math.random() * quoteData.length);
+  if (!quote?.text.length) {
+    return <div>Loading...</div>
+  }
 
   return (
     <div className="quote-list">
       <div className="quote">
         <blockquote className="sidekick">
-
-          {/* <p>{quote[randomIndex]?.text}</p>
-          <cite> {quote[randomIndex]?.author || 'Anonymous'} </cite> */}
-
           <p>{quote?.text}</p>
           <cite> {quote?.author || 'Anonymous'} </cite>
         </blockquote>
