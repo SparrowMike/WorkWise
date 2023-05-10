@@ -19,15 +19,17 @@
 }
 
 #work-wise__content {
-    transition: width .5s ease-in-out, height .5s ease-in-out;
+    transform: scale(.25) !important;
+    transition: width .5s ease-in-out, height .5s ease-in-out, scale .5s ease, transform .5s ease-in-out;
     position: fixed;
     border-radius: 50%;
     z-index: 2147483647;
     cursor: pointer;
-    
-    transform: scale(.25) !important;
-    transition: transform .5s ease-in-out;
+    scale: 0;
 
+    &.active {
+        scale: 1;
+    }
 
     .time-left {
         font-size: 55px;

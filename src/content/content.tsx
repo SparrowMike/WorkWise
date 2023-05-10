@@ -35,6 +35,9 @@ const Content = (props: ContentProps) => {
   const [timeLeft, setTimeLeft] = useState('');
   // const [countdownInfo, setCountdownInfo] = useState<countdownInterface>();
 
+  const blobContentContainer = document.getElementById('work-wise__content');
+  const blobSvg = document.getElementById('work-wise__blobSvg');
+
   // ! ======TBC====== REFACTORING NEEDED IN OTHER COMPONENTS SO THEY LISTEN FOR UPDATES
   useEffect(() => {
     const handleMessage = (
@@ -68,14 +71,13 @@ const Content = (props: ContentProps) => {
       if (reminders[0]) {
         setTimeLeft(timeLeft);
       }
-      const blob = document.getElementById('work-wise__blobSvg');
-  
-      if (blob?.classList.contains('active')) {
-        blob?.classList.remove('active');
+
+      if (blobSvg?.classList.contains('active')) {
+        blobSvg?.classList.remove('active');
       }
-  
-      if (timeLeft === '00:00' && !blob?.classList.contains('active')) {
-        blob?.classList.add('active');
+
+      if (timeLeft === '00:00' && !blobSvg?.classList.contains('active')) {
+        blobSvg?.classList.add('active');
         clearInterval(intervalId);
       }
 
@@ -126,8 +128,11 @@ const Content = (props: ContentProps) => {
     setInputValue(event.target.value);
   };
 
-  if (preference.hideBlob) {
-    return null;
+  if (preference.hideBlob && Number(timeLeft.split(':').join('')) > 0) {
+    blobContentContainer?.classList.remove('active');
+  } else {
+    blobContentContainer?.classList.add('active');
+    timeLeft === '00:00' && blobSvg?.classList.add('active');
   }
 
   return (
