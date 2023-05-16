@@ -29,45 +29,56 @@ chrome.runtime.onMessage.addListener(updateTheBlob);
 
 export function interactiveBlob(container: HTMLElement) {
   isSticky = globalPreference.stickyBlob;
-  blobPosition = globalPreference.blobPosition; 
+  blobPosition = globalPreference.blobPosition;
 
   let isActive = false;
   let isDragging = false;
   let dragStartX = 0;
   let dragStartY = 0;
 
-  if (blobPosition) {
-    if (blobPosition.left && blobPosition.top) {
-      // Get the size of the container
-      const containerWidth = container.offsetWidth;
-      const containerHeight = container.offsetHeight;
+  if (blobPosition && blobPosition.left && blobPosition.top) {
+    // Get the size of the container
+    const containerWidth = container.offsetWidth;
+    const containerHeight = container.offsetHeight;
 
-      // Get the size of the viewport
-      const viewportWidth = window.innerWidth;
-      const viewportHeight = window.innerHeight;
+    // Get the size of the viewport
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+  
+    // Calculate the maximum and minimum values for the left and top CSS properties
+    const maxLeft = viewportWidth - containerWidth;
+    const maxTop = viewportHeight - containerHeight;
+    const minLeft = 0;
+    const minTop = 0;
 
-      // Calculate the maximum and minimum values for the left and top CSS properties
-      const maxLeft = viewportWidth - containerWidth;
-      const maxTop = viewportHeight - containerHeight;
-      const minLeft = 0;
-      const minTop = 0;
+    // Adjust the maximum and minimum values for the left and top CSS properties
+    let newLeft = Math.max(minLeft, Math.min(maxLeft, parseFloat(blobPosition.left)));
+    let newTop = Math.max(minTop, Math.min(maxTop, parseFloat(blobPosition.top)));
 
-      // Adjust the maximum and minimum values for the left and top CSS properties
-      let newLeft = Math.max(minLeft, Math.min(maxLeft, parseFloat(blobPosition.left)));
-      let newTop = Math.max(minTop, Math.min(maxTop, parseFloat(blobPosition.top)));
-
-      if (isSticky) {
-        const blobPosition = {
-          left: `${newLeft}px`,
-          top: `${newTop}px`,
-        };
-        checkForStickyBlob(true, blobPosition, window.innerWidth, window.innerHeight, container);
-      } else {
-        container.style.left = `${newLeft}px`;
-        container.style.top = `${newTop}px`;
-      }
+    if (isSticky) {
+      const stickyBlobPosition = {
+        left: `${newLeft}px`,
+        top: `${newTop}px`,
+      };
+      checkForStickyBlob(true, stickyBlobPosition, window.innerWidth, window.innerHeight, container);
+    } else {
+      container.style.left = `${newLeft}px`;
+      container.style.top = `${newTop}px`;
     }
   }
+
+  window.addEventListener('resize', () => {
+    let top = window.innerHeight - 300;
+    let left = window.innerWidth - 300;
+
+    if (top <= parseFloat(container.style.top) && top > 0) {
+      container.style.top = `${top}px`;
+    }
+    if (left <= parseFloat(container.style.left)) {
+      container.style.left = `${left}px`;
+    }
+  });
+
 
   if (container) {
     const userSelectStyle = window.getComputedStyle(container).userSelect;
