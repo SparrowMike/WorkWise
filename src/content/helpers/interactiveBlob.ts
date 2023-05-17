@@ -1,3 +1,4 @@
+import { BLOB_HEIGHT, BLOB_WIDTH } from "../../constants";
 import { globalPreference, globalReminders } from "../../background/background";
 import { checkForStickyBlob } from "./stickyBlob";
 
@@ -37,23 +38,19 @@ export function interactiveBlob(container: HTMLElement) {
   let dragStartY = 0;
 
   if (blobPosition && blobPosition.left && blobPosition.top) {
-    // Get the size of the container
-    const containerWidth = container.offsetWidth;
-    const containerHeight = container.offsetHeight;
-
     // Get the size of the viewport
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
   
     // Calculate the maximum and minimum values for the left and top CSS properties
-    const maxLeft = viewportWidth - containerWidth;
-    const maxTop = viewportHeight - containerHeight;
+    const maxLeft = viewportWidth - BLOB_WIDTH;
+    const maxTop = viewportHeight - BLOB_HEIGHT;
     const minLeft = 0;
     const minTop = 0;
 
     // Adjust the maximum and minimum values for the left and top CSS properties
-    let newLeft = Math.max(minLeft, Math.min(maxLeft, parseFloat(blobPosition.left)));
-    let newTop = Math.max(minTop, Math.min(maxTop, parseFloat(blobPosition.top)));
+    const newLeft = Math.max(minLeft, Math.min(maxLeft, parseFloat(blobPosition.left)));
+    const newTop = Math.max(minTop, Math.min(maxTop, parseFloat(blobPosition.top)));
 
     if (isSticky) {
       const stickyBlobPosition = {
@@ -68,14 +65,21 @@ export function interactiveBlob(container: HTMLElement) {
   }
 
   window.addEventListener('resize', () => {
-    let top = window.innerHeight - 300;
-    let left = window.innerWidth - 300;
+    const left = window.innerWidth - BLOB_WIDTH;
+    const top = window.innerHeight - BLOB_HEIGHT;
 
     if (top <= parseFloat(container.style.top) && top > 0) {
       container.style.top = `${top}px`;
     }
     if (left <= parseFloat(container.style.left)) {
       container.style.left = `${left}px`;
+    }
+    if (isSticky) {
+      const stickyBlobPosition = {
+        left: `${Math.max(0, Math.min(left, parseFloat(container.style.left)))}px`,
+        top: `${Math.max(0, Math.min(top, parseFloat(container.style.top)))}px`,
+      };
+      checkForStickyBlob(true, stickyBlobPosition, window.innerWidth, window.innerHeight, container);
     }
   });
 

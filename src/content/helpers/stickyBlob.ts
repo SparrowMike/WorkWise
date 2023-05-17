@@ -1,3 +1,5 @@
+import { BLOB_HEIGHT, BLOB_WIDTH } from "../../constants";
+
 export function checkForStickyBlob(stickyBlob: boolean, blobPosition: { left: string, top: string }, width: number, height: number, container: HTMLElement) {
   // get the position of the stickyBlob element as strings
   const stickyBlobLeftString: string = blobPosition.left;
@@ -12,9 +14,9 @@ export function checkForStickyBlob(stickyBlob: boolean, blobPosition: { left: st
     // calculate the distances between the stickyBlob element and each side of the window
     const distances: Record<string, number> = {
       left: stickyBlobLeft,
-      right: width - (stickyBlobLeft + container.offsetWidth),
+      right: width - (stickyBlobLeft + BLOB_WIDTH),
       top: stickyBlobTop,
-      bottom: height - (stickyBlobTop + container.offsetHeight),
+      bottom: height - (stickyBlobTop + BLOB_HEIGHT),
     };
 
     // find the closest side of the window
@@ -29,7 +31,7 @@ export function checkForStickyBlob(stickyBlob: boolean, blobPosition: { left: st
         container.style.top = stickyBlobTopString;
         break;
       case "right":
-        container.style.left = `${width - container.offsetWidth}px`;
+        container.style.left = `${width - BLOB_WIDTH}px`;
         container.style.top = stickyBlobTopString;
         break;
       case "top":
@@ -37,14 +39,15 @@ export function checkForStickyBlob(stickyBlob: boolean, blobPosition: { left: st
         container.style.left = stickyBlobLeftString;
         break;
       case "bottom":
-        container.style.top = `${height - container.offsetHeight}px`;
+        container.style.top = `${height - BLOB_HEIGHT}px`;
         container.style.left = stickyBlobLeftString;
         break;
       default:
         break;
     }
   } else {
-    container.style.left = stickyBlobLeft < width ? blobPosition.left : `${width - 50}px`;
-    container.style.top = stickyBlobTop < height ? blobPosition.top : `${height - 50}px`;
+    
+    container.style.left = stickyBlobLeft < width - BLOB_WIDTH ? blobPosition.left : `${width - BLOB_WIDTH}px`;
+    container.style.top = stickyBlobTop < height - BLOB_HEIGHT ? blobPosition.top : `${height - BLOB_HEIGHT}px`;
   }
 }
