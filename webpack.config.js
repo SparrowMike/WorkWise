@@ -31,7 +31,7 @@ export default {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.(ts|tsx)?$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -47,7 +47,11 @@ export default {
           'css-loader',
           'sass-loader'
         ]
-      }
+      },
+      {
+        test: /\.svg$/,
+        use: ['@svgr/webpack', 'url-loader'],
+      },
     ],
   },
   plugins: [

@@ -30,11 +30,15 @@ html {
   font-family: 'Roboto', serif;
   width: 310px;
   margin: 0 auto;
-}
-
-html {
   box-sizing: border-box;
   background-color: black;
+}
+
+svg {
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-miterlimit: 10;
 }
 
 #Work-Wise {
