@@ -1,4 +1,4 @@
-import { BLOB_HEIGHT, BLOB_WIDTH } from "../../constants";
+import { BLOB_HEIGHT, BLOB_WIDTH } from "../../assets/constants";
 import { globalPreference, globalReminders } from "../../background/background";
 import { checkForStickyBlob } from "./stickyBlob";
 

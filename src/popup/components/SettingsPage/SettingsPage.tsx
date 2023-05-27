@@ -3,9 +3,14 @@ import { PreferenceContext } from "../../../context/PreferenceContext";
 import { Link } from "react-router-dom";
 import Clock from "../Shared/Clock";
 
-const SettingsToggle: React.FC<{ title: string; checked: boolean; onToggle: () => void; index: number; }> = ({
+import Back from './../../../assets/svg/back.svg'
+import Info from './../../../assets/svg/info.svg'
+  
+const SettingsToggle: React.FC<{ title: string; checked: boolean; tooltipContent?: string; tooltipPosition?: string; onToggle: () => void; index: number; }> = ({
   title,
   checked,
+  tooltipContent,
+  tooltipPosition,
   onToggle,
   index
 }) => {
@@ -13,6 +18,14 @@ const SettingsToggle: React.FC<{ title: string; checked: boolean; onToggle: () =
   return (
     <div className="settings-toggle">
       <span>{title}</span>
+      {tooltipContent && (
+        <div className="info">
+          <Info className="info-logo" />
+          <div className="info-container" data-position={tooltipPosition}>
+            {tooltipContent}
+          </div>
+        </div>
+      )}
       <div className="switch">
         <input id={inputId} type="checkbox" checked={checked} onChange={onToggle} />
         <label htmlFor={inputId} className="slider round"></label>
@@ -73,12 +86,7 @@ const SettingsPage: React.FC = () => {
       <div className="popup__header container">
         <div className="settings-icon">
           <Link className="link" to="/">
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M10.5002 25.6666H17.5002C23.3335 25.6666 25.6668 23.3333 25.6668 17.4999V10.4999C25.6668 4.66659 23.3335 2.33325 17.5002 2.33325H10.5002C4.66683 2.33325 2.3335 4.66659 2.3335 10.4999V17.4999C2.3335 23.3333 4.66683 25.6666 10.5002 25.6666Z" stroke="var(--primary-1)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M10.5001 17.9433H16.2401C18.2235 17.9433 19.8335 16.3333 19.8335 14.3499C19.8335 12.3666 18.2235 10.7566 16.2401 10.7566H8.3418" stroke="var(--primary-1)" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M9.99817 12.5649L8.1665 10.7216L9.99817 8.88989" stroke="var(--primary-1)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-
+            <Back />
           </Link>
         </div>
         <Clock />
@@ -112,30 +120,35 @@ const SettingsPage: React.FC = () => {
         <div className="settings">
           <SettingsToggle
             title="Show Reminder"
+            tooltipContent="Shows current reminder when blob is active."
             checked={preference.showReminder || false}
             onToggle={handleShowReminderToggle}
             index={2}
           />
           <SettingsToggle
             title="Show Time"
+            tooltipContent="Shows time when blob is active"
             checked={preference.showTime || false}
             onToggle={handleShowTimeToggle}
             index={5}
           />
           <SettingsToggle
             title="Show Date"
+            tooltipContent="Shows date when blob is active"
             checked={preference.showDate || false}
             onToggle={handleShowDateToggle}
             index={6}
           />
           <SettingsToggle
             title="Sticky Blob"
+            tooltipContent="When active, blob will stick to the closest edge of the screen"
             checked={preference.stickyBlob || false}
             onToggle={handleStickyBlobToggle}
             index={3}
           />
           <SettingsToggle
             title="Hide Blob"
+            tooltipContent="Will not be visible, unless current reminder is due"
             checked={preference.hideBlob || false}
             onToggle={handleHideBlobToggle}
             index={4}

@@ -1,4 +1,4 @@
-import { BLOB_HEIGHT, BLOB_WIDTH } from "../../constants";
+import { BLOB_HEIGHT, BLOB_WIDTH } from "../../assets/constants";
 
 export function checkForStickyBlob(stickyBlob: boolean, blobPosition: { left: string, top: string }, width: number, height: number, container: HTMLElement) {
   // get the position of the stickyBlob element as strings

@@ -24,6 +24,45 @@
         padding: .5rem;
         font-size: 0;
 
+        .info {
+          position: relative;
+          font-size: 1.4rem;
+
+          &-logo {
+            cursor: pointer;
+
+            & path {
+              transition: fill .150s ease;
+            }
+
+            &:hover path {
+              fill: var(--accent-1);
+            }
+          }
+
+          &-container {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            width: 180px;
+            transform: translateX(-50%);
+            padding: 8px;
+            background-color: var(--background-1);
+            box-shadow: 0 4px 8px var(--shadow);
+            color: var(--primary-2);
+            border-radius: 4px;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+          }
+
+          &:hover .info-container {
+            opacity: 1;
+            visibility: unset;
+            z-index: 9999;
+          }
+        }
+
         .number-field {
           width: 4.8rem;
           height: 2.3rem;

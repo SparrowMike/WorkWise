@@ -112,10 +112,10 @@ export function initializeAppWithPreference(): void {
   if (chrome && chrome.storage && chrome.storage.sync) {
     chrome.storage.sync.get('preference', (preferenceData) => {
       globalPreference = Object.assign({}, globalPreference, JSON.parse(preferenceData?.preference || "{}"));
-      
+
       chrome.storage.sync.get('reminders', (remindersData) => {
         globalReminders = JSON.parse(remindersData?.reminders || "[]");
-        
+
         startApp();
       });
     });
@@ -127,19 +127,19 @@ function startApp() {
     /**
      * Registers a message listener with chrome.runtime.onMessage.
     */
-   onMessage();
+    onMessage();
 
 
-  //  ! ======= unsed =========
-   /**
-    * Handles tab focus changes.
-    */
-   // onTabFocusChanged();
+    //  ! ======= unsed =========
+    /**
+     * Handles tab focus changes.
+     */
+    // onTabFocusChanged();
 
-   /**
-    * ! ===========TBC==========
-    */
-   // onListeners();
+    /**
+     * ! ===========TBC==========
+     */
+    // onListeners();
   }
 }
 
