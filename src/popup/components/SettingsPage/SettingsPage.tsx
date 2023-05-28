@@ -108,19 +108,26 @@ const SettingsPage: React.FC = () => {
               className="number-field"
               min="1"
               max="10"
-              value={preference.sprintTiming ? preference.sprintTiming.toString() : '5'} 
+              value={preference.sprintTiming ? preference.sprintTiming.toString() : '5'}
               onChange={handleSprintTimingChange}
             />
+            <div className="info">
+              <Info className="info-logo" />
+              <div className="info-container" data-position="top">
+                Set the length of the reminder
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="settings-container container" style={{'margin': '0px'}}>
+      <div className="settings-container container" style={{ 'margin': '0px' }}>
         <div className="type">Blob Settings:</div>
         <div className="settings">
           <SettingsToggle
             title="Show Reminder"
             tooltipContent="Shows current reminder when blob is active."
+            tooltipPosition="bottom"
             checked={preference.showReminder || false}
             onToggle={handleShowReminderToggle}
             index={2}
@@ -128,6 +135,7 @@ const SettingsPage: React.FC = () => {
           <SettingsToggle
             title="Show Time"
             tooltipContent="Shows time when blob is active"
+            tooltipPosition="bottom"
             checked={preference.showTime || false}
             onToggle={handleShowTimeToggle}
             index={5}
@@ -135,6 +143,7 @@ const SettingsPage: React.FC = () => {
           <SettingsToggle
             title="Show Date"
             tooltipContent="Shows date when blob is active"
+            tooltipPosition="bottom"
             checked={preference.showDate || false}
             onToggle={handleShowDateToggle}
             index={6}
@@ -142,6 +151,7 @@ const SettingsPage: React.FC = () => {
           <SettingsToggle
             title="Sticky Blob"
             tooltipContent="When active, blob will stick to the closest edge of the screen"
+            tooltipPosition="top"
             checked={preference.stickyBlob || false}
             onToggle={handleStickyBlobToggle}
             index={3}
@@ -149,6 +159,7 @@ const SettingsPage: React.FC = () => {
           <SettingsToggle
             title="Hide Blob"
             tooltipContent="Will not be visible, unless current reminder is due"
+            tooltipPosition="top"
             checked={preference.hideBlob || false}
             onToggle={handleHideBlobToggle}
             index={4}

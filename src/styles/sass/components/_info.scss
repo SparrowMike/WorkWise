@@ -1,0 +1,66 @@
+.info {
+  font-size: 1.4rem;
+  position: absolute;
+  right: 7rem;
+  top: 1rem;
+  // line-height: 0;
+
+  &-logo {
+    cursor: pointer;
+
+    & path {
+      transition: fill .150s ease;
+    }
+
+    &:hover path {
+      fill: var(--accent-1);
+    }
+  }
+
+  &-container {
+    position: absolute;
+    width: 18rem;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px;
+    background-color: var(--background-1);
+    box-shadow: 0 4px 8px var(--shadow);
+    color: var(--primary-2);
+    border-radius: 4px;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+
+    &::before {
+      content: '';
+      width: 10px;
+      height: 10px;
+      background: inherit;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+    }
+
+    &[data-position='bottom'] {
+      top: 2.5rem;
+
+      &::before {
+        top: -.5rem;
+      }
+    }
+
+    &[data-position='top'] {
+      bottom: 2.5rem;
+      
+      &::before {
+        bottom: -.5rem;
+      }
+    }
+  }
+
+  &:hover .info-container {
+    opacity: 1;
+    visibility: unset;
+    z-index: 9999;
+  }
+}

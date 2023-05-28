@@ -18,6 +18,7 @@ if (!dailyQuote.text) {
     dailyQuote = data[randomIndex];
   })
   .catch(err => {
+    dailyQuote = { text: "Tell me and I forget. Teach me and I remember. Involve me and I learn.", author: "Benjamin Franklin" };
     console.log("Error fetching Quote")
   })
 }
