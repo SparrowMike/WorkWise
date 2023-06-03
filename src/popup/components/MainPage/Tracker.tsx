@@ -39,7 +39,7 @@ function Tracker() {
   }, [backupTrigger, reminders]);
 
   function backUpData() {
-    chrome.runtime.sendMessage('', { type: 'SAVE_REMINDERS', reminders: reminders });
+    chrome.runtime.sendMessage('', { type: 'UPDATE_REMINDERS', reminders: reminders });
   }
 
   function handleSubmit(event: any) {

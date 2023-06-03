@@ -1,0 +1,29 @@
+.no-blob-available {
+  position: absolute;
+  z-index: 9999;
+  background: var(--shadow);
+  width: 100%;
+  height: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  backdrop-filter: blur(1px);
+
+  &::after {
+      content: "Please restart the browser to get full use of the extension";
+      position: absolute;
+      width: 90%;
+      height: 100px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--background-2);
+      font-size: 1.6rem;
+      text-align: center;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+  }
+}

@@ -9,9 +9,9 @@ if (optionsElement) {
   const optionsRoot = ReactDOM.createRoot(optionsElement);
   optionsRoot.render(
     <React.StrictMode>
-    <PreferenceProvider>
-      <Options />
-    </PreferenceProvider>
-  </React.StrictMode>,
+      <PreferenceProvider>
+        <Options />
+      </PreferenceProvider>
+    </React.StrictMode>,
   );
 }

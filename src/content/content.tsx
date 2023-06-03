@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react';
 import Blob from './components/Blob';
 import useIsMounted from '../hooks/useIsMounted';
 import { PreferenceInterface, ReminderInterface } from '../interfaces/user';
-import { v4 as uuidv4 } from 'uuid';
 import { countdown } from '../utils/countdown';
 import Time from '../popup/components/Shared/Time';
 import CurrentDate from '../popup/components/Shared/Date';
@@ -94,11 +93,7 @@ const Content = (props: ContentProps) => {
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-
-      const id = uuidv4();
-
       const reminder: ReminderInterface = {
-        // id,
         title: inputValue,
         description: '',
         priority: 1,
@@ -110,18 +105,10 @@ const Content = (props: ContentProps) => {
       const trimmedValue = inputValue.trim();
 
       if (trimmedValue !== '') {
-        chrome.runtime.sendMessage('', { type: 'SAVE_REMINDERS', reminders: updatedReminders });
+        chrome.runtime.sendMessage('', { type: 'UPDATE_REMINDERS', reminders: updatedReminders });
         setReminders(updatedReminders);
         setInputValue('');
       }
-
-      // Start countdown
-      // countdown(preference.sprintTiming || 10, (timeLeft) => {
-      //   setCountdownInfo({
-      //     id,
-      //     timeLeft
-      //   });
-      // });
     }
   };
 

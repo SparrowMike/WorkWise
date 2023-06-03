@@ -17,7 +17,7 @@ interface Props {
 
 function Popup(props: Props) {
   const { preference, setPreference } = useContext(PreferenceContext);
-  const { reminders, setReminders } = useContext(RemindersContext);
+  const { setReminders } = useContext(RemindersContext);
 
   useEffect(() => {
     setPreference(props.preference);
@@ -30,6 +30,7 @@ function Popup(props: Props) {
 
   return (
     <div id="Work-Wise" className={`${preference.theme || 'dark'}`}>
+      {/* {!preference.blobLoaded && <div className="no-blob-available"></div>} */}
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/settings" element={<SettingsPage />} />

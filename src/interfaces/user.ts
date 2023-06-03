@@ -33,6 +33,10 @@ export interface PreferenceInterface {
     left: string;
     top: string;
   };
+  quote: {
+    text: string;
+    author: string;
+  };
 
   reminder?: string; //! ==== same as single reminder from the array TBC
   isActive?: boolean; //! ==== tbc

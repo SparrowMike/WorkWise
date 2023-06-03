@@ -1,6 +1,5 @@
 import { globalPreference, globalReminders, initializeAppWithPreference } from "../background";
 import { updatePreference, updateReminders } from "../background";
-import { dailyQuote } from "../background";
 
 if (!globalPreference || !globalReminders) {
   initializeAppWithPreference();
@@ -83,11 +82,7 @@ export function onMessage() {
 
     switch (request.type) {
 
-      case 'LOAD_QUOTE':
-        sendResponse({ quote: dailyQuote });
-        break;
-
-      case 'SAVE_REMINDERS':
+      case 'UPDATE_REMINDERS':
         chrome.storage.sync.set({ reminders: JSON.stringify(request.reminders) }, () => {
           if (chrome.runtime.lastError) {
             console.error(chrome.runtime.lastError);
@@ -96,21 +91,6 @@ export function onMessage() {
             updateReminders(request.reminders);
             updateBlobData();
             sendResponse({ success: true });
-          }
-        });
-        break;
-
-      case 'LOAD_REMINDERS':
-        chrome.storage.sync.get('reminders', (data) => {
-          if (chrome.runtime.lastError) {
-            console.error(chrome.runtime.lastError);
-            sendResponse({ reminders: null, error: 'Failed to load reminders' });
-          } else {
-            try {
-              sendResponse({ reminders: JSON.parse(data?.reminders) });
-            } catch (e) {
-              sendResponse({ reminders: [] });
-            }
           }
         });
         break;
@@ -129,15 +109,6 @@ export function onMessage() {
             sendResponse({ success: true });
           }
         });
-        break;
-
-      case 'LOAD_PREFERENCE':
-        if (chrome.runtime.lastError) {
-          console.error(chrome.runtime.lastError);
-          sendResponse({ preference: null, error: 'Failed to load preference' });
-        } else {
-          sendResponse({ preference: globalPreference });
-        }
         break;
 
       case 'SAVE_BLOB_POSITION':
@@ -169,6 +140,7 @@ export function onMessage() {
       //     console.log('Sync data cleared');
       //   });
       //   break;
+
     }
     return true;
   });
