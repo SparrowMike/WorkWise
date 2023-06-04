@@ -114,7 +114,7 @@ const SettingsPage: React.FC = () => {
             <div className="info">
               <Info className="info-logo" />
               <div className="info-container" data-position="top">
-                Set the length of the reminder
+                Set the duration of the reminder
               </div>
             </div>
           </div>

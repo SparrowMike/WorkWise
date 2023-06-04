@@ -1,13 +1,16 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import { PreferenceContext } from '../../../context/PreferenceContext';
-import useApiRequest from "../../../hooks/useApiRequest";
-import { QuoteType } from "../../../interfaces/api";
 
 function Quote() {
   const { preference } = useContext(PreferenceContext);
 
   if (!preference.quote?.text.length) {
-    return <div>Loading...</div>
+    return (
+      <div className='loading-spinner-container'>
+        <div className="loading-spinner"></div>
+        <div className="text">Loading...</div>
+      </div>
+    )
   }
 
   return (

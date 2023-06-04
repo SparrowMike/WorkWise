@@ -1,5 +1,6 @@
 import { globalPreference, globalReminders, initializeAppWithPreference } from "../background";
 import { updatePreference, updateReminders } from "../background";
+import { dailyQuote } from "../background";
 
 if (!globalPreference || !globalReminders) {
   initializeAppWithPreference();
@@ -81,6 +82,9 @@ export function onMessage() {
     // console.log(`onMessage, request type --- ${request.type}, sender --- ${sender.origin || sender.url}`)
 
     switch (request.type) {
+      case 'LOAD_QUOTE':
+        sendResponse({ quote: dailyQuote });
+        break;
 
       case 'UPDATE_REMINDERS':
         chrome.storage.sync.set({ reminders: JSON.stringify(request.reminders) }, () => {

@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import './../styles/sass/main.scss';
 
 import { PreferenceContext } from '../context/PreferenceContext';
@@ -23,6 +23,16 @@ function Popup(props: Props) {
     setPreference(props.preference);
     setReminders(props.reminders)
   }, [props.preference, props.reminders]);
+
+  useEffect(() => {
+    if (Object.keys(props.preference).length) {
+      chrome.runtime.sendMessage({ type: 'LOAD_QUOTE' }, (response) => {
+        if (response && response.quote !== undefined && response.quote !== null) {
+          setPreference({ ...props.preference, quote: response.quote });
+        } 
+      });
+    }
+  }, []);
 
   const handleClick = () => {
     window.open('https://github.com/SparrowMike/WorkWise/issues', '_blank');

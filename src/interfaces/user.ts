@@ -33,7 +33,7 @@ export interface PreferenceInterface {
     left: string;
     top: string;
   };
-  quote: {
+  quote?: {
     text: string;
     author: string;
   };

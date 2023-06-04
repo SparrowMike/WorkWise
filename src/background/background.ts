@@ -9,7 +9,20 @@ import { onListeners } from "./listeners/onListeners";
  * Daily quote.
  */
 export let dailyQuote: QuoteType = { text: "", author: "" };
-  
+
+if (!dailyQuote.text) {
+  fetch("https://type.fit/api/quotes")
+  .then(res => res.json())
+  .then(data => {
+    const randomIndex: number = Math.floor(Math.random() * data.length);
+    dailyQuote = data[randomIndex];
+  })
+  .catch(err => {
+    dailyQuote = { text: "Tell me and I forget. Teach me and I remember. Involve me and I learn.", author: "Benjamin Franklin" };
+    console.log("Error fetching Quote")
+  })
+}
+
 /**
  * An array of reminder objects representing the user's reminders.
  */
@@ -31,23 +44,6 @@ export let globalPreference: PreferenceInterface = {
     left: '20px',
     top: '20px'
   },
-  quote: dailyQuote,
-};
-
-async function fetchAndAppendDailyQuote() {
-  if (!dailyQuote.text) {
-    try {
-      const response = await fetch("https://type.fit/api/quotes");
-      const data = await response.json();
-      const randomIndex: number = Math.floor(Math.random() * data.length);
-      dailyQuote = data[randomIndex];
-      globalPreference.quote = dailyQuote;
-    } catch (err) {
-      dailyQuote = { text: "Tell me and I forget. Teach me and I remember. Involve me and I learn.", author: "Benjamin Franklin" };
-      console.log("Error fetching Quote");
-      globalPreference.quote = dailyQuote;
-    }
-  }
 };
 
 //! ========================= CLEAR THE DATA
@@ -78,15 +74,13 @@ export function updateReminders(newReminders: ReminderInterface[]) {
  */
 export const preferenceReady = new Promise((resolve) => {
   if (chrome && chrome.storage && chrome.storage.sync) {
-    chrome.storage.sync.get('preference', async (data) => {
+    chrome.storage.sync.get('preference', (data) => {
       if (data && data.preference) {
         globalPreference = JSON.parse(data.preference);
-        await fetchAndAppendDailyQuote();
 
         resolve(globalPreference);
       } else {
-        chrome.storage.sync.set({ preference: JSON.stringify(globalPreference) }, async () => {
-          await fetchAndAppendDailyQuote(); 
+        chrome.storage.sync.set({ preference: JSON.stringify(globalPreference) }, () => {
           
           resolve(globalPreference);
         });
