@@ -10,17 +10,19 @@ import { onListeners } from "./listeners/onListeners";
  */
 export let dailyQuote: QuoteType = { text: "", author: "" };
 
-if (!dailyQuote.text) {
-  fetch("https://type.fit/api/quotes")
-  .then(res => res.json())
-  .then(data => {
+export async function fetchDailyQuote(): Promise<void> {
+  try {
+    const response = await fetch("https://type.fit/api/quotes");
+    const data = await response.json();
     const randomIndex: number = Math.floor(Math.random() * data.length);
     dailyQuote = data[randomIndex];
-  })
-  .catch(err => {
-    dailyQuote = { text: "Tell me and I forget. Teach me and I remember. Involve me and I learn.", author: "Benjamin Franklin" };
-    console.log("Error fetching Quote")
-  })
+  } catch (err) {
+    dailyQuote = {
+      text: "Tell me and I forget. Teach me and I remember. Involve me and I learn.",
+      author: "Benjamin Franklin",
+    };
+    console.log("Error fetching Quote");
+  }
 }
 
 /**
@@ -112,6 +114,7 @@ export const remindersReady = new Promise((resolve) => {
  * This function should be called when the extension is initialized.
  */
 export function initializeAppWithPreference(): void {
+  if (dailyQuote && !dailyQuote.text) fetchDailyQuote();
   if (chrome && chrome.storage && chrome.storage.sync) {
     chrome.storage.sync.get('preference', (preferenceData) => {
       globalPreference = Object.assign({}, globalPreference, JSON.parse(preferenceData?.preference || "{}"));
