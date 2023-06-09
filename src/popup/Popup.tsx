@@ -25,13 +25,20 @@ function Popup(props: Props) {
   }, [props.preference, props.reminders]);
 
   useEffect(() => {
-    if (Object.keys(props.preference).length) {
-      chrome.runtime.sendMessage({ type: 'LOAD_QUOTE' }, (response) => {
-        if (response && response.quote !== undefined && response.quote !== null) {
-          setPreference({ ...props.preference, quote: response.quote });
-        } 
-      });
-    }
+    const loadQuote = async (): Promise<void> => {
+      if (Object.keys(props.preference).length) {
+        await new Promise<void>((resolve) => {
+          chrome.runtime.sendMessage({ type: 'LOAD_QUOTE' }, (response) => {
+            if (response && response.quote !== undefined && response.quote !== null) {
+              setPreference({ ...props.preference, quote: response.quote });
+            }
+            resolve();
+          });
+        });
+      }
+    };
+  
+    loadQuote();
   }, []);
 
   const handleClick = () => {
