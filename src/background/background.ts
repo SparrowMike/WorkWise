@@ -17,11 +17,11 @@ export async function fetchDailyQuote(): Promise<QuoteType> {
     const randomIndex: number = Math.floor(Math.random() * data.length);
     return data[randomIndex];
   } catch (err) {
+    console.log("Error fetching Quote");
     return {
       text: "Tell me and I forget. Teach me and I remember. Involve me and I learn.",
       author: "Benjamin Franklin",
     };
-    console.log("Error fetching Quote");
   }
 }
 

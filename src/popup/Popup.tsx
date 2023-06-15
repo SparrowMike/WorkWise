@@ -26,7 +26,7 @@ function Popup(props: Props) {
 
   useEffect(() => {
     const loadQuote = async (): Promise<void> => {
-      if (Object.keys(props.preference).length) {
+      if (Object.keys(props.preference).length && !props.preference.quote?.text) {
         await new Promise<void>((resolve) => {
           chrome.runtime.sendMessage({ type: 'LOAD_QUOTE' }, (response) => {
             if (response && response.quote !== undefined && response.quote !== null) {
