@@ -1,10 +1,5 @@
-import { globalPreference, globalReminders, initializeAppWithPreference } from "../background";
-import { updatePreference, updateReminders } from "../background";
-import { dailyQuote } from "../background";
-
-if (!globalPreference || !globalReminders) {
-  initializeAppWithPreference();
-}
+import { globalPreference, globalReminders, dailyQuote } from "../background";
+import { updatePreference, updateReminders, fetchDailyQuote } from "../background";
 
 /**
  * Updates the position of the content blob.
@@ -83,6 +78,7 @@ export function onMessage() {
 
     switch (request.type) {
       case 'LOAD_QUOTE':
+        if (!dailyQuote.text) fetchDailyQuote();
         sendResponse({ quote: dailyQuote });
         break;
 

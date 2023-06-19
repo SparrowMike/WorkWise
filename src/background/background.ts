@@ -10,15 +10,15 @@ import { onListeners } from "./listeners/onListeners";
  */
 export let dailyQuote: QuoteType = { text: "", author: "" };
 
-export async function fetchDailyQuote(): Promise<QuoteType> {
+export async function fetchDailyQuote(): Promise<void> {
   try {
     const response = await fetch("https://type.fit/api/quotes");
     const data = await response.json();
     const randomIndex: number = Math.floor(Math.random() * data.length);
-    return data[randomIndex];
+    dailyQuote = data[randomIndex];
   } catch (err) {
     console.log("Error fetching Quote");
-    return {
+    dailyQuote = {
       text: "Tell me and I forget. Teach me and I remember. Involve me and I learn.",
       author: "Benjamin Franklin",
     };
@@ -114,9 +114,7 @@ export const remindersReady = new Promise((resolve) => {
  * This function should be called when the extension is initialized.
  */
 export async function initializeAppWithPreference(): Promise<void> {
-  if (dailyQuote && !dailyQuote.text) {
-    dailyQuote = await fetchDailyQuote();
-  }
+  if (dailyQuote && !dailyQuote.text) await fetchDailyQuote();
   if (chrome && chrome.storage && chrome.storage.sync) {
     await new Promise<void>((resolve) => {
       chrome.storage.sync.get(['preference', 'reminders'], async (data) => {
@@ -126,7 +124,7 @@ export async function initializeAppWithPreference(): Promise<void> {
       });
     });
   }
-  startApp(); // Moved inside the if statement
+  startApp();
 }
 
 function startApp() {
@@ -135,7 +133,6 @@ function startApp() {
      * Registers a message listener with chrome.runtime.onMessage.
     */
     onMessage();
-
 
     //  ! ======= unsed =========
     /**
