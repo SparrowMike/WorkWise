@@ -8,7 +8,7 @@ import { onListeners } from "./listeners/onListeners";
 /**
  * Daily quote.
  */
-export let dailyQuote: QuoteType = { text: "", author: "" };
+export let dailyQuote: QuoteType = { text: "", author: "", createdAt: new Date() };
 
 export async function fetchDailyQuote(): Promise<void> {
   try {
@@ -16,11 +16,13 @@ export async function fetchDailyQuote(): Promise<void> {
     const data = await response.json();
     const randomIndex: number = Math.floor(Math.random() * data.length);
     dailyQuote = data[randomIndex];
+    dailyQuote.createdAt = new Date();
   } catch (err) {
     console.log("Error fetching Quote");
     dailyQuote = {
       text: "Tell me and I forget. Teach me and I remember. Involve me and I learn.",
       author: "Benjamin Franklin",
+      createdAt: new Date()
     };
   }
 }
@@ -46,6 +48,7 @@ export let globalPreference: PreferenceInterface = {
     left: '20px',
     top: '20px'
   },
+  quote: dailyQuote
 };
 
 //! ========================= CLEAR THE DATA

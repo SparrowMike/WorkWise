@@ -33,9 +33,10 @@ export interface PreferenceInterface {
     left: string;
     top: string;
   };
-  quote?: {
+  quote: {
     text: string;
     author: string;
+    createdAt: Date;
   };
 
   reminder?: string; //! ==== same as single reminder from the array TBC

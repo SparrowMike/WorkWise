@@ -73,12 +73,12 @@ function updateBlobData(isActive?: boolean) {
   * 
   */
 export function onMessage() {
-  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     // console.log(`onMessage, request type --- ${request.type}, sender --- ${sender.origin || sender.url}`)
 
     switch (request.type) {
       case 'LOAD_QUOTE':
-        if (!dailyQuote.text) fetchDailyQuote();
+        if (!dailyQuote.text) await fetchDailyQuote();
         sendResponse({ quote: dailyQuote });
         break;
 

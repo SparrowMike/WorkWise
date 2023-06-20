@@ -11,4 +11,5 @@ export interface ChuckNorrisJoke {
 export interface QuoteType {
   text: string;
   author: string;
+  createdAt: Date;
 }

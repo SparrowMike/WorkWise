@@ -24,14 +24,28 @@ function Popup(props: Props) {
     setReminders(props.reminders)
   }, [props.preference, props.reminders]);
 
+  console.log('props', props.preference)
+
   useEffect(() => {
+    const currentTime = new Date();
+    let quoteCreatedAt = new Date();
+    if (props.preference.quote?.createdAt) {
+      quoteCreatedAt = props.preference.quote.createdAt;
+    }
+
+    const timeDifferenceMs = currentTime.getTime() - new Date(quoteCreatedAt).getTime();
+    const timeDifferenceMin = Math.floor(timeDifferenceMs / (1000 * 60));
+
+    console.log(timeDifferenceMin)
     const loadQuote = async (): Promise<void> => {
-      if (Object.keys(props.preference).length && !props.preference.quote?.text) {
+      if (Object.keys(props.preference).length && timeDifferenceMin >= 5) {
         await new Promise<void>((resolve) => {
           chrome.runtime.sendMessage({ type: 'LOAD_QUOTE' }, (response) => {
-            if (response && response.quote !== undefined && response.quote !== null) {
-              setPreference({ ...props.preference, quote: response.quote });
-            }
+            if (response && response.quote) {
+              const newPreference = { ...props.preference, quote: response.quote }
+              setPreference(newPreference);
+              chrome.runtime.sendMessage({ type: 'UPDATE_PREFERENCE', preference: newPreference });
+            } 
             resolve();
           });
         });
