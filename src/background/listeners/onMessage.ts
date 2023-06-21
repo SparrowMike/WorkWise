@@ -78,8 +78,9 @@ export function onMessage() {
 
     switch (request.type) {
       case 'LOAD_QUOTE':
-        if (!dailyQuote.text) await fetchDailyQuote();
         sendResponse({ quote: dailyQuote });
+        await fetchDailyQuote();
+        globalPreference.quote = dailyQuote
         break;
 
       case 'UPDATE_REMINDERS':

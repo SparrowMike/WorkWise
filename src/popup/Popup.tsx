@@ -24,36 +24,28 @@ function Popup(props: Props) {
     setReminders(props.reminders)
   }, [props.preference, props.reminders]);
 
-  console.log('props', props.preference)
-
   useEffect(() => {
     const currentTime = new Date();
-    let quoteCreatedAt = new Date();
-    if (props.preference.quote?.createdAt) {
-      quoteCreatedAt = props.preference.quote.createdAt;
-    }
-
-    const timeDifferenceMs = currentTime.getTime() - new Date(quoteCreatedAt).getTime();
+    const timeDifferenceMs = currentTime.getTime() - new Date(props.preference.quote.createdAt).getTime();
     const timeDifferenceMin = Math.floor(timeDifferenceMs / (1000 * 60));
 
-    console.log(timeDifferenceMin)
     const loadQuote = async (): Promise<void> => {
-      if (Object.keys(props.preference).length && timeDifferenceMin >= 5) {
-        await new Promise<void>((resolve) => {
-          chrome.runtime.sendMessage({ type: 'LOAD_QUOTE' }, (response) => {
-            if (response && response.quote) {
-              const newPreference = { ...props.preference, quote: response.quote }
-              setPreference(newPreference);
-              chrome.runtime.sendMessage({ type: 'UPDATE_PREFERENCE', preference: newPreference });
-            } 
-            resolve();
-          });
+      await new Promise<void>((resolve) => {
+        chrome.runtime.sendMessage({ type: 'LOAD_QUOTE' }, (response) => {
+          if (response && response.quote) {
+            const newPreference = { ...preference, quote: response.quote }
+            setPreference(newPreference);
+            chrome.runtime.sendMessage({ type: 'UPDATE_PREFERENCE', preference: newPreference });
+          }
+          resolve();
         });
-      }
+      });
+    }
+
+    if (Object.keys(preference).length && timeDifferenceMin >= 5) {
+      loadQuote();
     };
-  
-    loadQuote();
-  }, []);
+  }, [preference]);
 
   const handleClick = () => {
     window.open('https://github.com/SparrowMike/WorkWise/issues', '_blank');

@@ -8,7 +8,11 @@ import { onListeners } from "./listeners/onListeners";
 /**
  * Daily quote.
  */
-export let dailyQuote: QuoteType = { text: "", author: "", createdAt: new Date() };
+export let dailyQuote: QuoteType = {
+  text: "Tell me and I forget. Teach me and I remember. Involve me and I learn.",
+  author: "Benjamin Franklin",
+  createdAt: new Date()
+};
 
 export async function fetchDailyQuote(): Promise<void> {
   try {
@@ -19,11 +23,6 @@ export async function fetchDailyQuote(): Promise<void> {
     dailyQuote.createdAt = new Date();
   } catch (err) {
     console.log("Error fetching Quote");
-    dailyQuote = {
-      text: "Tell me and I forget. Teach me and I remember. Involve me and I learn.",
-      author: "Benjamin Franklin",
-      createdAt: new Date()
-    };
   }
 }
 
