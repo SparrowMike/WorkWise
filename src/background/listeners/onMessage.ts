@@ -80,7 +80,9 @@ export function onMessage() {
       case 'LOAD_QUOTE':
         sendResponse({ quote: dailyQuote });
         await fetchDailyQuote();
-        globalPreference.quote = dailyQuote
+        const preference = { ...globalPreference, quote: dailyQuote }
+        updatePreference(preference)
+        chrome.runtime.sendMessage({ type: 'UPDATE_PREFERENCE', preference: preference });
         break;
 
       case 'UPDATE_REMINDERS':

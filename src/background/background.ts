@@ -116,7 +116,7 @@ export const remindersReady = new Promise((resolve) => {
  * This function should be called when the extension is initialized.
  */
 export async function initializeAppWithPreference(): Promise<void> {
-  if (dailyQuote && !dailyQuote.text) await fetchDailyQuote();
+  await fetchDailyQuote();
   if (chrome && chrome.storage && chrome.storage.sync) {
     await new Promise<void>((resolve) => {
       chrome.storage.sync.get(['preference', 'reminders'], async (data) => {

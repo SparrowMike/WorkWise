@@ -32,17 +32,12 @@ function Popup(props: Props) {
     const loadQuote = async (): Promise<void> => {
       await new Promise<void>((resolve) => {
         chrome.runtime.sendMessage({ type: 'LOAD_QUOTE' }, (response) => {
-          if (response && response.quote) {
-            const newPreference = { ...preference, quote: response.quote }
-            setPreference(newPreference);
-            chrome.runtime.sendMessage({ type: 'UPDATE_PREFERENCE', preference: newPreference });
-          }
           resolve();
         });
       });
     }
 
-    if (Object.keys(preference).length && timeDifferenceMin >= 5) {
+    if (Object.keys(preference).length && timeDifferenceMin >= 60) {
       loadQuote();
     };
   }, [preference]);
