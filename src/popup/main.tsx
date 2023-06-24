@@ -8,7 +8,7 @@ import PreferenceProvider from '../context/PreferenceContext';
 
 import { preferenceReady, remindersReady } from '../background/background';
 import { PreferenceInterface, ReminderInterface } from '../interfaces/user';
-import RemindersProvider from '../context/RemindersContext';
+import RemindersProvider from '../context/RemindersContext'; 
 
 (async function () {
   const preference = await (preferenceReady as Promise<PreferenceInterface>);

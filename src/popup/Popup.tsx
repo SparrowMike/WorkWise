@@ -18,29 +18,11 @@ interface Props {
 function Popup(props: Props) {
   const { preference, setPreference } = useContext(PreferenceContext);
   const { setReminders } = useContext(RemindersContext);
-
+  
   useEffect(() => {
     setPreference(props.preference);
-    setReminders(props.reminders)
+    setReminders(props.reminders);
   }, [props.preference, props.reminders]);
-
-  useEffect(() => {
-    const currentTime = new Date();
-    const timeDifferenceMs = currentTime.getTime() - new Date(props.preference.quote.createdAt).getTime();
-    const timeDifferenceMin = Math.floor(timeDifferenceMs / (1000 * 60));
-
-    const loadQuote = async (): Promise<void> => {
-      await new Promise<void>((resolve) => {
-        chrome.runtime.sendMessage({ type: 'LOAD_QUOTE' }, (response) => {
-          resolve();
-        });
-      });
-    }
-
-    if (Object.keys(preference).length && timeDifferenceMin >= 60) {
-      loadQuote();
-    };
-  }, [preference]);
 
   const handleClick = () => {
     window.open('https://github.com/SparrowMike/WorkWise/issues', '_blank');

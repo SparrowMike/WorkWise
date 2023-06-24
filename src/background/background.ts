@@ -19,8 +19,7 @@ export async function fetchDailyQuote(): Promise<void> {
     const response = await fetch("https://type.fit/api/quotes");
     const data = await response.json();
     const randomIndex: number = Math.floor(Math.random() * data.length);
-    dailyQuote = data[randomIndex];
-    dailyQuote.createdAt = new Date();
+    dailyQuote = { ...data[randomIndex], createdAt: new Date() };
   } catch (err) {
     console.log("Error fetching Quote");
   }
@@ -78,14 +77,27 @@ export function updateReminders(newReminders: ReminderInterface[]) {
  */
 export const preferenceReady = new Promise((resolve) => {
   if (chrome && chrome.storage && chrome.storage.sync) {
-    chrome.storage.sync.get('preference', (data) => {
+    chrome.storage.sync.get('preference', async (data) => {
       if (data && data.preference) {
         globalPreference = JSON.parse(data.preference);
 
+        const currentTime = new Date();
+        const timeDifferenceMs = currentTime.getTime() - new Date(globalPreference.quote.createdAt).getTime();
+        const timeDifferenceHrs = Math.floor(timeDifferenceMs / (1000 * 60 * 60));
+
+        if (timeDifferenceHrs >= 6) {
+          await fetchDailyQuote();
+          if (dailyQuote) {
+            globalPreference.quote = dailyQuote;
+            chrome.storage.sync.set({ preference: JSON.stringify(globalPreference) });
+          }
+        }
+
         resolve(globalPreference);
       } else {
+        await fetchDailyQuote();
+        if (dailyQuote) globalPreference.quote = dailyQuote;
         chrome.storage.sync.set({ preference: JSON.stringify(globalPreference) }, () => {
-          
           resolve(globalPreference);
         });
       }

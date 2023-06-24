@@ -1,5 +1,5 @@
-import { globalPreference, globalReminders, dailyQuote } from "../background";
-import { updatePreference, updateReminders, fetchDailyQuote } from "../background";
+import { globalPreference, globalReminders } from "../background";
+import { updatePreference, updateReminders } from "../background";
 
 /**
  * Updates the position of the content blob.
@@ -77,14 +77,6 @@ export function onMessage() {
     // console.log(`onMessage, request type --- ${request.type}, sender --- ${sender.origin || sender.url}`)
 
     switch (request.type) {
-      case 'LOAD_QUOTE':
-        sendResponse({ quote: dailyQuote });
-        await fetchDailyQuote();
-        const preference = { ...globalPreference, quote: dailyQuote }
-        updatePreference(preference)
-        chrome.runtime.sendMessage({ type: 'UPDATE_PREFERENCE', preference: preference });
-        break;
-
       case 'UPDATE_REMINDERS':
         chrome.storage.sync.set({ reminders: JSON.stringify(request.reminders) }, () => {
           if (chrome.runtime.lastError) {
